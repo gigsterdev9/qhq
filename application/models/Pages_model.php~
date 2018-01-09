@@ -1,0 +1,381 @@
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+class grants_model extends CI_Model {
+
+	public function __construct()
+	{
+		$this->load->database();
+	}
+        
+    /*
+   	public function get_grants($slug = FALSE)
+	{
+		if ($slug === FALSE)
+		{
+			$query = $this->db->get('grants');
+		    return $query->result_array();
+		}
+
+		$query = $this->db->get_where('grants', array('slug' => $slug));
+		return $query->row_array();
+	}
+	*/
+	public function get_grants($slug = FALSE)
+	{
+		if ($slug === FALSE)
+		{
+			$this->db->select('*');
+			$this->db->from('projects as a');
+			$this->db->join('proponents as b', 'b.proponent_id = a.proponent_id');
+			$this->db->join('sgp5_sites as c', 'c.location_id = a.location_id');
+			$this->db->order_by('a.project_title', 'ASC');
+			$query = $this->db->get();
+			//$query = $this->db->get('projects');
+		    return $query->result_array();
+		}
+		
+		$this->db->select('*');
+		$this->db->from('projects as a');
+		$this->db->join('proponents as b', 'b.proponent_id = a.proponent_id');
+		$this->db->join('sgp5_sites as c', 'c.location_id = a.location_id');
+		$this->db->where('slug',$slug);
+		$query = $this->db->get();		
+
+		return $query->row_array();
+	}
+	
+	public function filter_grants($filter_param1 = FALSE, $filter_param2 = FALSE)
+	{
+		if ($filter_param1 === FALSE)
+		{
+			return 0;
+		}
+		
+		$this->db->select('*');
+		$this->db->from('projects as a');
+		$this->db->join('proponents as b', 'b.proponent_id = a.proponent_id');
+		$this->db->join('sgp5_sites as c', 'c.location_id = a.location_id');
+		$this->db->where($filter_param1,$filter_param2);
+		$query = $this->db->get();		
+
+		return $query->result_array();
+		
+	}
+	
+	public function search_grants($search_param = FALSE)
+	{
+		if ($search_param === FALSE)
+		{
+			return 0;
+		}
+		
+		$this->db->select('*');
+		$this->db->from('projects as a');
+		$this->db->join('proponents as b', 'b.proponent_id = a.proponent_id');
+		$this->db->join('sgp5_sites as c', 'c.location_id = a.location_id');
+		$this->db->where("project_title like '%$search_param%'");
+		$query = $this->db->get();		
+
+		return $query->result_array();
+		
+	}
+	
+	
+	public function get_grant_indicators($id = FALSE)
+	{
+		if ($id === FALSE) 
+		{
+			return 0;
+		}
+		
+		$this->db->select('*');
+		$this->db->from('project_indicators');
+		$this->db->where('project_id', $id);
+		$query = $this->db->get();
+		
+		return $query->result_array();
+	}
+	
+	
+	public function get_due_grants()
+	{
+		//look to 2 months prior to due date
+
+		//return $query->result_array();
+	}
+	
+	public function get_recent_grants($count_limit = 5)
+	{
+				
+		$this->db->select('project_id, project_title, slug');
+		$this->db->from('projects');
+		$this->db->order_by('project_id', 'DESC');
+		$this->db->limit($count_limit);
+		$query = $this->db->get();		
+
+		return $query->result_array();
+	}
+	
+	public function set_grants() //new grants
+	{
+		$this->load->helper('url');
+		
+		$slug = url_title($this->input->post('title'), 'dash', TRUE);
+
+		$data = array(
+				'project_title' => $this->input->post('title'),
+				'slug' => $slug,
+				'location' => $this->input->post('location'),
+				'location_id' => $this->input->post('site'),
+				'proponent_id' => $this->input->post('proponent'),
+				'project_objectives' => $this->input->post('project_objectives'),
+				'key_partners' => $this->input->post('key_partners'),
+				'beneficiaries' => $this->input->post('beneficiaries'),
+				'project_duration' => $this->input->post('project_duration'),
+				'project_start' => $this->input->post('project_start'),
+				'project_end' => $this->input->post('project_end'),
+				'actual_start' => $this->input->post('actual_start'),
+				'actual_end' => $this->input->post('actual_end'),
+				'project_budget' => $this->input->post('project_budget'),
+				'amount_requested' => $this->input->post('amount_requested'),
+				'co_financing' => $this->input->post('co_financing'),
+				'project_status' => $this->input->post('project_status'),
+				'grant_type' => $this->input->post('grant_type'),
+				'moa_number' => $this->input->post('moa_number'),
+				'remarks' => $this->input->post('remarks')
+		);
+		//insert new project
+		$this->db->insert('projects', $data);
+		
+		$project_id = $this->db->insert_id();
+		
+		//prep outcome indicators and values
+		if ($this->input->post('o111') != NULL) 
+		{
+			$data1[] = array(
+				'project_id' => $project_id,
+				'indicator_code' => '1.1.1',
+				'indicator_value' => $this->input->post('o111')
+			);
+		}
+		if ($this->input->post('o112') != NULL) 
+		{
+			$data1[] = array(
+				'project_id' => $project_id,
+				'indicator_code' => '1.1.2',
+				'indicator_value' => $this->input->post('o112')
+			);
+		}
+		if ($this->input->post('o113') != NULL) 
+		{
+			$data1[] = array(
+				'project_id' => $project_id,
+				'indicator_code' => '1.1.3',
+				'indicator_value' => $this->input->post('o113')
+			);
+		}
+		if ($this->input->post('o114') != NULL) 
+		{
+			$data1[] = array(
+				'project_id' => $project_id,
+				'indicator_code' => '1.1.4',
+				'indicator_value' => $this->input->post('o114')
+			);
+		}
+		if ($this->input->post('o221') != NULL) 
+		{
+			$data1[] = array(
+				'project_id' => $project_id,
+				'indicator_code' => '2.2.1',
+				'indicator_value' => $this->input->post('o221')
+			);
+		}
+		if ($this->input->post('o222') != NULL) 
+		{
+			$data1[] = array(
+				'project_id' => $project_id,
+				'indicator_code' => '2.2.2',
+				'indicator_value' => $this->input->post('o222')
+			);
+		}
+		if ($this->input->post('o231') != NULL) 
+		{
+			$data1[] = array(
+				'project_id' => $project_id,
+				'indicator_code' => '2.3.1',
+				'indicator_value' => $this->input->post('o231')
+			);
+		}
+		if ($this->input->post('o341') != NULL) 
+		{
+			$data1[] = array(
+				'project_id' => $project_id,
+				'indicator_code' => '3.4.1',
+				'indicator_value' => $this->input->post('o341')
+			);
+		}
+		if ($this->input->post('o342') != NULL) 
+		{
+			$data1[] = array(
+				'project_id' => $project_id,
+				'indicator_code' => '3.4.2',
+				'indicator_value' => $this->input->post('o342')
+			);
+		}
+		if ($this->input->post('o343') != NULL) 
+		{
+			$data1[] = array(
+				'project_id' => $project_id,
+				'indicator_code' => '3.4.3',
+				'indicator_value' => $this->input->post('o343')
+			);
+		}
+		if ($this->input->post('o344') != NULL) 
+		{
+			$data1[] = array(
+				'project_id' => $project_id,
+				'indicator_code' => '3.4.4',
+				'indicator_value' => $this->input->post('o344')
+			);
+		}
+		if ($this->input->post('o351') != NULL) 
+		{
+			$data1[] = array(
+				'project_id' => $project_id,
+				'indicator_code' => '3.5.1',
+				'indicator_value' => $this->input->post('o351')
+			);
+		}
+		if ($this->input->post('o352') != NULL) 
+		{
+			$data1[] = array(
+				'project_id' => $project_id,
+				'indicator_code' => '3.5.2',
+				'indicator_value' => $this->input->post('o352')
+			);
+		}
+		if ($this->input->post('o353') != NULL) 
+		{
+			$data1[] = array(
+				'project_id' => $project_id,
+				'indicator_code' => '3.5.3',
+				'indicator_value' => $this->input->post('o353')
+			);
+		}
+		
+		//insert project indicators
+		$this->db->insert_batch('project_indicators', $data1);
+		
+		return;
+	}
+	
+	
+	//update individual grant
+	public function update_grant($project_id = NULL) 
+	{
+		$this->load->helper('url');
+		
+		$slug = url_title($this->input->post('title'), 'dash', TRUE);
+
+		$data = array(
+				'project_title' => $this->input->post('title'),
+				'slug' => $slug,
+				'location' => $this->input->post('location'),
+				'location_id' => $this->input->post('site'),
+				'proponent_id' => $this->input->post('proponent'),
+				'project_objectives' => $this->input->post('project_objectives'),
+				'key_partners' => $this->input->post('key_partners'),
+				'beneficiaries' => $this->input->post('beneficiaries'),
+				'project_duration' => $this->input->post('project_duration'),
+				'project_start' => $this->input->post('project_start'),
+				'project_end' => $this->input->post('project_end'),
+				'actual_start' => $this->input->post('actual_start'),
+				'actual_end' => $this->input->post('actual_end'),
+				'project_budget' => $this->input->post('project_budget'),
+				'amount_requested' => $this->input->post('amount_requested'),
+				'co_financing' => $this->input->post('co_financing'),
+				'project_status' => $this->input->post('project_status'),
+				'grant_type' => $this->input->post('grant_type'),
+				'moa_number' => $this->input->post('moa_number'),
+				'remarks' => $this->input->post('remarks'),
+		);
+		
+		$project_id = $this->input->post('project_id');
+		$this->db->where('project_id', $project_id);
+		return $this->db->update('projects', $data);
+	}
+	
+	public function get_historical_grants($slug = FALSE)
+	{
+		if ($slug === FALSE)
+		{
+			$query = $this->db->get('grants');
+		    return $query->result_array();
+		}
+
+		$query = $this->db->get_where('grants', array('slug' => $slug));
+		return $query->row_array();
+	}
+	
+	public function search_historical_grants($search_param = FALSE)
+	{
+		if ($search_param === FALSE)
+		{
+			return 0;
+		}
+		
+		$this->db->select('*');
+		$this->db->from('grants');
+		$this->db->where("title like '%$search_param%'");
+		$query = $this->db->get();		
+
+		return $query->result_array();
+		
+	}
+	
+	public function set_historical_grants()
+	{
+		$this->load->helper('url');
+		
+		$slug = url_title($this->input->post('title'), 'dash', TRUE);
+
+		$data = array(
+				'title' => $this->input->post('title'),
+				'slug' => $slug,
+				'proponent' => $this->input->post('proponent'),
+				'site' => $this->input->post('site'),
+				'description' => $this->input->post('description'),
+				'grant_amount' => $this->input->post('grant_amount'),
+				'grant_type' => $this->input->post('grant_type'),
+				'remarks' => $this->input->post('remarks'),
+				'status' => '0'
+		);
+
+		return $this->db->insert('grants', $data);
+	}
+
+
+	public function get_sites()
+	{
+		$this->db->select('location_id, location_name');
+		$query = $this->db->get('sgp5_sites');
+		return $query->result_array();
+	}
+	
+	public function get_indicators()
+	{
+		$this->db->select('indicator_code, indicator_desc');
+		$query = $this->db->get('sgp5_indicators');
+		return $query->result_array();
+	}
+
+	public function get_proponents()
+	{
+		$this->db->select('proponent_id, organization_name');
+		$query = $this->db->get('proponents');
+		return $query->result_array();
+	}
+	
+	
+
+}

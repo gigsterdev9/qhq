@@ -1,0 +1,82 @@
+<div class="container-fluid">
+	<h2><span class="glyphicon glyphicon-folder-open"></span>&nbsp; <?php echo $title; ?></h2>
+	<div class="container-fluid text-right"><a href="grants/add"><span class="glyphicon glyphicon-plus-sign"></span> New grant</a> &nbsp; | &nbsp;
+	<a href="grants/add_historic"><span class="glyphicon glyphicon-plus-sign"></span> Add historical grant</a></div>
+	<p>&nbsp;</p>
+
+	<h3><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Phase 5 Grants</h3>
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Title</th>
+					<th>Proponent</th>
+					<th>Site</th>
+					<th>Project budget<br /><small>(in PHP)</small></th>
+					<th>Grant type</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($grants as $grants_item): ?>
+				<tr>
+					<td>
+						<a href="<?php echo site_url('grants/'.$grants_item['slug']); ?>">
+							<strong><span class="glyphicon glyphicon-file"></span> <?php echo $grants_item['project_title']; ?></strong>
+						</a>
+					</td>
+					<td><?php echo $grants_item['organization_name']; ?></td>
+					<td><?php echo $grants_item['location_name']; ?></td>
+					<td><?php echo number_format($grants_item['project_budget'], 2); ?></td>
+					<td><?php echo $grants_item['grant_type']; ?></td>
+					<td>
+					<?php 
+						switch ($grants_item['project_status'])
+							{
+							case '1': $status = 'Pending approval'; break;
+							case '2': $status = 'Approved'; break;
+							case '3': $status = 'Declined'; break;
+							case '4': $status = 'Completed'; break;							
+							case '5': $status = 'Cancelled'; break;
+							default: $status = null; break;
+							} 
+						echo $status;
+					?>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+	</div>
+	
+	<h3><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Historical Grants</h3>
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Title</th>
+					<th>Proponent</th>
+					<th>Site</th>
+					<th>Grant amount<br /><small>(in PHP)</small></th>
+					<th>Grant type</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($historical_grants as $grants_item): ?>
+				<tr>
+					<td>
+						<a href="<?php echo site_url('grants/historic/'.$grants_item['slug']); ?>">
+							<strong><span class="glyphicon glyphicon-file"></span> <?php echo $grants_item['title']; ?></strong>
+						</a>
+					</td>
+					<td><?php echo $grants_item['proponent']; ?></td>
+					<td><?php echo $grants_item['site']; ?></td>
+					<td><?php echo number_format($grants_item['grant_amount'], 2); ?></td>
+					<td><?php echo $grants_item['grant_type']; ?></td>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+	</div>
+</div>
+

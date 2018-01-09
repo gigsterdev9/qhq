@@ -1,0 +1,47 @@
+body, input, select {font-family: arial, sans-serif; color: padding-top: 100px; font-size: 12px }
+h1, h2 {margin-top: 70px}
+h1 {font-size: 2em}
+h2 {font-size: 1.8em}
+h3 {font-size: 1.6em}
+h4 {font-size: 1.4em}
+h5, .panel-heading {font-size: 1.2em}
+
+.back-link {padding: 5px 10px 0 0} 
+.col-sm-10, .col-sm-2 {padding-bottom: 10px}
+.control-label {font-size: 1.1em}
+.control-value {font-size: 1.1em; font-weight: bold; padding-bottom: 10px}
+.buffer {height: 30px}
+
+.message { font-weight: bold; text-align: center } 
+
+#footer-div {padding-bottom: 20px}
+
+/*Nav Bar*/ 
+.nav {font-size: 1.1em}
+
+/*Search Bar*/
+#search_bar {text-align: left}
+#search_in {margin-left: 85px}
+
+/*Service Availment History*/
+.service-history {font-size: 1em; padding: 5px 5px 5px 5px}
+.service-history-details {font-size: 1em; padding: 10px 10px 20px 10px; border-top: 1px solid #dddddd}
+.service-history-details h3 {font-size: 1.2em; font-weight: bold; margin-top: 10px } 
+
+/*Data Mod History*/
+.mod-history {font-size: .8em; padding: 5px 5px 5px 5px}
+.mod-history-details {font-size: .8em; padding: 5px 5px 20px 20px; border-top: 1px solid #dddddd}
+.mod-history-details h3 {font-size: 1.2em; font-weight: bold; margin-top: 10px } 
+
+/*Dashboard*/
+.descriptive-text, .descriptive-text p, .descriptive-text ul, .descriptive-text li {font-size: .95em}
+.descriptive-text, .descriptive-text ul {margin: 0; padding-bottom: 5px}
+#grant_output {border-top: 1px solid #dddddd}
+#grant_output p {font-family: verdana; font-size: 12px}  
+
+/*Pagination Links*/
+.page-links { padding: 10px 5px 5px 10px; text-align: center }
+.page-links a, .page-links span { padding: 0 10px 0 10px; font-weight: bold } 
+
+/*Results*/
+.show-records {min-height: 400px}
