@@ -63,8 +63,9 @@
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">Beneficiaries<span class="caret"></span></a>
 						<ul class="dropdown-menu">
+							<li><a href="<?php echo base_url('beneficiaries') ?>"><span class="glyphicon glyphicon-folder-open"></span>&nbsp; All Beneficiaries</a></li>
 							<li><a href="<?php echo base_url('rvoters') ?>"><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Registered Voters</a></li>
-							<li><a href="<?php echo base_url('nonvoters') ?>"><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Non Voters</a></li>
+							<li><a href="<?php echo base_url('nonvoters') ?>"><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Non-Voters</a></li>
 						</ul>
 					</li>
 					<li><a href="<?php echo base_url('scholarships') ?>"><span class="glyphicon glyphicon-education"></span> Scholarships</a></li>
