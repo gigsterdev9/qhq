@@ -49,6 +49,14 @@
 						<option value="<?php echo $school['school_id'] ?>" ><?php echo $school['school_name'] ?></option>
 					<?php endforeach; ?>
 				</select>
+				<select name="filter_by_district" id="filter_by_district" class="form-control" style="display:none">
+					<option value="1">1</option>
+					<option value="2">2</option>
+				</select>
+				<select name="filter_by_gender" id="filter_by_gender" class="form-control" style="display:none">
+					<option value="M">Male</option>
+					<option value="F">Female</option>
+				</select>
 				<input type="submit" class="form-control" value="&raquo;" />
 			</div>
 		<?php echo form_close();?>
@@ -57,7 +65,7 @@
 	<h3>
 		<span class="glyphicon glyphicon-folder-open"></span>&nbsp; List of Scholars
 	</h3>
-	<div class="container-fluid message"><?php echo $scholarships['result_count'] ?> records found.</div>
+	<div class="container-fluid message"><?php echo $record_count ?> records found.</div>
 	<div class="container-fluid">
 		<small>
 		<?php 
@@ -82,7 +90,7 @@
 	<div class="panel panel-default">
 		<div class="table-responsive show-records">
 		
-			<?php if ($scholarships['result_count'] > 0) { ?>	
+			<?php if ($record_count > 0) { ?>	
 			<div class="page-links"><?php echo $links; ?></div>
 			
 				<table class="table table-striped">
@@ -142,11 +150,27 @@
 		
     	if (myval == 'brgy') {
     		$('#filter_by_brgy').show();
-    		$('#filter_by_somethingelse').hide();
+    		$('#filter_by_school').hide();
+			$('#filter_by_district').hide();
+			$('#filter_by_gender').hide();
     	}
     	else if(myval == 'school'){
     		$('#filter_by_brgy').hide();
     		$('#filter_by_school').show();
+			$('#filter_by_district').hide();
+			$('#filter_by_gender').hide();
+    	}
+		else if(myval == 'district'){
+    		$('#filter_by_brgy').hide();
+    		$('#filter_by_school').hide();
+			$('#filter_by_district').show();
+			$('#filter_by_gender').hide();
+    	}
+		else if(myval == 'gender'){
+    		$('#filter_by_brgy').hide();
+    		$('#filter_by_school').hide();
+			$('#filter_by_district').hide();
+			$('#filter_by_gender').show();
     	}
     	else{
     		

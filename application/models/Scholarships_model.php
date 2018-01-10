@@ -76,23 +76,27 @@ class scholarships_model extends CI_Model {
 	
 	}
 
-	public function filter_rvoters($filter_param1 = FALSE, $filter_param2 = FALSE)
+	public function filter_scholarships($filter_param1 = FALSE, $filter_param2 = FALSE, $limit = 0, $start = 0)
 	{
 		if ($filter_param1 === FALSE)
 		{
 			return 0;
 		}
 		
-		$this->db->select('*');
-		$this->db->from('rvoters');
-		$this->db->where("$filter_param1 = '$filter_param2' and trash = 0");
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(non_voters.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('scholarships');
+		$this->db->join('beneficiaries', 'beneficiaries.ben_id = scholarships.ben_id');
+		$this->db->join('non_voters', 'beneficiaries.nv_id = non_voters.nv_id');
+		$this->db->join('schools', 'scholarships.school_id = schools.school_id');
+		$this->db->where("$filter_param1 = '$filter_param2' and beneficiaries.trash = 0");
+		$this->db->limit($limit, $start);
 		$query = $this->db->get();		
 		
 		return $query->result_array();
 		
 	}
 	
-	public function search_rvoters($search_param = FALSE)
+	public function search_scholarships($search_param = FALSE)
 	{
 		if ($search_param === FALSE)
 		{
@@ -100,7 +104,7 @@ class scholarships_model extends CI_Model {
 		}
 		
 		$this->db->select('*');
-		$this->db->from('rvoters');
+		$this->db->from('scholarships');
 		$this->db->where("lname like '%$search_param%' or fname like '%$search_param%' and trash = 0");
 		$query = $this->db->get();		
 
