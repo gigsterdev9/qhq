@@ -3,13 +3,9 @@
 	<h3><a href="<?php echo site_url('beneficiaries/view/'.$scholar['ben_id']); ?>">
 		<span class="glyphicon glyphicon-file"></span> <?php echo $scholar['fname'].' '.$scholar['lname'].' ('.$scholar['id_no'].')'; ?> 
  		</a>
-		<?php if ($this->ion_auth->in_group('admin'))
-		{
-		?>
-		<small>[&nbsp;<a href="<?php echo site_url('scholarships/edit/'.$scholar['scholarship_id']); ?>">Edit</a>&nbsp;]</small>
-		<?php
-		}
-		?>
+		<?php if ($this->ion_auth->in_group('admin')) { ?>
+			<small>[&nbsp;<a href="<?php echo site_url('scholarships/edit/'.$scholar['scholarship_id']); ?>">Edit</a>&nbsp;]</small>
+		<?php } ?>
 	</h3>
 	<div class="panel panel-default">
 		<div class="text-right back-link"><a href="javascript:history.go(-1)">&laquo; Back</a></div>

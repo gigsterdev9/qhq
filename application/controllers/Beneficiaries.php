@@ -123,7 +123,7 @@ class Beneficiaries extends CI_Controller {
         }
 
         public function view($id = NULL) {
-		//essentially classifies a beneficiary as either a registered voter or a non-voter and loads the appropriate viewing pages
+		//essentially classifies a beneficiary as either a registered voter or a non-voter and loads the appropriate viewing pages 
 
                 $beneficiary = $this->beneficiaries_model->get_beneficiary_by_id($id);
                 if (empty($beneficiary)) {
