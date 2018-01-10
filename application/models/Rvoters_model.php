@@ -39,6 +39,20 @@ class rvoters_model extends CI_Model {
 		return $query->row_array();
 	}
 	
+	public function get_rvoter_by_comelec_id($id = FALSE)
+	{
+		if ($id === FALSE)
+		{
+			return 0;
+		}
+		
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('rvoters');
+		$this->db->where("id_no_comelec = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
+		$query = $this->db->get();		
+
+		return $query->row_array();
+	}
 	
 	public function filter_rvoters($limit, $start, $filter_param1 = FALSE, $filter_param2 = FALSE, $filter_operand = FALSE)
 	{

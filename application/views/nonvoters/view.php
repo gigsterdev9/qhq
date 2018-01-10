@@ -75,7 +75,7 @@
 					<div class="col-sm-9 control-value"><?php echo $nonvoter['email']; ?>&nbsp;</div>
 
 					<div class="col-sm-3 control-label">Remarks</div>
-					<div class="col-sm-9 control-value"><?php echo $nonvoter['remarks']; ?>&nbsp;</div>
+					<div class="col-sm-9 control-value"><?php echo $nonvoter['nv_remarks']; ?>&nbsp;</div>
 
 				</div>
 
@@ -129,7 +129,7 @@
 
 						foreach ($services as $service): 
 						//echo '<pre>'; print_r($rvoter); echo '</pre>';
-						if (is_array($rvoter)) { //do not display 'result_count' 
+						if (is_array($nonvoter)) { //do not display 'result_count' 
 					?>
 					<tr>
 						<td><a href="#"><span class="glyphicon glyphicon-file"></span></a></td>

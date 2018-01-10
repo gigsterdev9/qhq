@@ -23,8 +23,7 @@ class nonvoters_model extends CI_Model {
 
 	}
 
-	public function get_nonvoter_by_id($id = FALSE)
-	{
+	public function get_nonvoter_by_id($id = FALSE) {
 		if ($id === FALSE)
 		{
 			return 0;
@@ -37,7 +36,6 @@ class nonvoters_model extends CI_Model {
 
 		return $query->row_array();
 	}
-	
 	
 	public function filter_nonvoters($limit, $start, $filter_param1 = FALSE, $filter_param2 = FALSE, $filter_operand = FALSE)
 	{

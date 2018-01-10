@@ -30,9 +30,10 @@ class beneficiaries_model extends CI_Model {
 			return 0;
 		}
 		
-		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
+		//$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->select("*");
 		$this->db->from('beneficiaries');
-		$this->db->where("id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
+		$this->db->where("ben_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
 		$query = $this->db->get();		
 
 		return $query->row_array();
