@@ -25,8 +25,7 @@ class beneficiaries_model extends CI_Model {
 
 	public function get_beneficiary_by_id($id = FALSE)
 	{
-		if ($id === FALSE)
-		{
+		if ($id === FALSE) {
 			return 0;
 		}
 		

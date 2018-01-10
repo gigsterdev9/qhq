@@ -1,7 +1,7 @@
  <div class="container">
 	<h2><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Scholarship Grant Details</h2>
 	<h3><a href="<?php echo site_url('beneficiaries/view/'.$scholar['ben_id']); ?>">
-		<span class="glyphicon glyphicon-file"></span> <?php echo $scholar['fname'].' '.$scholar['lname'].' ('.$scholar['id_no'].')'; ?> 
+			<span class="glyphicon glyphicon-file"></span> <?php echo $scholar['fname'].' '.$scholar['lname'].' ('.$scholar['id_no'].')'; ?> 
  		</a>
 		<?php if ($this->ion_auth->in_group('admin')) { ?>
 			<small>[&nbsp;<a href="<?php echo site_url('scholarships/edit/'.$scholar['scholarship_id']); ?>">Edit</a>&nbsp;]</small>
