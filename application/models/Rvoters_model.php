@@ -207,7 +207,7 @@ class rvoters_model extends CI_Model {
 		//add audit trail
 		$user = $this->ion_auth->user()->row();
 		$data1 = array(
-					'project_id' => $rvid,
+					'rvoter_id' => $rvid,
 					'user' => $user->username,
 					'activity' => 'created'
 		);

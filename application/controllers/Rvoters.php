@@ -21,25 +21,6 @@ class Rvoters extends CI_Controller {
 				//debug
 				//$this->output->enable_profiler(TRUE);
 				
-				/*
-				$username = 'qseq';
-				$password = 'test';
-				$email = 'pj.villarta@gmail.com';
-				$additional_data = array(
-								'first_name' => 'QSec',
-								'last_name' => 'QHQ',
-								);
-				$group = array('1'); // Sets user to admin.
-
-				$this->ion_auth->register($username, $password, $email, $additional_data, $group);
-				
-				$id = 2;
-				$data = array(
-							'username' => 'secretariat'
-							 );
-				$this->ion_auth->update($id, $data);
-				/**/
-				
         }
 
         public function index() {		
