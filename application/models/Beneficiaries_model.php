@@ -10,18 +10,34 @@ class beneficiaries_model extends CI_Model {
         return $this->db->count_all("beneficiaries");
     }
 
-	public function get_beneficiaries($limit = 0, $start = 0) {
+	public function get_nv_beneficiaries($limit = 0, $start = 0) {
 		
 		$this->db->select("*");
 		$this->db->from('beneficiaries');
-		$this->db->where('trash = 0');
-		$this->db->order_by('lname', 'ASC');
+		$this->db->join('non_voters', 'non_voters.nv_id = beneficiaries.nv_id');
+		$this->db->where('beneficiaries.trash = 0');
+		$this->db->order_by('non_voters.lname', 'ASC');
 		$this->db->limit($limit, $start);
 		$query = $this->db->get();
 
 		return $query->result_array();
 
 	}
+
+	public function get_rv_beneficiaries($limit = 0, $start = 0) {
+		
+		$this->db->select("*");
+		$this->db->from('beneficiaries');
+		$this->db->join('rvoters', 'rvoters.id_no_comelec = beneficiaries.id_no_comelec');
+		$this->db->where('beneficiaries.trash = 0'); 
+		$this->db->order_by('rvoters.lname', 'ASC');
+		$this->db->limit($limit, $start);
+		$query = $this->db->get();
+
+		return $query->result_array();
+
+	}
+
 
 	public function get_beneficiary_by_id($id = FALSE)
 	{

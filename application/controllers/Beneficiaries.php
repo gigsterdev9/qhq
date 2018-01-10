@@ -19,6 +19,9 @@ class Beneficiaries extends CI_Controller {
 				{
 					redirect('auth/login');
 				}
+
+				//debug
+				//$this->output->enable_profiler(TRUE);
 				
         }
 
@@ -28,9 +31,9 @@ class Beneficiaries extends CI_Controller {
 
 			//set general pagination config
 			$config = array();
-			$config['base_url'] = base_url() . 'rvoters';
+			$config['base_url'] = base_url() . 'beneficiaries';
 			
-			$config['per_page'] = 100;
+			$config['per_page'] = 25;
 			$config['uri_segment'] = 2;
 			$config['cur_tag_open'] = '<span>';
 			$config['cur_tag_close'] = '</span>';
@@ -41,6 +44,7 @@ class Beneficiaries extends CI_Controller {
 			
 
 				if ($this->input->get('filter_by') != NULL) {
+					
 					$filter_by = $this->input->get('filter_by');
 					switch ($filter_by) 
 					{
@@ -104,20 +108,24 @@ class Beneficiaries extends CI_Controller {
 					}
 				}
 				else{
-					//Display all
+					//Display registered first, non-voters next
 					//implement pagination
 					$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-					$data['nonvoters'] = $this->nonvoters_model->get_nonvoters($config["per_page"], $page);
-					$data['nonvoters']['result_count'] = $this->nonvoters_model->record_count();
-						$config['total_rows'] = $data['nonvoters']['result_count'];
+					$data['total_result_count'] = $this->beneficiaries_model->record_count();
+						$config['total_rows'] = $data['total_result_count'];
 						$this->pagination->initialize($config);
+
+					$data['nonvoters'] = $this->beneficiaries_model->get_nv_beneficiaries($config["per_page"], $page);
+					$data['rvoters'] = $this->beneficiaries_model->get_rv_beneficiaries($config["per_page"], $page);
+
 					$data['links'] = $this->pagination->create_links();
+
 				}
 				
                 $data['title'] = 'Master List';
 				//echo '<pre>'; print_r($data); echo '</pre>';
 				$this->load->view('templates/header', $data);
-				$this->load->view('nonvoters/index', $data);
+				$this->load->view('beneficiaries/index', $data);
 				$this->load->view('templates/footer');
 				
         }

@@ -53,6 +53,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+$route['beneficiaries/(:any)'] = 'beneficiaries';
+$route['beneficiaries'] = 'beneficiaries';
+
 $route['rvoters/view/(:any)'] = 'rvoters/view/$1';
 $route['rvoters/edit/(:any)'] = 'rvoters/edit/$1';
 $route['rvoters/add'] = 'rvoters/add';
