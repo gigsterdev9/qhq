@@ -47,27 +47,32 @@ class Scholarships extends CI_Controller {
 						case 'brgy': 
 							$brgy = $this->input->post('filter_by_brgy');
 							$data['scholarships'] = $this->scholarships_model->filter_scholarships('barangay', $brgy, $config["per_page"], $page);
+							$data['record_count'] = $this->scholarships_model->filter_scholarships_num_rows('barangay', $brgy);
 							$data['filterval'] = array('barangay',$brgy); 
 							break;
 						case 'school': 
 							$school = $this->input->post('filter_by_school');
 							$data['scholarships'] = $this->scholarships_model->filter_scholarships('schools.school_id', $school, $config["per_page"], $page);
-							$data['filterval'] = array('school',$school); 
+							$data['record_count'] = $this->scholarships_model->filter_scholarships_num_rows('schools.school_id', $school);
+							$data['filterval'] = array('school ID',$school); 
 							break;
 						case 'district': 
 							$district = $this->input->post('filter_by_district');
 							$data['scholarships'] = $this->scholarships_model->filter_scholarships('district', $district, $config["per_page"], $page);
+							$data['record_count'] = $this->scholarships_model->filter_scholarships_num_rows('district', $district);
 							$data['filterval'] = array('district',$district); 
 							break;
 						case 'gender': 
 							$gender = $this->input->post('filter_by_gender');
 							$data['scholarships'] = $this->scholarships_model->filter_scholarships('sex', $gender, $config["per_page"], $page);
+							$data['record_count'] = $this->scholarships_model->filter_scholarships_num_rows('sex', $gender);
 							$data['filterval'] = array('gender',$gender); 
 							break;
 						default: 
 							break;
+
 					}
-					$data['record_count'] = count($data['scholarships']);
+					
 					$config['total_rows'] = $data['record_count'];
 						$this->pagination->initialize($config);
 					$data['links'] = $this->pagination->create_links();

@@ -65,24 +65,28 @@
 	<h3>
 		<span class="glyphicon glyphicon-folder-open"></span>&nbsp; List of Scholars
 	</h3>
-	<div class="container-fluid message"><?php echo $record_count ?> records found.</div>
+	<div class="container-fluid message"><?php echo $record_count ?> records found.
+		<?php 
+			if (isset($filterval)) {
+				$filter = (is_array($filterval)) ? '<br />Filter parameters: '. ucfirst($filterval[0]).' / '.$filterval[1] : '' ; 
+				echo $filter; 
+			}
+		?>
+	</div>
 	<div class="container-fluid">
 		<small>
 		<?php 
-			if (isset($filterval)) 
-			{ 
+			if (isset($filterval)) 			{ 
 				$url = 'scholarships/filtered_to_excel/'.$filterval[0].'/'.$filterval[1];
 			}
-			else if (isset($searchval))
-			{
+			else if (isset($searchval))	{
 				$url = 'scholarships/results_to_excel/'.$searchval;
 			}
-			else
-			{
+			else {
 				$url = 'scholarships/all_to_excel';
 			}
 			
-			//echo '<a href="'.$url.'" target="_blank">Export to Excel &raquo;</a>';	
+			if ($record_count > 0) echo '<a href="'.$url.'" target="_blank">Export to Excel &raquo;</a>';	
 		?>
 		</small>
 	</div>

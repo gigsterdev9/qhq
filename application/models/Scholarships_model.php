@@ -76,8 +76,7 @@ class scholarships_model extends CI_Model {
 	
 	}
 
-	public function filter_scholarships($filter_param1 = FALSE, $filter_param2 = FALSE, $limit = 0, $start = 0)
-	{
+	public function filter_scholarships($filter_param1 = FALSE, $filter_param2 = FALSE, $limit = 0, $start = 0) {
 		if ($filter_param1 === FALSE)
 		{
 			return 0;
@@ -92,9 +91,30 @@ class scholarships_model extends CI_Model {
 		$this->db->limit($limit, $start);
 		$query = $this->db->get();		
 		
+		//return $query;
 		return $query->result_array();
 		
 	}
+
+	public function filter_scholarships_num_rows($filter_param1 = FALSE, $filter_param2 = FALSE) {
+		if ($filter_param1 === FALSE)
+		{
+			return 0;
+		}
+		
+		$this->db->select('*');
+		$this->db->from('scholarships');
+		$this->db->join('beneficiaries', 'beneficiaries.ben_id = scholarships.ben_id');
+		$this->db->join('non_voters', 'beneficiaries.nv_id = non_voters.nv_id');
+		$this->db->join('schools', 'scholarships.school_id = schools.school_id');
+		$this->db->where("$filter_param1 = '$filter_param2' and beneficiaries.trash = 0");
+		$query = $this->db->get();		
+		
+		return $query->num_rows();
+		
+	}
+
+	
 	
 	public function search_scholarships($search_param = FALSE)
 	{
