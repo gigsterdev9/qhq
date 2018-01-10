@@ -20,26 +20,7 @@ class Nonvoters extends CI_Controller {
 				
 				//debug
 				//$this->output->enable_profiler(TRUE);
-				
-				/*
-				$username = 'qseq';
-				$password = 'test';
-				$email = 'pj.villarta@gmail.com';
-				$additional_data = array(
-								'first_name' => 'QSec',
-								'last_name' => 'QHQ',
-								);
-				$group = array('1'); // Sets user to admin.
-
-				$this->ion_auth->register($username, $password, $email, $additional_data, $group);
-				
-				$id = 2;
-				$data = array(
-							'username' => 'secretariat'
-							 );
-				$this->ion_auth->update($id, $data);
-				/**/
-				
+								
         }
 
         public function index() {		
@@ -48,7 +29,7 @@ class Nonvoters extends CI_Controller {
 
 			//set general pagination config
 			$config = array();
-			$config['base_url'] = base_url() . 'rvoters';
+			$config['base_url'] = base_url() . 'nonvoters';
 			
 			$config['per_page'] = 100;
 			$config['uri_segment'] = 2;
@@ -68,7 +49,7 @@ class Nonvoters extends CI_Controller {
 							$brgy = $this->input->get('filter_by_brgy');
 							$data['filterval'] = array('barangay',$brgy,''); //the '' is to factor in the 3rd element introduced by the age filter
 							$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-							$data['nonvoters'] = $this->nonvoters_model->filter_rvoters($config["per_page"], $page, 'barangay',$brgy);
+							$data['nonvoters'] = $this->nonvoters_model->filter_nonvoters($config["per_page"], $page, 'barangay',$brgy);
 								$config['total_rows'] = $data['nonvoters']['result_count'];
 								$this->pagination->initialize($config);
 							$data['links'] = $this->pagination->create_links();
@@ -77,7 +58,7 @@ class Nonvoters extends CI_Controller {
 							$district = $this->input->get('filter_by_district');
 							$data['filterval'] = array('district',$district,''); //the '' is to factor in the 3rd element introduced by the age filter
 							$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-							$data['nonvoters'] = $this->nonvoters_model->filter_rvoters($config["per_page"], $page, 'district',$district);
+							$data['nonvoters'] = $this->nonvoters_model->filter_nonvoters($config["per_page"], $page, 'district',$district);
 								$config['total_rows'] = $data['nonvoters']['result_count'];
 								$this->pagination->initialize($config);
 							$data['links'] = $this->pagination->create_links();
@@ -95,7 +76,7 @@ class Nonvoters extends CI_Controller {
 
 							$data['filterval'] = array('age',$age_operand, $age_value);
 							$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-							$data['nonvoters'] = $this->nonvoters_model->filter_rvoters($config["per_page"], $page, 'age',$age_value, $age_operand);
+							$data['nonvoters'] = $this->nonvoters_model->filter_nonvoters($config["per_page"], $page, 'age',$age_value, $age_operand);
 								$config['total_rows'] = $data['nonvoters']['result_count'];
 								$this->pagination->initialize($config);
 							$data['links'] = $this->pagination->create_links();
@@ -112,7 +93,7 @@ class Nonvoters extends CI_Controller {
 
 					if (!empty($search_key)) {
 						$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-						$data['nonvoters'] = $this->nonvoters_model->search_rvoters($config["per_page"], $page, $search_param, $search_key);
+						$data['nonvoters'] = $this->nonvoters_model->search_nonvoters($config["per_page"], $page, $search_param, $search_key);
 							$config['total_rows'] = $data['nonvoters']['result_count'];
 							$this->pagination->initialize($config);
 						$data['links'] = $this->pagination->create_links();
@@ -161,7 +142,7 @@ class Nonvoters extends CI_Controller {
         
         public function add() {
 			if (!$this->ion_auth->in_group('admin')) {
-				redirect('rvoters');
+				redirect('nonvoters');
 			}
 			
 			$this->load->helper('form');
@@ -171,9 +152,8 @@ class Nonvoters extends CI_Controller {
 			$data['title'] = 'New registered voter';
 
 			//validation rules
-			$this->form_validation->set_rules('code', 'Code', 'required|is_unique[rvoters.code]');
-			$this->form_validation->set_rules('id_no', 'ID No.', 'required|is_unique[rvoters.id_no]');
-			$this->form_validation->set_rules('id_no_comelec', 'Comelec ID No.', 'required|is_unique[rvoters.id_no_comelec]');
+			$this->form_validation->set_rules('code', 'Code', 'required|is_unique[nonvoters.code]');
+			$this->form_validation->set_rules('id_no', 'ID No.', 'required|is_unique[nonvoters.id_no]');
 			$this->form_validation->set_rules('fname', 'First Name', 'required');
 			$this->form_validation->set_rules('mname', 'Middle Name', 'required');
 			$this->form_validation->set_rules('lname', 'Last Name', 'required');
@@ -193,7 +173,7 @@ class Nonvoters extends CI_Controller {
 			else
 			{
 				//execute insert
-				$this->nonvoters_model->set_rvoter();
+				$this->nonvoters_model->set_nonvoter();
 				
 				$data['title'] = 'Registered voter entry.';
 				$data['alert_success'] = 'Entry successful.';
@@ -209,19 +189,16 @@ class Nonvoters extends CI_Controller {
 		public function edit($id = NULL) {
 
 			if (!$this->ion_auth->in_group('admin')) {
-				redirect('rvoters');
+				redirect('nonvoters');
 			}
 			
 			$this->load->helper('form');
 			$this->load->library('form_validation');
 
-			$data['title'] = 'Edit registered voter details';
+			$data['title'] = 'Edit details';
 			$data['id'] = $id;
 
 			//validation rules
-			$this->form_validation->set_rules('code', 'Code', 'required');
-			$this->form_validation->set_rules('id_no', 'ID No.', 'required');
-			$this->form_validation->set_rules('id_no_comelec', 'Comelec ID No.', 'required');
 			$this->form_validation->set_rules('fname', 'First Name', 'required');
 			$this->form_validation->set_rules('lname', 'Last Name', 'required');
 			$this->form_validation->set_rules('dob', 'Birthdate', 'required');
@@ -236,7 +213,7 @@ class Nonvoters extends CI_Controller {
 				
 				if ($this->form_validation->run() === FALSE) {
 					
-					$data['rvoter'] = $this->nonvoters_model->get_nonvoter_by_id($id);
+					$data['nonvoter'] = $this->nonvoters_model->get_nonvoter_by_id($id);
 					
 					$this->load->view('templates/header', $data);
 					$this->load->view('nonvoters/edit');
@@ -245,15 +222,15 @@ class Nonvoters extends CI_Controller {
 				}
 				else {
 					//execute data update
-					$this->nonvoters_model->update_rvoter();
+					$this->nonvoters_model->update_nonvoter();
 					//retrieve updated data
-					$data['rvoter'] = $this->nonvoters_model->get_nonvoter_by_id($this->input->post('id'));
+					$data['nonvoter'] = $this->nonvoters_model->get_nonvoter_by_id($this->input->post('id'));
 					
 					if ( $this->input->post('trash') == 1) {
 						$data['alert_trash'] = 'Marked for deletion. This is your last chance to undo by unchecking the "Delete this entry" box below and clicking submit.<br />';
 					}
 					else {
-						$data['alert_success'] = 'Voter entry updated.';
+						$data['alert_success'] = 'Entry updated.';
 					}
 					
 					$this->load->view('templates/header', $data);
@@ -263,9 +240,9 @@ class Nonvoters extends CI_Controller {
 				
 			}
 			else{
-				$data['rvoter'] = $this->nonvoters_model->get_nonvoter_by_id($id);
+				$data['nonvoter'] = $this->nonvoters_model->get_nonvoter_by_id($id);
 				
-				if (empty($data['rvoter'])) {
+				if (empty($data['nonvoter'])) {
 					show_404();
 				}
 

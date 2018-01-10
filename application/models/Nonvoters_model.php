@@ -200,14 +200,16 @@ class nonvoters_model extends CI_Model {
 	
 	
 	//update individual voter
-	public function update_rvoter() {
+	public function update_nonvoter() {
 		//echo '<pre>'; print_r($_POST); echo '</pre>'; die();
 		$this->load->helper('url');
 		
-		$id = $this->input->post('id');
+		$nv_id = $this->input->post('nv_id');
 				
 		
 		$data = array(
+				'code' => strtoupper($this->input->post('code')),
+				'id_no' => strtoupper($this->input->post('id_no')),
 				'fname' => strtoupper($this->input->post('fname')),
 				'lname' => strtoupper($this->input->post('lname')),
 				'dob' => $this->input->post('dob'),
@@ -215,18 +217,16 @@ class nonvoters_model extends CI_Model {
 				'barangay' => $this->input->post('barangay'),
 				'district' => $this->input->post('district'),
 				'sex' => $this->input->post('sex'),
-				'precinct' => $this->input->post('precinct'),
 				'mobile_no' => $this->input->post('mobile_no'),
 				'email' => $this->input->post('email'),
 				'referee' => $this->input->post('referee'),
-				//'voters_id' => $this->input->post('voters_id'),
-				'status' => $this->input->post('status'),
-				'remarks' => $this->input->post('remarks'),
+				'nv_status' => $this->input->post('status'),
+				'nv_remarks' => $this->input->post('remarks'),
 				'trash' => $this->input->post('trash')
 		);
 		
-		$this->db->where('id', $id);
-		$this->db->update('nonvoters', $data);
+		$this->db->where('nv_id', $nv_id);
+		$this->db->update('non_voters', $data);
 		
 		//add audit trail
 		$altered = $this->input->post('altered'); //hidden field that tracks form edits; see form
@@ -234,7 +234,7 @@ class nonvoters_model extends CI_Model {
 		{
 			$user = $this->ion_auth->user()->row();
 			$data3 = array(
-						'rvoter_id' => $id,
+						'nv_id' => $nv_id,
 						'user' => $user->username,
 						'activity' => 'modified',
 						'mod_details' => $altered
@@ -245,11 +245,11 @@ class nonvoters_model extends CI_Model {
 		return;
 	}
 
-	public function show_activities($rvoter_id) {
+	public function show_activities($nv_id) {
 		$this->db->select('*');
 		$this->db->from('audit_trail');
 		$this->db->order_by('timestamp', 'desc');
-		$this->db->where("rvoter_id = '$rvoter_id' and activity = 'modified'");
+		$this->db->where("nv_id = '$nv_id' and activity = 'modified'");
 		$this->db->limit(5);
 		$query = $this->db->get();		
 		
@@ -257,7 +257,7 @@ class nonvoters_model extends CI_Model {
 		
 		$this->db->select('*');
 		$this->db->from('audit_trail');
-		$this->db->where("rvoter_id = '$rvoter_id' and activity = 'created'");
+		$this->db->where("nv_id = '$nv_id' and activity = 'created'");
 		$query = $this->db->get();		
 		
 		$tracker['created'] = $query->row_array();	

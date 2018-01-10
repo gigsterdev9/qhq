@@ -1,6 +1,6 @@
 <div class="container">
 	<h2><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Registered Voter Details</h2>
-	<h3><span class="glyphicon glyphicon-file"></span> <?php echo $rvoter['fname'].' '.$rvoter['lname'].' ('.$rvoter['id_no'].')'; ?> 
+	<h3><span class="glyphicon glyphicon-file"></span> <?php echo strtoupper($rvoter['fname'].' '.$rvoter['lname'].' ('.$rvoter['id_no'].')'); ?> 
 	<?php if ($this->ion_auth->in_group('admin'))
 	{
 	?>
@@ -91,9 +91,10 @@
 		</div>
 		
 		<div class="service-history-details text-left">
-			<h3>SERVICE AVAILMENT HISTORY</h3>
+			<h3>AVAILMENT HISTORY</h3>
 			<div class="table-responsive show-records" >
-				
+			
+			<h4>Social Services</h4>	
 			<table class="table table-striped">
 				<thead>
 					<tr>
@@ -155,19 +156,100 @@
 				</tbody>
 			</table>
 
-				<?php 
-					/*
-					if (is_array($proponent_projects)) 
-					{
-						//print_r($proponent_projects);
-						foreach ($proponent_projects as $project) 
-						{
-							echo '<a href="'.site_url('rvoters/'.$project['slug']).'">'.$project['project_title'].'</a>';
-							echo '<br />';
+			<h4>Scholarship</h4>	
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th width="2%">&nbsp;</th>
+						<th width="10%">Date</th>
+						<th width="20%">Assistance Type</th>
+						<th width="10%">Amount</th>
+						<th width="10%">Institution</th>
+						<th width="10%">Release Date</th>
+						<th>Remarks</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php 
+						$services = array(
+										array('date' => '2017-02-20', 
+											'assistance_type' => 'Financial Assistance', 
+											'amount' => '1,500.00', 
+											'institution' => 'N/A',
+											'release_date' => '2017-02-25',
+											'remarks' => 'Lorem ipsum dolor consectitur sit amet.'),
+									);
+
+						foreach ($services as $service): 
+						//echo '<pre>'; print_r($rvoter); echo '</pre>';
+						if (is_array($rvoter)) { //do not display 'result_count' 
+					?>
+					<tr>
+						<td><a href="#"><span class="glyphicon glyphicon-file"></span></a></td>
+						<td><?php echo $service['date']; ?></td>
+						<td><?php echo $service['assistance_type']; ?></td>
+						<td><?php echo $service['amount']; ?></td>
+						<td><?php echo $service['institution']; ?></td>
+						<td><?php echo $service['release_date']; ?></td>
+						<td><?php echo $service['remarks']; ?></td>
+					</tr>
+					<?php 
 						}
-					}
-					*/
-				?>&nbsp;
+						endforeach;
+					?>
+				</tbody>
+			</table>
+
+			<h4>Livelihood</h4>	
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th width="2%">&nbsp;</th>
+						<th width="10%">Date</th>
+						<th width="20%">Assistance Type</th>
+						<th width="10%">Amount</th>
+						<th width="10%">Institution</th>
+						<th width="10%">Release Date</th>
+						<th>Remarks</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php 
+						$services = array(
+										array('date' => '2017-11-02', 
+											'assistance_type' => 'Burial Assistance', 
+											'amount' => '10,000.00', 
+											'institution' => 'N/A',
+											'release_date' => '2017-11-04',
+											'remarks' => 'Lorem ipsum dolor consectitur sit amet.'),
+										array('date' => '2017-02-20', 
+											'assistance_type' => 'Financial Assistance', 
+											'amount' => '1,500.00', 
+											'institution' => 'N/A',
+											'release_date' => '2017-02-25',
+											'remarks' => 'Lorem ipsum dolor consectitur sit amet.'),
+									);
+
+						foreach ($services as $service): 
+						//echo '<pre>'; print_r($rvoter); echo '</pre>';
+						if (is_array($rvoter)) { //do not display 'result_count' 
+					?>
+					<tr>
+						<td><a href="#"><span class="glyphicon glyphicon-file"></span></a></td>
+						<td><?php echo $service['date']; ?></td>
+						<td><?php echo $service['assistance_type']; ?></td>
+						<td><?php echo $service['amount']; ?></td>
+						<td><?php echo $service['institution']; ?></td>
+						<td><?php echo $service['release_date']; ?></td>
+						<td><?php echo $service['remarks']; ?></td>
+					</tr>
+					<?php 
+						}
+						endforeach;
+					?>
+				</tbody>
+			</table>
+
 			</div>
 			<div class="text-right back-link"><a href="javascript:history.go(-1)">&laquo; Back</a></div>
 		</div>

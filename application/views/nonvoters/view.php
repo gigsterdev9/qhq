@@ -1,10 +1,10 @@
 <div class="container">
 	<h2><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Non-Voter Details</h2>
-	<h3><span class="glyphicon glyphicon-file"></span> <?php echo $nonvoter['fname'].' '.$nonvoter['lname'].' ('.$nonvoter['id_no'].')'; ?> 
+	<h3><span class="glyphicon glyphicon-file"></span> <?php echo strtoupper($nonvoter['fname'].' '.$nonvoter['lname'].' ('.$nonvoter['id_no'].')'); ?> 
 	<?php if ($this->ion_auth->in_group('admin'))
 	{
 	?>
-	<small>[&nbsp;<a href="<?php echo site_url('rvoters/edit/'.$nonvoter['nv_id']); ?>">Edit</a>&nbsp;]</small>
+	<small>[&nbsp;<a href="<?php echo site_url('nonvoters/edit/'.$nonvoter['nv_id']); ?>">Edit</a>&nbsp;]</small>
 	<?php
 	}
 	?>
@@ -61,7 +61,7 @@
 
 				<div class="col-sm-6">
 					<div class="col-sm-3 control-label" >Code</div>
-					<div class="col-sm-9 control-value" ><?php echo $nonvoter['code']; ?></div>
+					<div class="col-sm-9 control-value" ><?php echo $nonvoter['code']; ?>&nbsp;</div>
 
 					<div class="col-sm-3 control-label ">ID No.</div>
 					<div class="col-sm-9 control-value"><?php echo $nonvoter['id_no']; ?>&nbsp;</div>
@@ -83,9 +83,10 @@
 		</div>
 		
 		<div class="service-history-details text-left">
-			<h3>SERVICE AVAILMENT HISTORY</h3>
+			<h3>AVAILMENT HISTORY</h3>
 			<div class="table-responsive show-records" >
-				
+			
+			<h4>Social Services <small>[ <a href="#">New Entry</a> ]</small></h4>
 			<table class="table table-striped">
 				<thead>
 					<tr>
@@ -147,20 +148,105 @@
 				</tbody>
 			</table>
 
-				<?php 
-					/*
-					if (is_array($proponent_projects)) 
-					{
-						//print_r($proponent_projects);
-						foreach ($proponent_projects as $project) 
-						{
-							echo '<a href="'.site_url('rvoters/'.$project['slug']).'">'.$project['project_title'].'</a>';
-							echo '<br />';
+			
+			<h4>Scholarship <small>[ <a href="#">New Entry</a> ]</small></h4>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th width="2%">&nbsp;</th>
+						<th width="10%">Date</th>
+						<th width="20%">Assistance Type</th>
+						<th width="10%">Amount</th>
+						<th width="10%">Institution</th>
+						<th width="10%">Release Date</th>
+						<th>Remarks</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php 
+						$services = array(
+										array('date' => '2017-02-20', 
+											'assistance_type' => 'Financial Assistance', 
+											'amount' => '1,500.00', 
+											'institution' => 'N/A',
+											'release_date' => '2017-02-25',
+											'remarks' => 'Lorem ipsum dolor consectitur sit amet.'),
+									);
+
+						foreach ($services as $service): 
+						//echo '<pre>'; print_r($rvoter); echo '</pre>';
+						if (is_array($nonvoter)) { //do not display 'result_count' 
+					?>
+					<tr>
+						<td><a href="#"><span class="glyphicon glyphicon-file"></span></a></td>
+						<td><?php echo $service['date']; ?></td>
+						<td><?php echo $service['assistance_type']; ?></td>
+						<td><?php echo $service['amount']; ?></td>
+						<td><?php echo $service['institution']; ?></td>
+						<td><?php echo $service['release_date']; ?></td>
+						<td><?php echo $service['remarks']; ?></td>
+					</tr>
+					<?php 
 						}
-					}
-					*/
-				?>&nbsp;
+						endforeach;
+					?>
+				</tbody>
+			</table>
+
+			
+			<h4>Livelihood <small>[ <a href="#">New Entry</a> ]</small></h4>	
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th width="2%">&nbsp;</th>
+						<th width="10%">Date</th>
+						<th width="20%">Assistance Type</th>
+						<th width="10%">Amount</th>
+						<th width="10%">Institution</th>
+						<th width="10%">Release Date</th>
+						<th>Remarks</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php 
+						$services = array(
+										array('date' => '2017-11-02', 
+											'assistance_type' => 'Burial Assistance', 
+											'amount' => '10,000.00', 
+											'institution' => 'N/A',
+											'release_date' => '2017-11-04',
+											'remarks' => 'Lorem ipsum dolor consectitur sit amet.'),
+										array('date' => '2017-02-20', 
+											'assistance_type' => 'Financial Assistance', 
+											'amount' => '1,500.00', 
+											'institution' => 'N/A',
+											'release_date' => '2017-02-25',
+											'remarks' => 'Lorem ipsum dolor consectitur sit amet.'),
+									);
+
+						foreach ($services as $service): 
+						//echo '<pre>'; print_r($rvoter); echo '</pre>';
+						if (is_array($nonvoter)) { //do not display 'result_count' 
+					?>
+					<tr>
+						<td><a href="#"><span class="glyphicon glyphicon-file"></span></a></td>
+						<td><?php echo $service['date']; ?></td>
+						<td><?php echo $service['assistance_type']; ?></td>
+						<td><?php echo $service['amount']; ?></td>
+						<td><?php echo $service['institution']; ?></td>
+						<td><?php echo $service['release_date']; ?></td>
+						<td><?php echo $service['remarks']; ?></td>
+					</tr>
+					<?php 
+						}
+						endforeach;
+					?>
+				</tbody>
+			</table>
+
+
 			</div>
+
 			<div class="text-right back-link"><a href="javascript:history.go(-1)">&laquo; Back</a></div>
 		</div>
 
