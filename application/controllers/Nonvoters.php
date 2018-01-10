@@ -152,8 +152,6 @@ class Nonvoters extends CI_Controller {
 			$data['title'] = 'New registered voter';
 
 			//validation rules
-			$this->form_validation->set_rules('code', 'Code', 'required|is_unique[nonvoters.code]');
-			$this->form_validation->set_rules('id_no', 'ID No.', 'required|is_unique[nonvoters.id_no]');
 			$this->form_validation->set_rules('fname', 'First Name', 'required');
 			$this->form_validation->set_rules('mname', 'Middle Name', 'required');
 			$this->form_validation->set_rules('lname', 'Last Name', 'required');

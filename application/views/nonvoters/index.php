@@ -15,7 +15,7 @@
 			echo form_open('nonvoters/', $attributes); 
 		?>
 			<div class="form-group" id="search_bar">
-				<label class="control-label" for="title">Search Voter</label> &nbsp; 
+				<label class="control-label" for="title">Search</label> &nbsp; 
 				<input type="input" class="form-control" name="search_param" />
 				<input type="submit" class="form-control" value="&raquo;" />
 				<br />

@@ -21,7 +21,7 @@
 	
 			//begin form
 			$attributes = array('class' => 'form-horizontal', 'role' => 'form');
-			echo form_open('rvoters/add', $attributes); 
+			echo form_open('nonvoters/add', $attributes); 
 		?>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="fname">First Name<span class="text-info">*</span></label>
