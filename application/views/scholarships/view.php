@@ -1,5 +1,5 @@
  <div class="container">
-	<h2><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Scholarship Grant Details</h2>
+	<h2><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Scholarship Grant Details</h2> 
 	<h3><a href="<?php echo site_url('beneficiaries/view/'.$scholar['ben_id']); ?>">
 			<span class="glyphicon glyphicon-file"></span> <?php echo $scholar['fname'].' '.$scholar['lname'].' ('.$scholar['id_no'].')'; ?> 
  		</a>
