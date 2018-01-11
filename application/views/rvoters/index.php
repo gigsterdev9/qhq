@@ -26,6 +26,7 @@
 				</span> 
 			</div>
 		<?php echo form_close();?>
+		<a href="rvoters/advanced">Advanced Search &raquo;</a>
 	</div>
 	<div class="container-fluid">
 		<?php 

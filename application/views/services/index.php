@@ -16,14 +16,9 @@
 				<label class="control-label" for="title">Search</label> &nbsp; 
 				<input type="input" class="form-control" name="search_param" />
 				<input type="submit" class="form-control" value="&raquo;" />
-				<br />
-				<span id="search_in">
-				Search in: 
-					<input type="checkbox" name="s_key[]" value="s_name" checked /> Name
-					<input type="checkbox" name="s_key[]" value="s_address" />Address
-				</span> 
 			</div>
 		<?php echo form_close();?>
+		<a href="services/advanced">Advanced Search &raquo;</a>
 	</div>
 	<div class="container-fluid">
 		<?php 
