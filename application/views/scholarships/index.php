@@ -1,12 +1,9 @@
 <div class="container">
 	<h2><span class="glyphicon glyphicon-folder-open"></span>&nbsp; <?php echo $title; ?></h2>
 	<?php
-	if ($this->ion_auth->in_group('admin'))
-	{
-	?>
-	<div class="container-fluid text-right"><a href="scholarships/add"><span class="glyphicon glyphicon-plus-sign"></span> New entry</a></div>
-	<?php
-	}
+		if ($this->ion_auth->in_group('admin')) {
+			echo '<div class="container-fluid text-right"><a href="scholarships/add"><span class="glyphicon glyphicon-plus-sign"></span> New entry</a></div>';
+		}
 	?>
 	<p>&nbsp;</p>
 	<div class="container-fluid text-right">
