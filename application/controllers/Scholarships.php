@@ -11,12 +11,12 @@ class Scholarships extends CI_Controller {
 				$this->load->library('ion_auth');
 				$this->load->library('pagination');
                 
-                //$this->output->enable_profiler(TRUE);	
-                
                 if (!$this->ion_auth->logged_in())
 				{
 					redirect('auth/login');
 				}
+
+				//$this->output->enable_profiler(TRUE);	
 				
         }
 
@@ -139,16 +139,17 @@ class Scholarships extends CI_Controller {
 			$data['scholarships'] = $this->scholarships_model->get_scholarships();
 			$data['title'] = 'New scholarship';
 
-			$this->form_validation->set_rules('proponent', 'Proponent', 'required');
-			$this->form_validation->set_rules('title', 'Title', 'required');
-			$this->form_validation->set_rules('grant_type','Grant type','required');
-			$this->form_validation->set_rules('location','Location','required');
-			$this->form_validation->set_rules('site','Site','required');
-			$this->form_validation->set_rules('project_duration','Project duration','required');
-			$this->form_validation->set_rules('project_budget','Project budget','required');
-			$this->form_validation->set_rules('amount_requested','Amount requested','required');
-			$this->form_validation->set_rules('co_financing','Co-financing','required');
-			$this->form_validation->set_rules('project_status','Project status','required');
+			//primary scholarship data
+			$this->form_validation->set_rules('batch','Batch','required');
+			$this->form_validation->set_rules('school_id','School ID','required');
+			$this->form_validation->set_rules('course','Course','required');
+			$this->form_validation->set_rules('major','Major','required');
+			$this->form_validation->set_rules('scholarship_status','Amount requested','required');
+			
+			//term data
+			$this->form_validation->set_rules('year_level','Year Level','required');
+			$this->form_validation->set_rules('school_year','School Year','required');
+			$this->form_validation->set_rules('guardian_combined_income','Parent/Guardian Combined Income','required');
 
 			if ($this->form_validation->run() === FALSE) {
 				$this->load->view('templates/header', $data);
@@ -171,105 +172,70 @@ class Scholarships extends CI_Controller {
 		
 		
 		
-		public function edit($slug = NULL)
-		{
+		public function edit($scholarship_id = NULL) {
 			
-			if (!$this->ion_auth->in_group('admin'))
-			{
-				redirect('grants');
+			if (!$this->ion_auth->in_group('admin')) {
+				redirect('scholarships'); 
 			}
-						
-			if ($this->input->post('action') == 1) 
-			{
-				$this->grants_model->update_grant($this->input->post('project_id'));
-				$data['grant_item'] = $this->grants_model->get_grant_by_id($this->input->post('project_id'));
-				
-				if ( $this->input->post('trash') == 1)
-				{
-					$data['alert_trash'] = 'Marked for deletion. This is your last chance to undo by unchecking the "Delete this entry" box below and clicking submit.<br />';
-				}
-				else
-				{
-					$data['alert_success'] = 'Grant entry updated.';
-				}					
-			}
-			else
-			{
-				$data['grant_item'] = $this->grants_model->get_grants($slug);
-			}
-			
-			//print_r($data);
-			if (empty($data['grant_item']))
-			{
-				show_404();
-			}
-			
-			
+
 			$this->load->helper('form');
 			$this->load->library('form_validation');
 
-			$data['indicators'] = $this->grants_model->get_indicators();
-				
-				$project_id = $data['grant_item']['project_id'];
-                
-                $indicators = $this->grants_model->get_grant_indicators($project_id);
-                foreach ($indicators as $indicator) 
-                {
-                	$indicator_code = $indicator['indicator_code'];
-                	
-                	switch (substr($indicator_code,0,1)) 
-                	{
-                		case '1': 
-                			$data['outcome']['1'][][$indicator_code] = $indicator['indicator_value'];
-                			break;
-                		case '2': 
-                			$data['outcome']['2'][][$indicator_code] = $indicator['indicator_value'];
-                			break;
-                		case '3': 
-							$data['outcome']['3'][][$indicator_code] = $indicator['indicator_value'];
-                			break;
-                		default: break;
-                	}
-                	
-                }
-			//$data['submitted_docs'] = $this->grants_model->get_submitted_docs($project_id);
-			$tranches = $this->grants_model->show_finances($project_id);
-            foreach ($tranches as $tranche) 
-            {
-               	$fin[$tranche['tranche']]['amount'] = $tranche['amount'];
-              	$fin[$tranche['tranche']]['amount_released'] = $tranche['amount_released'];
-             	$fin[$tranche['tranche']]['date_released'] = $tranche['date_released'];
-            }
-            $data['tranches'] = (isset($fin)) ? $fin : 0;
+			$data['title'] = 'Edit scholarship';
+			$data['schools'] = $this->scholarships_model->get_schools(); //display school names in filter dropdown
+			$data['scholarship_id'] = $scholarship_id;
+
+			//primary scholarship data
+			$this->form_validation->set_rules('batch','Batch','required');
+			$this->form_validation->set_rules('school_id','School ID','required');
+			$this->form_validation->set_rules('course','Course','required');
+			$this->form_validation->set_rules('scholarship_status','Scholarship Status','required');
 			
-			$data['proponents'] = $this->grants_model->get_proponents();
-			$data['sites'] = $this->grants_model->get_sites();
-			$data['title'] = 'Edit grant';
+			//term data
+			//$this->form_validation->set_rules('year_level','Year Level','required');
+			//$this->form_validation->set_rules('school_year','School Year','required');
+			//$this->form_validation->set_rules('guardian_combined_income','Parent/Guardian Combined Income','required');
 
-			$this->form_validation->set_rules('proponent', 'Proponent', 'required');
-			$this->form_validation->set_rules('title', 'Title', 'required');
-			$this->form_validation->set_rules('grant_type','Grant type','required');
-			$this->form_validation->set_rules('location','Location','required');
-			$this->form_validation->set_rules('site','Site','required');
-			$this->form_validation->set_rules('project_duration','Project duration','required');
-			$this->form_validation->set_rules('project_budget','Project budget','required');
-			$this->form_validation->set_rules('amount_requested','Amount requested','required');
-			$this->form_validation->set_rules('co_financing','Co-financing','required');
-			$this->form_validation->set_rules('project_status','Project status','required');
-
-			if ($this->form_validation->run() === FALSE)
-			{
-				$this->load->view('templates/header', $data);
-				$this->load->view('grants/edit');
-				$this->load->view('templates/footer');
-
-			}
-			else
-			{
-				//$this->grants_model->update_grant($slug);
+			//upon submission of edit action
+			if ($this->input->post('action') == 1) {
 				
+				if ($this->form_validation->run() === FALSE) {
+					
+					$data['scholarship'] = $this->scholarships_model->get_scholarship_by_id($scholarship_id);
+					
+					$this->load->view('templates/header', $data);
+					$this->load->view('scholarships/edit');
+					$this->load->view('templates/footer');
+	
+				}
+				else {
+					//execute data update
+					$this->scholarships_model->update_scholarship($scholarship_id);
+					//retrieve updated data
+					$data['scholarship'] = $this->scholarships_model->get_scholarship_by_id($scholarship_id);
+					
+					if ( $this->input->post('trash') == 1) {
+						$data['alert_trash'] = 'Marked for deletion. This is your last chance to undo by unchecking the "Delete this entry" box below and clicking submit.<br />';
+					}
+					else {
+						$data['alert_success'] = 'Entry updated.';
+					}
+					
+					$this->load->view('templates/header', $data);
+					$this->load->view('scholarships/edit');
+					$this->load->view('templates/footer');
+				}
+				
+			}
+			else{
+				$data['scholarship'] = $this->scholarships_model->get_scholarship_by_id($scholarship_id);
+				
+				if (empty($data['scholarship'])) {
+					show_404();
+				}
+
 				$this->load->view('templates/header', $data);
-				$this->load->view('grants/edit');
+				$this->load->view('scholarships/edit');
 				$this->load->view('templates/footer');
 			}
 		}
@@ -378,8 +344,7 @@ class Scholarships extends CI_Controller {
 				
         }
         
-        public function all_to_excel()
-        {
+        public function all_to_excel() {
         //export all data to Excel file
         
         	$this->load->library('export');
@@ -389,8 +354,7 @@ class Scholarships extends CI_Controller {
 			//$this->output->enable_profiler(TRUE);	
         }
         
-        public function filtered_to_excel()
-        {
+        public function filtered_to_excel() {
         	$this->load->library('export');
         	
         	$filter = $this->uri->uri_to_assoc(3);
@@ -406,8 +370,7 @@ class Scholarships extends CI_Controller {
 			//$this->output->enable_profiler(TRUE);	
         }
         
-        public function results_to_excel()
-        {
+        public function results_to_excel() {
         	$this->load->library('export');
         	
         	$search = $this->uri->segment(3);
@@ -419,50 +382,5 @@ class Scholarships extends CI_Controller {
 	
         }
 		
-		public function change_request()
-		{
-			//load helpers
-			$this->load->helper('email');
-			$this->load->library('form_validation');
-			
-			//sort variables
-			$project_id = $this->input->post('project_id');
-			$fields = $this->input->post('fields');
-			$new_values = $this->input->post('new_values');
-
-			$user = $this->ion_auth->user()->row();
-			$requestor = ucfirst($user->username);
-			$userip = $_SERVER['REMOTE_ADDR'];
-			
-			//set validation rules
-			$this->form_validation->set_rules('fields', 'Fields', 'required');
-			$this->form_validation->set_rules('new_values', 'New Vallues', 'required');
-			
-			if ($this->form_validation->run() === FALSE)
-			{
-				//do nothing
-				//echo 'Error';
-				redirect('grants');
-			}
-			else
-			{
-				
-				//get more data about project
-				$scholar = $this->grants_model->get_grant_by_id($project_id);
-			
-				//prep message
-				$msg = 'Project Title: '.$scholar['project_title'].'\n'.
-						'Field(s): '.$fields.'\n'.
-						'New value(s): '.$new_values.'\n'.
-						'Requestor: '.$requestor.'\n'.
-						'Originating IP: '.$userip;
-
-				//send	
-				mail('pj.villarta@gmail.com', '[SGP-5 GIS] Data modification request', nl2br($msg));
-			
-				redirect('grants/'.$scholar['slug']);
-			}
-			
-		}
 			
 }

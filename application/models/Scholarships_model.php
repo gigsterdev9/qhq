@@ -147,8 +147,8 @@ class scholarships_model extends CI_Model {
 		return $query->result_array();
 	}
 	
-	public function set_rvoter() //new voter
-	{
+	public function set_scholarship() { //new scholarship
+	
 		$this->load->helper('url');
 		
 		$data = array(
@@ -166,7 +166,7 @@ class scholarships_model extends CI_Model {
 				'status' => $this->input->post('status'),
 				'remarks' => $this->input->post('remarks')
 		);
-		//insert new voter
+		//insert new scholarship
 		$this->db->insert('rvoters', $data);
 		
 		$rvid = $this->db->insert_id();
@@ -174,7 +174,7 @@ class scholarships_model extends CI_Model {
 		//add audit trail
 		$user = $this->ion_auth->user()->row();
 		$data1 = array(
-					'project_id' => $rvid,
+					'scholarship_id' => $scholarship_id,
 					'user' => $user->username,
 					'activity' => 'created'
 		);
@@ -185,33 +185,27 @@ class scholarships_model extends CI_Model {
 	
 	
 	//update individual grant
-	public function update_rvoter($project_id = NULL) 
+	public function update_scholarship($scholarship_id = NULL) 
 	{
 		//echo '<pre>'; print_r($_POST); echo '</pre>'; die();
 		$this->load->helper('url');
 		
-		$id = $this->input->post('id');
-				
+		//$id = $this->input->post('scholarship_id');
 		
 		$data = array(
-				'fname' => $this->input->post('fname'),
-				'lname' => $this->input->post('lname'),
-				'dob' => $this->input->post('dob'),
-				'address' => $this->input->post('address'),
-				'barangay' => $this->input->post('barangay'),
-				'sex' => $this->input->post('sex'),
-				'precinct' => $this->input->post('precinct'),
-				'mobile_no' => $this->input->post('mobile_no'),
-				'email' => $this->input->post('email'),
-				'referee' => $this->input->post('referee'),
-				'voters_id' => $this->input->post('voters_id'),
-				'status' => $this->input->post('status'),
-				'remarks' => $this->input->post('remarks'),
-				'trash' => $this->input->post('trash')
+				'batch' => $this->input->post('batch'),
+				'school_id' => $this->input->post('school_id'),
+				'course' => $this->input->post('course'),
+				'major' => $this->input->post('major'),
+				'scholarship_status' => $this->input->post('scholarship_status'),
+				'disability' => $this->input->post('disability'),
+				'senior_citizen' => $this->input->post('senior_citizen'),
+				'parent_support_status' => $this->input->post('parent_support_status'),
+				'scholarship_remarks' => $this->input->post('scholarship_remarks'),
 		);
 		
-		$this->db->where('id', $id);
-		$this->db->update('rvoters', $data);
+		$this->db->where('scholarship_id', $scholarship_id);
+		$this->db->update('scholarships', $data);
 		
 		//add audit trail
 		$altered = $this->input->post('altered'); //hidden field that tracks form edits; see form
@@ -219,7 +213,7 @@ class scholarships_model extends CI_Model {
 		{
 			$user = $this->ion_auth->user()->row();
 			$data3 = array(
-						'project_id' => $project_id,
+						'scholarship_id' => $scholarship_id,
 						'user' => $user->username,
 						'activity' => 'modified',
 						'mod_details' => $altered

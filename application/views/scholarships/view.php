@@ -26,6 +26,9 @@
 					<div class="col-sm-3 control-label">First Name</div>
 					<div class="col-sm-9 control-value"><?php echo $scholar['fname']; ?>&nbsp;</div>
 
+					<div class="col-sm-3 control-label">Middle Name</div>
+					<div class="col-sm-9 control-value"><?php echo $scholar['mname']; ?>&nbsp;</div>
+
 					<div class="col-sm-3 control-label">Last Name</div>
 					<div class="col-sm-9 control-value"><?php echo $scholar['lname']; ?>&nbsp;</div>
 
@@ -103,6 +106,7 @@
 		
 		<div class="service-history-details text-left">
 			<h3>SCHOLARSHIP AVAILMENT HISTORY</h3>
+			<div class="text-right"><a href="#"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
 			<div class="table-responsive show-records" >
 				
 			<table class="table table-striped">
@@ -119,6 +123,7 @@
 						<th width="5%">Income Points</th>
 						<th width="5%">Rank Points</th>
 						<th>Remarks</th>
+						<th width="5%">Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -139,6 +144,10 @@
 							<td><?php echo $availment['income_points']; ?></td>
 							<td><?php echo $availment['rank_points']; ?></td>
 							<td><?php echo $availment['notes']; ?></td>
+							<td>
+								<a href="#"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
+								<a href="#"><span class="glyphicon glyphicon-remove-circle"></span></a>
+							</td>
 						</tr>
 						<?php 
 							}
