@@ -14,7 +14,8 @@
 		?>
 			<div class="alert alert-success">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				Entry added. <a href="<?php echo base_url('scholarships') ?>">Return to Index.</a>
+				<?php echo $alert_success; ?>
+				<a href="<?php echo base_url('scholarships') ?>">Return to Index.</a>
 			</div>
 		<?php
 		}
@@ -25,7 +26,11 @@
 		?>
 				<div class="form-group">
 					<div class="col-sm-12">
-						<h4><?php echo $scholarship['fname'].' '.$scholarship['mname'].' '.$scholarship['lname']; ?></h4>
+						<h4>
+							<a href="<?php echo base_url('scholarships').'/view/'.$scholarship_id; ?>">
+							<?php echo $scholarship['fname'].' '.$scholarship['mname'].' '.$scholarship['lname']; ?>
+							</a>
+						</h4>
 					</div>
 				</div>
 				<div class="form-group">
