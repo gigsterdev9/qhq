@@ -233,12 +233,12 @@ class Beneficiaries extends CI_Controller {
 				echo '<div class="radio">';
 				echo '<label><input type="radio" name="optradio">Create New</label>';
 				echo '</div>';
-				echo 'If none of the above is an actual match, you may proceed create a new entry. &nbsp; ';
-				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#no-match">Proceed with caution.</button>';
+				echo 'If none of the above is an actual match, you may proceed to create a new entry. &nbsp; ';
+				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#no-match" id="btn-proceed" >Proceed with caution.</button>';
 			}
 			else{
 				echo 'No match found. &nbsp; ';
-				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#no-match">Proceed.</button>';
+				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#no-match" id="btn-proceed">Proceed.</button>';
 			}
 			//$data[$nvoter_match] = $this->nonvoters_model->find_nvoter_match($fname, $mname, $lname, $dob);
 			//echo '<pre>'; print_r($data['rvoter_match']); echo '</pre>'; 

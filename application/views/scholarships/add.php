@@ -26,25 +26,25 @@
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="fname">First Name<span class="text-info">*</span></label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" name="fname" value="<?php echo set_value('fname'); ?>" required />
+						<input type="text" class="form-control" name="fname" id="fname" value="<?php echo set_value('fname'); ?>" required />
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="fname">Middle Name<span class="text-info">*</span></label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" name="mname" value="<?php echo set_value('mname'); ?>" required />
+						<input type="text" class="form-control" name="mname" id="mname" value="<?php echo set_value('mname'); ?>" required />
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="lname">Last Name<span class="text-info">*</span></label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" name="lname" value="<?php echo set_value('lname'); ?>" />
+						<input type="text" class="form-control" name="lname" id="lname" value="<?php echo set_value('lname'); ?>" required />
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="dob">Birthdate<span class="text-info">*</span></label>
 					<div class="col-sm-10">
-						<input type='text' class="form-control" name="dob" id='datetimepicker1' value="<?php echo set_value('dob'); ?>" />
+						<input type='text' class="form-control" name="dob" id='datetimepicker1' value="<?php echo set_value('dob'); ?>" required />
 						<script type="text/javascript">
 							$(function () {
 								var end = new Date();
@@ -145,14 +145,13 @@
 						<textarea name="remarks" class="form-control" rows="5"><?php echo set_value('remarks'); ?></textarea>
 					</div>
 				</div>
-
-				</div> <!-- hidden -->
-
-				<div class="form-group collapse">
+				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
 						<button type="submit" class="btn btn-default" id="final_submit">Submit</button>
 					</div>
 				</div>
+
+				</div> <!-- hidden -->
 			</form>
 	</div>
 </div>
@@ -169,6 +168,11 @@ $(document).ready(function() {
 		$("#match_submit").hide();
 		$("#match-found").show();
 
+		$("input#fname").prop("readonly", true);
+		$("input#mname").prop("readonly", true);
+		$("input#lname").prop("readonly", true);
+		$("input#datetimepicker1").prop("readonly", true);
+
 		var fname = $("input#fname").val();
 		var mname = $("input#mname").val();
 		var lname = $("input#lname").val();
@@ -176,7 +180,7 @@ $(document).ready(function() {
 		
 		$.ajax({
 			"type" : "POST",
-			"url" : "<?php echo base_url(); ?>" + "beneficiaries/match_find",
+			"url" : "<?php echo base_url('beneficiaries/match_find'); ?>",
 			"data" : $("#form-match-find").serialize(), // serializes the form's elements.
 			"success" : function(data) {
 				console.log(data);
@@ -188,5 +192,6 @@ $(document).ready(function() {
 			}
 		});
 	});
+
 });
 </script>
