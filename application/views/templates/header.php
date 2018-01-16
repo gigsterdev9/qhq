@@ -23,7 +23,7 @@
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-		<script src="//google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+		<script src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"></script>
 		<!-- prod: online -->
 		<!-- for offline dev work --
@@ -33,6 +33,8 @@
 		<script src="<?php echo base_url('js/run_prettify.js') ?>"></script>
 		<script src="<?php echo base_url('js/d3.min.js') ?>"></script>
 		<!-- end: for offline dev work -->
+		
+		<!-- for jchart -->
 		<script src="<?php echo base_url('js/jchart.js') ?>"></script>
 		<script src="<?php echo base_url('js/d3pie.min.js') ?>"></script>
 		
@@ -41,6 +43,12 @@
 		<script src="<?php echo base_url('js/collapse.js') ?>"></script>
 		<script src="<?php echo base_url('js/transition.js') ?>"></script>
 		<script src="<?php echo base_url('js/bootstrap-datetimepicker.min.js') ?>"></script>
+
+		<!-- new additions -->
+		<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-validator/0.4.5/js/bootstrapvalidator.min.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery.bootstrapvalidator/0.5.0/css/bootstrapValidator.min.css" />
+		
 	</head>
 
 	<body>

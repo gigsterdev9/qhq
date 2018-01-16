@@ -1,4 +1,4 @@
-body, input, select {font-family: arial, sans-serif; color: padding-top: 100px; font-size: 12px }
+body, input, select {font-family: arial, sans-serif; padding-top: 100px; font-size: 12px }
 h1, h2 {margin-top: 70px}
 h1 {font-size: 2em}
 h2 {font-size: 1.8em}
@@ -51,4 +51,5 @@ h5, .panel-heading {font-size: 1.2em}
 .index-section-title {margin-left: 10px}
 
 /* Modal Details */
+.match-found {font-size: 1em}
 .quick-view {font-size: 1.2em; color: #000000}
