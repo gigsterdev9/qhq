@@ -144,7 +144,7 @@
 			<?php 
 				} 
 				else{
-					echo '<div class="message">No registered voters found in the beneficiaries list.</div>';
+					echo '<div class="message">Currently, there are no registered voters found in the beneficiaries list.</div>';
 				}
 
 				if (count($nonvoters) > 0) {
@@ -199,7 +199,7 @@
 			<?php 
 				} 
 				else{
-					echo '<div class="message">No non-voters found in the beneficiaries list.</div>';
+					echo '<div class="message">Currently, there are no non-voters found in the beneficiaries list.</div>';
 				}
 			?>
 

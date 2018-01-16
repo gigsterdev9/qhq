@@ -20,7 +20,7 @@
 		}
 	
 			//begin form
-			$attributes = array('class' => 'form-horizontal', 'role' => 'form');
+			$attributes = array('class' => 'form-horizontal', 'role' => 'form', 'id' => 'form-match-find');
 			echo form_open('rvoters/add', $attributes); 
 		?>
 				<div class="form-group">
@@ -47,28 +47,26 @@
 						<input type='text' class="form-control" name="dob" id='datetimepicker1' value="<?php echo set_value('dob'); ?>" />
 						<script type="text/javascript">
 							$(function () {
+								var end = new Date();
+								end.setFullYear(end.getFullYear() - 12);
+
 								$('#datetimepicker1').datetimepicker({
 									format: 'YYYY-MM-DD',
-									viewMode: 'years'
+									viewMode: 'years',
+									maxDate: end
 								});
 							});
 						</script>
 					</div>
 				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-default" id="match_submit">Submit</button>
+					</div>
+				</div>
 				
 				<!-- display the remainder of the form only if no match is found -->
-				<div class="match-found alert alert-warning">
-					Match found. Please make sure the entry you are about to create is not a duplicate.
-						<div class="radio">
-							<label><input type="radio" name="optradio"><a href="#">Match One (Registered voter)</a></label> 
-							Click on name to show more details.
-						</div>
-						<div class="radio">
-							<label><input type="radio" name="optradio"><a href="#">Match Two (Non-voter)</a></label> Click on name to show more details.
-						</div>
-					If none of the existing is an actual match, you may create a new entry. 
-					<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#no-match">Proceed with caution.</button>
-				</div> 
+				<div class="match-found alert alert-warning collapse" id="match-found"></div> 
 
 				<div class="no-match collapse" id="no-match">
 				<div class="form-group">
@@ -150,12 +148,45 @@
 
 				</div> <!-- hidden -->
 
-				<div class="form-group">
+				<div class="form-group collapse">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-default">Submit</button>
+						<button type="submit" class="btn btn-default" id="final_submit">Submit</button>
 					</div>
 				</div>
 			</form>
 	</div>
 </div>
 </div>
+
+<script type="text/javascript">
+
+// Ajax post
+$(document).ready(function() {
+	$("#match_submit").click(function(event) {
+		
+		event.preventDefault();
+		
+		$("#match_submit").hide();
+		$("#match-found").show();
+
+		var fname = $("input#fname").val();
+		var mname = $("input#mname").val();
+		var lname = $("input#lname").val();
+		var dob = $("input#dob").val();
+		
+		$.ajax({
+			"type" : "POST",
+			"url" : "<?php echo base_url(); ?>" + "beneficiaries/match_find",
+			"data" : $("#form-match-find").serialize(), // serializes the form's elements.
+			"success" : function(data) {
+				console.log(data);
+				$("#match-found").html(data);
+			},
+			"error" : function(jqXHR, status, error) {
+				console.log("status:", status, "error:", error);
+				$("#match-find").text(status);
+			}
+		});
+	});
+});
+</script>

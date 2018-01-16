@@ -160,7 +160,89 @@ class Beneficiaries extends CI_Controller {
 					}
 				}
 				
-        }
+		}
+		
+		public function match_find() {
+			//echo '<pre>'; print_r($_POST); echo '</pre>'; die();
+			$fname = $this->input->post('fname');
+			$mname = $this->input->post('mname');
+			$lname = $this->input->post('lname');
+			$dob = $this->input->post('dob');
+
+			$rvoter_match = $this->rvoters_model->find_rvoter_match($fname, $mname, $lname, $dob);
+			//$nvoter_match = $this->nonvoters_model->find_nvoter_match($fname, $mname, $lname, $dob);
+
+			if (isset($rvoter_match) && $rvoter_match != NULL) {
+				echo 'Possible match(es) found.';
+				foreach($rvoter_match as $rmatch) {
+					$match_name = $rmatch['fname'] .' '.$rmatch['mname'].' '.$rmatch['lname'].' ('.$rmatch['dob'].')';
+					
+					echo '<div class="radio">';
+					echo '<label><input type="radio" name="optradio"><a href="#" data-toggle="modal" data-target="#quick-view-'.$rmatch['id'].'">'.$match_name.'</a></label>';
+					echo '</div>';
+				
+					//create modal for entry details
+					?>
+					<!-- modals -->
+					<div id="quick-view-<?php echo $rmatch['id'] ?>" class="modal quick-view" role="dialog">
+					<div class="modal-dialog">
+
+						<!-- Modal content-->
+						<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Entry Details</h4>
+						</div>
+						<div class="modal-body">
+							<?php
+								
+								echo 'First Name: '.$rmatch['fname'];
+								echo '<br />';
+								echo 'Middle Name: '.$rmatch['mname'];
+								echo '<br />';
+								echo 'Last Name: '.$rmatch['lname'];
+								echo '<br />';
+								echo 'Birthdate: '.$rmatch['dob'];
+								echo '<br />';
+								echo 'Code: '.$rmatch['code'];
+								echo '<br />';
+								echo 'Comelec ID No.: '.$rmatch['id_no_comelec'];
+								echo '<br />';
+								echo 'ID No.: '.$rmatch['id_no'];
+								echo '<br />';
+								echo 'Address: '.$rmatch['address'];
+								echo '<br />';
+								echo 'Barangay: '.$rmatch['barangay'];
+								echo '<br />';
+								echo 'District: '.$rmatch['district'];
+							?>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+						</div>
+
+					</div>
+					</div>
+					<?php
+				}
+				$show_last_radio = true;
+			}
+							
+			if (isset($show_last_radio)) {
+				echo '<div class="radio">';
+				echo '<label><input type="radio" name="optradio">Create New</label>';
+				echo '</div>';
+				echo 'If none of the above is an actual match, you may proceed create a new entry. &nbsp; ';
+				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#no-match">Proceed with caution.</button>';
+			}
+			else{
+				echo 'No match found. &nbsp; ';
+				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#no-match">Proceed.</button>';
+			}
+			//$data[$nvoter_match] = $this->nonvoters_model->find_nvoter_match($fname, $mname, $lname, $dob);
+			//echo '<pre>'; print_r($data['rvoter_match']); echo '</pre>'; 
+		}
         
       	public function all_to_excel() {
         //export all data to Excel file

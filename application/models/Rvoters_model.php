@@ -174,6 +174,18 @@ class rvoters_model extends CI_Model {
 
 		return $query->result_array();
 	}
+
+	public function find_rvoter_match($fname, $mname, $lname, $dob) {
+		
+		$this->db->select('*');
+		$this->db->from('rvoters');
+		$this->db->where("fname = '$fname' and mname = '$mname' and lname = '$lname' and dob = '$dob' and trash = 0");
+		$this->db->order_by('id', 'DESC');
+		$query = $this->db->get();	
+
+		return $query->result_array();
+		
+	}
 	
 	public function set_rvoter() //new voter
 	{
