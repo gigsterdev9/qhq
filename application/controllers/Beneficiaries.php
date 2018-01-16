@@ -170,61 +170,36 @@ class Beneficiaries extends CI_Controller {
 			$dob = $this->input->post('dob');
 
 			$rvoter_match = $this->rvoters_model->find_rvoter_match($fname, $mname, $lname, $dob);
-			//$nvoter_match = $this->nonvoters_model->find_nvoter_match($fname, $mname, $lname, $dob);
+			$nvoter_match = $this->nonvoters_model->find_nvoter_match($fname, $mname, $lname, $dob);
 
+			//registered voter matches
 			if (isset($rvoter_match) && $rvoter_match != NULL) {
-				echo 'Possible match(es) found.';
+				echo 'Possible match(es) in REGISTERED VOTERS.';
 				foreach($rvoter_match as $rmatch) {
 					$match_name = $rmatch['fname'] .' '.$rmatch['mname'].' '.$rmatch['lname'].' ('.$rmatch['dob'].')';
 					
 					echo '<div class="radio">';
-					echo '<label><input type="radio" name="optradio" value="id_no_comelec|'.$rmatch['id_no_comelec'].'"><a href="#" data-toggle="modal" data-target="#quick-view-'.$rmatch['id'].'">'.$match_name.'</a></label>';
+					echo '<label><input type="radio" name="optradio" value="id_no_comelec|'.$rmatch['id_no_comelec'].'"> ';
+							//'<a href="#" data-toggle="modal" data-target="#quick-view-'.$rmatch['id_no_comelec'].'">'.$match_name.'</a>';
+					echo 'COMELEC ID No. '.$rmatch['id_no_comelec'].' | Address: '.$rmatch['address'].' | Barangay'.$rmatch['barangay'].' | District :'.$rmatch['district'];
+					echo '</label></div>';
+				
+				}
+				$show_last_radio = true;
+			}
+
+			//Non voter matches
+			if (isset($nvoter_match) && $nvoter_match != NULL) {
+				echo 'Possible match(es) in NON-VOTERS.';
+				foreach($nvoter_match as $nmatch) {
+					$match_name = $nmatch['fname'] .' '.$nmatch['mname'].' '.$nmatch['lname'].' ('.$nmatch['dob'].')';
+					
+					echo '<div class="radio">';
+					echo '<label><input type="radio" name="optradio" value="nv_id|'.$nmatch['nv_id'].'">';
+							//'<a href="#" data-toggle="modal" data-target="#quick-view-'.$nmatch['nv_id'].'">'.$match_name.'</a>';
+					echo 'ID No. '.$rmatch['id_no'].' | Address: '.$rmatch['address'].' | Barangay'.$rmatch['barangay'].' | District :'.$rmatch['district'];
 					echo '</div>';
 				
-					//create modal for entry details
-					?>
-					<!-- modals -->
-					<div id="quick-view-<?php echo $rmatch['id'] ?>" class="modal quick-view" role="dialog">
-					<div class="modal-dialog">
-
-						<!-- Modal content-->
-						<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">Entry Details</h4>
-						</div>
-						<div class="modal-body">
-							<?php
-								
-								echo 'First Name: '.$rmatch['fname'];
-								echo '<br />';
-								echo 'Middle Name: '.$rmatch['mname'];
-								echo '<br />';
-								echo 'Last Name: '.$rmatch['lname'];
-								echo '<br />';
-								echo 'Birthdate: '.$rmatch['dob'];
-								echo '<br />';
-								echo 'Code: '.$rmatch['code'];
-								echo '<br />';
-								echo 'Comelec ID No.: '.$rmatch['id_no_comelec'];
-								echo '<br />';
-								echo 'ID No.: '.$rmatch['id_no'];
-								echo '<br />';
-								echo 'Address: '.$rmatch['address'];
-								echo '<br />';
-								echo 'Barangay: '.$rmatch['barangay'];
-								echo '<br />';
-								echo 'District: '.$rmatch['district'];
-							?>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						</div>
-						</div>
-
-					</div>
-					</div>
-					<?php
 				}
 				$show_last_radio = true;
 			}
@@ -239,8 +214,7 @@ class Beneficiaries extends CI_Controller {
 				echo '<a href="'.base_url('nonvoters/add').'?fname='.$fname.'&mname='.$mname.'&lname='.$lname.'&dob='.$dob.'">create a new beneficiary entry</a>.';
 			
 			}
-			//$data[$nvoter_match] = $this->nonvoters_model->find_nvoter_match($fname, $mname, $lname, $dob);
-			//echo '<pre>'; print_r($data['rvoter_match']); echo '</pre>'; 
+			
 		}
         
       	public function all_to_excel() {

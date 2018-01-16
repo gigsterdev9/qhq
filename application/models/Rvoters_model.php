@@ -183,7 +183,9 @@ class rvoters_model extends CI_Model {
 		$this->db->order_by('id', 'DESC');
 		$query = $this->db->get();	
 
+		//$str = $this->db->last_query(); echo $str; 
 		return $query->result_array();
+		//var_dump(get_object_vars($query)); die();
 		
 	}
 	
@@ -238,9 +240,9 @@ class rvoters_model extends CI_Model {
 				
 		
 		$data = array(
-				'fname' => strtoupper($this->input->post('fname')),
-				'mname' => strtoupper($this->input->post('mname')),
-				'lname' => strtoupper($this->input->post('lname')),
+				'fname' => $this->input->post('fname'),
+				'mname' => $this->input->post('mname'),
+				'lname' => $this->input->post('lname'),
 				'dob' => $this->input->post('dob'),
 				'address' => $this->input->post('address'),
 				'barangay' => $this->input->post('barangay'),

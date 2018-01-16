@@ -158,13 +158,26 @@ class nonvoters_model extends CI_Model {
 		return $query->result_array();
 	}
 	
+	public function find_nvoter_match($fname, $mname, $lname, $dob) {
+		
+		$this->db->select('*');
+		$this->db->from('non_voters');
+		$this->db->where("fname = '$fname' and mname = '$mname' and lname = '$lname' and dob = '$dob' and trash = 0");
+		$this->db->order_by('nv_id', 'DESC');
+		$query = $this->db->get();	
+
+		//$str = $this->db->last_query(); echo $str; 
+		return $query->result_array();
+		
+	}
+
 	public function set_nonvoter() //new voter
 	{
 		$this->load->helper('url');
 		
 		$data = array(
-				'code' => $this->input->post('code'),
-				'id_no' => $this->input->post('id_no'),	
+				'code' => strtoupper($this->input->post('code')),
+				'id_no' => strtoupper($this->input->post('id_no')),
 				'fname' => $this->input->post('fname'),
 				'mname' => $this->input->post('mname'),
 				'lname' => $this->input->post('lname'),
@@ -208,9 +221,9 @@ class nonvoters_model extends CI_Model {
 		$data = array(
 				'code' => strtoupper($this->input->post('code')),
 				'id_no' => strtoupper($this->input->post('id_no')),
-				'fname' => strtoupper($this->input->post('fname')),
+				'fname' => $this->input->post('fname'),
 				'mname' => $this->input->post('mname'),
-				'lname' => strtoupper($this->input->post('lname')),
+				'lname' => $this->input->post('lname'),
 				'dob' => $this->input->post('dob'),
 				'address' => $this->input->post('address'),
 				'barangay' => $this->input->post('barangay'),
