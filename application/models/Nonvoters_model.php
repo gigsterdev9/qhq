@@ -104,7 +104,7 @@ class nonvoters_model extends CI_Model {
 		}
 		
 		if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
-			$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' and trash = 0";
+			$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or mname like '%$search_param%' and trash = 0";
 		}
 		elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
 			$where_clause = "address like '%$search_param%' and trash = 0";		
