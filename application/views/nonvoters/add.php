@@ -26,25 +26,25 @@
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="fname">First Name<span class="text-info">*</span></label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" name="fname" value="<?php echo set_value('fname'); ?>" required />
+						<input type="text" class="form-control" name="fname" value="<?php echo ($this->input->get('fname') !== null) ? $this->input->get('fname') : set_value('fname'); ?>" required />
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="fname">Middle Name<span class="text-info">*</span></label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" name="mname" value="<?php echo set_value('mname'); ?>" required />
+						<input type="text" class="form-control" name="mname" value="<?php echo ($this->input->get('mname') !== null) ? $this->input->get('mname') : set_value('mname'); ?>" required />
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="lname">Last Name<span class="text-info">*</span></label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" name="lname" value="<?php echo set_value('lname'); ?>" />
+						<input type="text" class="form-control" name="lname" value="<?php echo ($this->input->get('lname') !== null) ? $this->input->get('lname') : set_value('lname'); ?>" />
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="dob">Birthdate<span class="text-info">*</span></label>
 					<div class="col-sm-10">
-						<input type='text' class="form-control" name="dob" id='datetimepicker1' value="<?php echo set_value('dob'); ?>" />
+						<input type='text' class="form-control" name="dob" id='datetimepicker1' value="<?php echo ($this->input->get('dob') !== null) ? $this->input->get('dob') : set_value('dob'); ?>" />
 						<script type="text/javascript">
 							$(function () {
 								$('#datetimepicker1').datetimepicker({

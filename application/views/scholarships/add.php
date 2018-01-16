@@ -21,7 +21,7 @@
 	
 			//begin form
 			$attributes = array('class' => 'form-horizontal', 'role' => 'form', 'id' => 'form-match-find');
-			echo form_open('rvoters/add', $attributes); 
+			echo form_open('scholarships/add', $attributes); 
 		?>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="fname">First Name<span class="text-info">*</span></label>
@@ -64,11 +64,15 @@
 						<button type="submit" class="btn btn-default" id="match_submit">Submit</button>
 					</div>
 				</div>
-				
+				</form>
+
 				<!-- display the remainder of the form only if no match is found -->
 				<div class="match-found alert alert-warning collapse" id="match-found"></div> 
 
+				
 				<div class="no-match collapse" id="no-match">
+				X
+				<!--
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="address">Address<span class="text-info">*</span></label>
 					<div class="col-sm-10">	
@@ -147,9 +151,14 @@
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
+						<input type="hidden" name="new_record" id="new_record" value="0" />
+						<input type="hidden" name="action" id="action" value="1" />
+						<input type="hidden" name="nv_id" id="nv_id" value="" />
+						<input type="hidden" name="id_no_comelec" id="id_no_comelec" value="" />
 						<button type="submit" class="btn btn-default" id="final_submit">Submit</button>
 					</div>
 				</div>
+				-->
 
 				</div> <!-- hidden -->
 			</form>
@@ -158,9 +167,11 @@
 </div>
 
 <script type="text/javascript">
+//move this to data.js
 
 // Ajax post
 $(document).ready(function() {
+
 	$("#match_submit").click(function(event) {
 		
 		event.preventDefault();
@@ -168,16 +179,12 @@ $(document).ready(function() {
 		$("#match_submit").hide();
 		$("#match-found").show();
 
+		//set the previously entered values to read-only
 		$("input#fname").prop("readonly", true);
 		$("input#mname").prop("readonly", true);
 		$("input#lname").prop("readonly", true);
 		$("input#datetimepicker1").prop("readonly", true);
 
-		var fname = $("input#fname").val();
-		var mname = $("input#mname").val();
-		var lname = $("input#lname").val();
-		var dob = $("input#dob").val();
-		
 		$.ajax({
 			"type" : "POST",
 			"url" : "<?php echo base_url('beneficiaries/match_find'); ?>",

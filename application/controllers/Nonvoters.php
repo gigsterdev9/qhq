@@ -149,7 +149,7 @@ class Nonvoters extends CI_Controller {
 			$this->load->library('form_validation');
 
 			//$data['nonvoters'] = $this->nonvoters_model->get_nonvoters();
-			$data['title'] = 'New registered voter';
+			$data['title'] = 'New non-voter entry';
 
 			//validation rules
 			$this->form_validation->set_rules('fname', 'First Name', 'required');
@@ -173,7 +173,7 @@ class Nonvoters extends CI_Controller {
 				//execute insert
 				$this->nonvoters_model->set_nonvoter();
 				
-				$data['title'] = 'Registered voter entry.';
+				$data['title'] = 'New non-voter entry';
 				$data['alert_success'] = 'Entry successful.';
 				
 				$this->load->view('templates/header', $data);

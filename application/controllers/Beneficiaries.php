@@ -178,7 +178,7 @@ class Beneficiaries extends CI_Controller {
 					$match_name = $rmatch['fname'] .' '.$rmatch['mname'].' '.$rmatch['lname'].' ('.$rmatch['dob'].')';
 					
 					echo '<div class="radio">';
-					echo '<label><input type="radio" name="optradio"><a href="#" data-toggle="modal" data-target="#quick-view-'.$rmatch['id'].'">'.$match_name.'</a></label>';
+					echo '<label><input type="radio" name="optradio" value="id_no_comelec|'.$rmatch['id_no_comelec'].'"><a href="#" data-toggle="modal" data-target="#quick-view-'.$rmatch['id'].'">'.$match_name.'</a></label>';
 					echo '</div>';
 				
 					//create modal for entry details
@@ -230,15 +230,14 @@ class Beneficiaries extends CI_Controller {
 			}
 							
 			if (isset($show_last_radio)) {
-				echo '<div class="radio">';
-				echo '<label><input type="radio" name="optradio">Create New</label>';
-				echo '</div>';
-				echo 'If none of the above is an actual match, you may proceed to create a new entry. &nbsp; ';
-				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#no-match" id="btn-proceed" >Proceed with caution.</button>';
+				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#no-match" id="btn-existing-ben" >Continue</button><br />';
+				echo 'If none of the above is an actual match, you may proceed to ' .
+						'<a href="'.base_url('nonvoters/add').'?fname='.$fname.'&mname='.$mname.'&lname='.$lname.'&dob='.$dob.'">create a new beneficiary entry</a>. <br />';
 			}
 			else{
 				echo 'No match found. &nbsp; ';
-				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#no-match" id="btn-proceed">Proceed.</button>';
+				echo '<a href="'.base_url('nonvoters/add').'?fname='.$fname.'&mname='.$mname.'&lname='.$lname.'&dob='.$dob.'">create a new beneficiary entry</a>.';
+			
 			}
 			//$data[$nvoter_match] = $this->nonvoters_model->find_nvoter_match($fname, $mname, $lname, $dob);
 			//echo '<pre>'; print_r($data['rvoter_match']); echo '</pre>'; 
