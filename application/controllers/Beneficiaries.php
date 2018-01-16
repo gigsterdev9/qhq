@@ -179,7 +179,7 @@ class Beneficiaries extends CI_Controller {
 					$match_name = $rmatch['fname'] .' '.$rmatch['mname'].' '.$rmatch['lname'].' ('.$rmatch['dob'].')';
 					
 					echo '<div class="radio">';
-					echo '<label><input type="radio" name="optradio" value="id_no_comelec|'.$rmatch['id_no_comelec'].'"> ';
+					echo '<label><input type="radio" name="optradio" id="optradio" value="id_no_comelec|'.$rmatch['id_no_comelec'].'"> ';
 							//'<a href="#" data-toggle="modal" data-target="#quick-view-'.$rmatch['id_no_comelec'].'">'.$match_name.'</a>';
 					echo 'COMELEC ID No. '.$rmatch['id_no_comelec'].' | Address: '.$rmatch['address'].' | Barangay'.$rmatch['barangay'].' | District :'.$rmatch['district'];
 					echo '</label></div>';
@@ -195,9 +195,9 @@ class Beneficiaries extends CI_Controller {
 					$match_name = $nmatch['fname'] .' '.$nmatch['mname'].' '.$nmatch['lname'].' ('.$nmatch['dob'].')';
 					
 					echo '<div class="radio">';
-					echo '<label><input type="radio" name="optradio" value="nv_id|'.$nmatch['nv_id'].'">';
+					echo '<label><input type="radio" name="optradio" id="optradio" value="nv_id|'.$nmatch['nv_id'].'">';
 							//'<a href="#" data-toggle="modal" data-target="#quick-view-'.$nmatch['nv_id'].'">'.$match_name.'</a>';
-					echo 'ID No. '.$rmatch['id_no'].' | Address: '.$rmatch['address'].' | Barangay'.$rmatch['barangay'].' | District :'.$rmatch['district'];
+					echo 'ID No. '.$nmatch['id_no'].' | Address: '.$nmatch['address'].' | Barangay'.$nmatch['barangay'].' | District :'.$nmatch['district'];
 					echo '</div>';
 				
 				}
@@ -205,7 +205,7 @@ class Beneficiaries extends CI_Controller {
 			}
 							
 			if (isset($show_last_radio)) {
-				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#no-match" id="btn-existing-ben" >Continue</button><br />';
+				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#no-match" id="btn-existing-ben" disabled>Continue</button><br />';
 				echo 'If none of the above is an actual match, you may proceed to ' .
 						'<a href="'.base_url('nonvoters/add').'?fname='.$fname.'&mname='.$mname.'&lname='.$lname.'&dob='.$dob.'">create a new beneficiary entry</a>. <br />';
 			}

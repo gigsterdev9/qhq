@@ -137,7 +137,8 @@ class Scholarships extends CI_Controller {
 			$this->load->library('form_validation');
 
 			$data['non_voters'] = $this->nonvoters_model->get_nonvoters();
-			$data['scholarships'] = $this->scholarships_model->get_scholarships();
+			//$data['scholarships'] = $this->scholarships_model->get_scholarships();
+			$data['schools'] = $this->scholarships_model->get_schools(); //display school names in filter dropdown
 			$data['title'] = 'New scholarship';
 
 			//primary scholarship data
