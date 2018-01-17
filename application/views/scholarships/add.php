@@ -75,7 +75,7 @@
 				<div class="match-found alert alert-warning collapse" id="match-found"></div> 
 
 				<!-- begin: hidden div -->
-				<div class="no-match collapse" id="no-match">
+				<div class="with-match collapse" id="with-match">
 						
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="batch">Batch<span class="text-info">*</span></label>

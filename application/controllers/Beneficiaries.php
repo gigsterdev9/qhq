@@ -205,7 +205,7 @@ class Beneficiaries extends CI_Controller {
 			}
 							
 			if (isset($show_last_radio)) {
-				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#no-match" id="btn-existing-ben" disabled>Continue</button><br />';
+				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#with-match" id="btn-existing-ben" >Continue</button><br />';
 				echo 'If none of the above is an actual match, you may proceed to ' .
 						'<a href="'.base_url('nonvoters/add').'?fname='.$fname.'&mname='.$mname.'&lname='.$lname.'&dob='.$dob.'">create a new beneficiary entry</a>. <br />';
 			}
