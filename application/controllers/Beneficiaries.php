@@ -237,20 +237,32 @@ class Beneficiaries extends CI_Controller {
 				}
 				$show_last_radio = true;
 			}
+			
 			//echo '<pre>'; print_r($s_match); echo '</pre>';
 			if (isset($s_match)) {
 				echo '<br />Possible match in SCHOLARSHIPS.';
 				echo '<div class="radio">';
-				echo '<label><input type="radio" name="optradio" id="optradio" value="ben_id|'.$s_match['ben_id'].'">';
 				//echo '<a href="#" data-toggle="modal" data-target="#quick-view-'.$nmatch['nv_id'].'">'.$match_name.'</a>';
 				if ($s_match['nv_id'] != '') {
-					 echo ($s_match['id_no_comelec'] != '') ? 'COMELEC ID No.'.$s_match['id_no_comelec'] : 'ID No.'.$s_match['nv_id'] ;
+					if ($s_match['id_no_comelec'] != '') { //comelec id trumps nv_id in the unlikely case that they co-exist in a record
+						echo '<label><input type="radio" name="optradio" id="optradio" value="id_no_comelec|'.$s_match['id_no_comelec'].'">';
+						echo '<a href="'.base_url('scholarships/view').'/'.$s_match['scholarship_id'].'">';
+						echo 'COMELEC ID No.'.$s_match['id_no_comelec'];
+					} 
+					else{
+						echo '<label><input type="radio" name="optradio" id="optradio" value="nv_id|'.$s_match['nv_id'].'">';
+						echo '<a href="'.base_url('scholarships/view').'/'.$s_match['scholarship_id'].'">';
+						echo 'ID No.'.$s_match['nv_id'];
+					}
+
 				}
 				else{
+					echo '<label><input type="radio" name="optradio" id="optradio" value="id_no_comelec|'.$s_match['id_no_comelec'].'">';
+					echo '<a href="'.base_url('scholarships/view').'/'.$s_match['scholarship_id'].'">';
 					echo 'COMELEC ID No.'.$s_match['id_no_comelec'];
 				}
 				echo ' | Address: '.$s_match['address'].' | Barangay'.$s_match['barangay'].' | District :'.$s_match['district'];
-				echo '</div>';
+				echo '</a></div>';
 			}	
 
 			if (isset($show_last_radio)) {

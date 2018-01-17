@@ -196,38 +196,48 @@ class beneficiaries_model extends CI_Model {
 		return $query->result_array();
 	}
 	
-	public function set_beneficiary() //new voter
+	public function set_beneficiary() //new beneficiary
 	{
 		$this->load->helper('url');
+
+		if ($this->input->post('optradio') != null) {
+			$new_id = explode('|', $this->input->post('optradio'));
+			switch ($new_id[0]) {
+				case 'id_no_comelec':
+					$id_no_comelec = $new_id[1];
+					$nv_id = '';
+					break;
+				case 'nv_id':
+					$id_no_comelec = '';
+					$nv_id = $new_id[1];
+					break;
+				default:
+					//nothing
+					break;
+			}
+		}
+		else{
+			$id_no_comelec = $this->input->post('id_no_comelec');
+			$nv_id = $this->input->post('nv_id');
+		}
+		
+		$trash = ( $this->input->post('trash') !== null )  ? $this->input->post('trash') : 0 ;
 		
 		$data = array(
-				'fname' => $this->input->post('fname'),
-				'lname' => $this->input->post('lname'),
-				'dob' => $this->input->post('dob'),
-				'address' => $this->input->post('address'),
-				'barangay' => $this->input->post('barangay'),
-				'district' => $this->input->post('district'),
-				'sex' => $this->input->post('sex'),
-				'code' => $this->input->post('code'),
-				'id_no' => $this->input->post('id_no'),
-				'id_no_comelec' => $this->input->post('id_no_comelec'),
-				'precinct' => $this->input->post('precinct'),
-				'mobile_no' => $this->input->post('mobile_no'),
-				'email' => $this->input->post('email'),
-				'referee' => $this->input->post('referee'),
-				//'voters_id' => $this->input->post('voters_id'),
-				'status' => $this->input->post('status'),
-				'remarks' => $this->input->post('remarks')
+				'id_no_comelec' => $id_no_comelec,
+				'nv_id' => $nv_id,
+				'trash' => $trash
 		);
-		//insert new voter
+
+		//insert new beneficiary
 		$this->db->insert('beneficiaries', $data);
 		
-		$rvid = $this->db->insert_id();
+		$ben_id = $this->db->insert_id();
 		
 		//add audit trail
 		$user = $this->ion_auth->user()->row();
 		$data1 = array(
-					'project_id' => $rvid,
+					'ben_id' => $ben_id,
 					'user' => $user->username,
 					'activity' => 'created'
 		);
@@ -235,73 +245,5 @@ class beneficiaries_model extends CI_Model {
 		
 		return;
 	}
-	
-	
-	//update individual voter
-	public function update_beneficiary() {
-		//echo '<pre>'; print_r($_POST); echo '</pre>'; die();
-		$this->load->helper('url');
-		
-		$id = $this->input->post('id');
-				
-		
-		$data = array(
-				'fname' => strtoupper($this->input->post('fname')),
-				'lname' => strtoupper($this->input->post('lname')),
-				'dob' => $this->input->post('dob'),
-				'address' => $this->input->post('address'),
-				'barangay' => $this->input->post('barangay'),
-				'district' => $this->input->post('district'),
-				'sex' => $this->input->post('sex'),
-				'precinct' => $this->input->post('precinct'),
-				'mobile_no' => $this->input->post('mobile_no'),
-				'email' => $this->input->post('email'),
-				'referee' => $this->input->post('referee'),
-				//'voters_id' => $this->input->post('voters_id'),
-				'status' => $this->input->post('status'),
-				'remarks' => $this->input->post('remarks'),
-				'trash' => $this->input->post('trash')
-		);
-		
-		$this->db->where('id', $id);
-		$this->db->update('beneficiaries', $data);
-		
-		//add audit trail
-		$altered = $this->input->post('altered'); //hidden field that tracks form edits; see form
-		if (strlen($altered) > 0) 
-		{
-			$user = $this->ion_auth->user()->row();
-			$data3 = array(
-						'beneficiary_id' => $id,
-						'user' => $user->username,
-						'activity' => 'modified',
-						'mod_details' => $altered
-			);
-			$this->db->insert('audit_trail', $data3);
-		}
-		
-		return;
-	}
-
-	public function show_activities($beneficiary_id) {
-		$this->db->select('*');
-		$this->db->from('audit_trail');
-		$this->db->order_by('timestamp', 'desc');
-		$this->db->where("beneficiary_id = '$beneficiary_id' and activity = 'modified'");
-		$this->db->limit(5);
-		$query = $this->db->get();		
-		
-		$tracker['modified'] = $query->result_array();	
-		
-		$this->db->select('*');
-		$this->db->from('audit_trail');
-		$this->db->where("beneficiary_id = '$beneficiary_id' and activity = 'created'");
-		$query = $this->db->get();		
-		
-		$tracker['created'] = $query->row_array();	
-		
-		return $tracker;
-	}
-
 	
 }

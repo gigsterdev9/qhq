@@ -7,6 +7,7 @@ class Scholarships extends CI_Controller {
 				$this->load->model('scholarships_model');
 				$this->load->model('nonvoters_model');
 				$this->load->model('rvoters_model');
+				$this->load->model('beneficiaries_model');
                 $this->load->helper('url');
                 $this->load->helper('form');
 				$this->load->library('ion_auth');
@@ -144,7 +145,6 @@ class Scholarships extends CI_Controller {
 			$this->form_validation->set_rules('batch','Batch','required');
 			$this->form_validation->set_rules('school_id','School ID','required');
 			$this->form_validation->set_rules('course','Course','required');
-			$this->form_validation->set_rules('major','Major','required');
 			$this->form_validation->set_rules('scholarship_status','Scholarship status','required');
 			
 			//term data
@@ -160,11 +160,11 @@ class Scholarships extends CI_Controller {
 			}
 			else
 			{
-				//insert into beneficiaries table 
-
+				echo '<pre>'; print_r($_POST); echo '</pre>'; 
+				
 				//insert into scholarships table
-				//$this->scholarships_model->set_scholarship();
-				$data['alert_success'] = 'New entry successful.';
+				$this->scholarships_model->set_scholarship();
+				$data['alert_success'] = 'New entry created.';
 				
 				$this->load->view('templates/header', $data);
 				$this->load->view('scholarships/add');

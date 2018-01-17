@@ -70,7 +70,7 @@ class scholarships_model extends CI_Model {
 		$this->db->where("beneficiaries.ben_id = '$id'");
 		$query = $this->db->get();
 
-		echo $this->db->last_query();
+		//echo $this->db->last_query();
 		return $query->row_array();
 
 	}
@@ -175,34 +175,68 @@ class scholarships_model extends CI_Model {
 	
 		$this->load->helper('url');
 		
+
+		if ($this->input->post('optradio') != null) {
+			$new_id = explode('|', $this->input->post('optradio'));
+			switch ($new_id[0]) {
+				case 'id_no_comelec':
+					$id_no_comelec = $new_id[1];
+					$nv_id = '';
+					break;
+				case 'nv_id':
+					$id_no_comelec = '';
+					$nv_id = $new_id[1];
+					break;
+				default:
+					//nothing
+					break;
+			}
+		}
+		else{
+			$id_no_comelec = $this->input->post('id_no_comelec');
+			$nv_id = $this->input->post('nv_id');
+		}
+		
+		$trash = ( $this->input->post('trash') !== null )  ? $this->input->post('trash') : 0 ;
+		
+		//prep data for beneficiary table
 		$data = array(
-				'fname' => $this->input->post('fname'),
-				'lname' => $this->input->post('lname'),
-				'dob' => $this->input->post('dob'),
-				'address' => $this->input->post('address'),
-				'barangay' => $this->input->post('barangay'),
-				'sex' => $this->input->post('sex'),
-				'precinct' => $this->input->post('precinct'),
-				'mobile_no' => $this->input->post('mobile_no'),
-				'email' => $this->input->post('email'),
-				'referee' => $this->input->post('referee'),
-				'voters_id' => $this->input->post('voters_id'),
-				'status' => $this->input->post('status'),
-				'remarks' => $this->input->post('remarks')
+				'id_no_comelec' => $id_no_comelec,
+				'nv_id' => $nv_id,
+				'trash' => $trash
+		);
+
+		//insert new beneficiary
+		$this->db->insert('beneficiaries', $data);
+		
+		$ben_id = $this->db->insert_id();
+		
+		//prep data for scholarship table
+		$data = array(
+				'ben_id' => $ben_id,
+				'batch' => $this->input->post('batch'),
+				'school_id' => $this->input->post('school_id'),
+				'course' => $this->input->post('course'),
+				'major' => $this->input->post('major'),
+				'scholarship_status' => $this->input->post('scholarship_status'),
+				'disability' => $this->input->post('disability'),
+				'senior_citizen' => $this->input->post('senior_citizen'),
+				'parent_support_status' => $this->input->post('parent_support_status'),
+				'scholarship_remarks' => $this->input->post('scholarship_remarks')
 		);
 		//insert new scholarship
-		$this->db->insert('rvoters', $data);
+		$this->db->insert('scholarships', $data);
 		
-		$rvid = $this->db->insert_id();
+		$scholarship_id = $this->db->insert_id();
 		
 		//add audit trail
 		$user = $this->ion_auth->user()->row();
-		$data1 = array(
+		$data = array(
 					'scholarship_id' => $scholarship_id,
 					'user' => $user->username,
 					'activity' => 'created'
 		);
-		$this->db->insert('audit_trail', $data1);
+		$this->db->insert('audit_trail', $data);
 		
 		return;
 	}

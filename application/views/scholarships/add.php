@@ -1,4 +1,4 @@
-<?php echo '<pre>'; print_r($_POST); echo '</pre>'; ?>
+<?php //echo '<pre>'; print_r($_POST); echo '</pre>'; ?>
 <div class="container">
 <h2><?php echo $title; ?></h2>
 <p><a href="javascript:history.go(-1)" ><span class="glyphicon glyphicon-remove-sign"></span> Cancel</a></p>
