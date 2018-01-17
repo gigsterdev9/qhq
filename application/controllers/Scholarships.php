@@ -18,7 +18,7 @@ class Scholarships extends CI_Controller {
 					redirect('auth/login');
 				}
 
-				$this->output->enable_profiler(TRUE);	
+				//$this->output->enable_profiler(TRUE);	
 				
         }
 
@@ -108,7 +108,7 @@ class Scholarships extends CI_Controller {
 				
 				$this->output->cache(1);
 				//$this->output->delete_cache();
-				//$this->output->enable_profiler(TRUE);
+				
         }
 
         public function view($s_id = NULL) {
@@ -186,6 +186,7 @@ class Scholarships extends CI_Controller {
 				$this->load->view('scholarships/add');
 				$this->load->view('templates/footer');
 			}
+
 		}
 		
 		
@@ -256,6 +257,45 @@ class Scholarships extends CI_Controller {
 				$this->load->view('scholarships/edit');
 				$this->load->view('templates/footer');
 			}
+		
+		}
+
+
+		public function add_term($id = FALSE) {
+			if (!$this->ion_auth->in_group('admin')) {
+				redirect('scholarships'); 
+			}
+
+			$this->load->helper('form');
+			$this->load->library('form_validation');
+
+			//$data['scholarships'] = $this->scholarships_model->get_scholarships();
+			$data['title'] = 'New scholarship term';
+			$data['scholarship_id'] = $id;
+
+			//term data
+			$this->form_validation->set_rules('year_level','Year Level','required');
+			$this->form_validation->set_rules('school_year','School Year','required');
+			$this->form_validation->set_rules('guardian_combined_income','Parent/Guardian Combined Income','required');
+
+			if ($this->form_validation->run() === FALSE) {
+				$this->load->view('templates/header', $data);
+				$this->load->view('scholarships/add_term');
+				$this->load->view('templates/footer');
+
+			}
+			else {
+				//echo '<pre>'; print_r($_POST); echo '</pre>'; 
+				
+				//insert into scholarships table
+				$this->scholarships_model->set_scholarship_term();
+				$data['alert_success'] = 'New entry created.';
+				
+				$this->load->view('templates/header', $data);
+				$this->load->view('scholarships/add_term');
+				$this->load->view('templates/footer');
+			}
+			
 		}
 		
 		public function all_to_excel() {

@@ -72,6 +72,7 @@ $route['nonvoters'] = 'nonvoters';
 $route['scholarships/view/(:any)'] = 'scholarships/view/$1';
 $route['scholarships/edit/(:any)'] = 'scholarships/edit/$1';
 $route['scholarships/add'] = 'scholarships/add';
+$route['scholarships/add_term'] = 'scholarships/add_term';
 $route['scholarships/test'] = 'scholarships/test';
 $route['scholarships/(:any)'] = 'scholarships';
 $route['scholarships'] = 'scholarships';

@@ -294,6 +294,44 @@ class scholarships_model extends CI_Model {
 		return;
 	}
 	
+
+	public function set_scholarship_term() { //new scholarship
+	
+		$this->load->helper('url');
+		
+		$trash = ( $this->input->post('trash') !== null )  ? $this->input->post('trash') : 0 ;
+		$scholarship_id = $this->input->post('scholarship_id');
+
+		//prep data for scholarship term table
+		$data = array(
+				'scholarship_id' => $scholarship_id,
+				'award_no' => $this->input->post('award_no'),
+				'year_level' => $this->input->post('year_level'),
+				'school_year' => $this->input->post('school_year'),
+				'guardian_combined_income' => $this->input->post('guardian_combined_income'),
+				'gwa_1' => $this->input->post('gwa_1'),
+				'gwa_2' => $this->input->post('gwa_2'),
+				'3_4_gwa' => $this->input->post('3_4_gwa'),
+				'grade_points' => $this->input->post('grade_points'),
+				'rank_points' => $this->input->post('rank_points'),
+				'notes' => $this->input->post('notes')
+		);
+
+		//insert new term data
+		$this->db->insert('scholarships_term_details', $data);
+		
+		//add audit trail
+		$user = $this->ion_auth->user()->row();
+		$data = array(
+					'scholarship_id' => $scholarship_id,
+					'user' => $user->username,
+					'activity' => 'created'
+		);
+		$this->db->insert('audit_trail', $data);
+		
+		return;
+	}
+
 	
 	//update individual grant
 	public function update_scholarship($scholarship_id = NULL) 

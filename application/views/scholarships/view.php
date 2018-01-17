@@ -4,7 +4,7 @@
 			<span class="glyphicon glyphicon-file"></span> <?php echo $scholar['fname'].' '.$scholar['lname'].' ('.$scholar['id_no'].')'; ?> 
  		</a>
 		<?php if ($this->ion_auth->in_group('admin')) { ?>
-			<small>[&nbsp;<a href="<?php echo site_url('scholarships/edit/'.$scholar['scholarship_id']); ?>">Edit</a>&nbsp;]</small>
+			<small>[&nbsp;<a href="<?php echo base_url('scholarships/edit/'.$scholar['scholarship_id']); ?>">Edit</a>&nbsp;]</small>
 		<?php } ?>
 	</h3>
 	<div class="panel panel-default">
@@ -86,7 +86,7 @@
 					<div class="col-sm-12 buffer">&nbsp;</div>
 
 					<div class="col-sm-3 control-label" >Disability</div>
-					<div class="col-sm-9 control-value" ><?php echo $scholar['disability']; ?></div>
+					<div class="col-sm-9 control-value" ><?php echo $scholar['disability']; ?>&nbsp;</div>
 
 					<div class="col-sm-3 control-label ">Senior Citizen</div>
 					<div class="col-sm-9 control-value"><?php echo $scholar['senior_citizen']; ?>&nbsp;</div>
@@ -106,7 +106,7 @@
 		
 		<div class="service-history-details text-left">
 			<h3>SCHOLARSHIP AVAILMENT HISTORY</h3>
-			<div class="text-right"><a href="#"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
+			<div class="text-right"><a href="<?php echo base_url('scholarships/add_term/'.$scholar['scholarship_id']); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
 			<div class="table-responsive show-records" >
 				
 			<table class="table table-striped">
@@ -145,8 +145,8 @@
 							<td><?php echo $availment['rank_points']; ?></td>
 							<td><?php echo $availment['notes']; ?></td>
 							<td>
-								<a href="#"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
-								<a href="#"><span class="glyphicon glyphicon-remove-circle"></span></a>
+								<a href="<?php echo base_url('scholarships/edit_term/'.$scholar['scholarship_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
+								<a href="<?php echo base_url('scholarships/rem_term/'.$scholar['scholarship_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
 							</td>
 						</tr>
 						<?php 
