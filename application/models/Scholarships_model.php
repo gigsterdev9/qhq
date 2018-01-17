@@ -87,6 +87,7 @@ class scholarships_model extends CI_Model {
 		$this->db->where("s.scholarship_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
 		$query = $this->db->get();
 
+		//echo $this->db->last_query();
 		return $query->row_array(); //nv_id column has unique attrib
 	}
 
@@ -100,6 +101,7 @@ class scholarships_model extends CI_Model {
 		$this->db->where("s.scholarship_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
 		$query = $this->db->get();
 
+		//echo $this->db->last_query();
 		return $query->row_array(); //nv_id column has unique attrib
 	}
 
@@ -137,11 +139,28 @@ class scholarships_model extends CI_Model {
 
 		$this->db->select('*');
 		$this->db->from('scholarships_term_details');
-		$this->db->where("scholarship_id = '$id'");
+		$this->db->where("scholarship_id = '$id' and trash = 0");
 		$query = $this->db->get();
 
 		return $query->result_array();
 	} 
+
+	
+	public function get_single_term_details($id = FALSE) {
+		
+		if ($id === FALSE)
+		{
+			return 0;
+		}
+
+		$this->db->select('*');
+		$this->db->from('scholarships_term_details');
+		$this->db->where("term_id = '$id' and trash = 0");
+		$query = $this->db->get();
+
+		return $query->row_array();
+	}
+
 	
 	public function get_schools() {
 
@@ -294,6 +313,46 @@ class scholarships_model extends CI_Model {
 		return;
 	}
 	
+	
+	//update individual grant
+	public function update_scholarship($scholarship_id = NULL) {
+		//echo '<pre>'; print_r($_POST); echo '</pre>'; die();
+		$this->load->helper('url');
+		
+		//$id = $this->input->post('scholarship_id');
+		
+		$data = array(
+				'batch' => $this->input->post('batch'),
+				'school_id' => $this->input->post('school_id'),
+				'course' => $this->input->post('course'),
+				'major' => $this->input->post('major'),
+				'scholarship_status' => $this->input->post('scholarship_status'),
+				'disability' => $this->input->post('disability'),
+				'senior_citizen' => $this->input->post('senior_citizen'),
+				'parent_support_status' => $this->input->post('parent_support_status'),
+				'scholarship_remarks' => $this->input->post('scholarship_remarks')
+		);
+		
+		$this->db->where('scholarship_id', $scholarship_id);
+		$this->db->update('scholarships', $data);
+		
+		//add audit trail
+		$altered = $this->input->post('altered'); //hidden field that tracks form edits; see form
+		if (strlen($altered) > 0) 
+		{
+			$user = $this->ion_auth->user()->row();
+			$data3 = array(
+						'scholarship_id' => $scholarship_id,
+						'user' => $user->username,
+						'activity' => 'modified',
+						'mod_details' => $altered
+			);
+			$this->db->insert('audit_trail', $data3);
+		}
+		
+		return;
+	}
+
 
 	public function set_scholarship_term() { //new scholarship
 	
@@ -332,52 +391,71 @@ class scholarships_model extends CI_Model {
 		return;
 	}
 
-	
-	//update individual grant
-	public function update_scholarship($scholarship_id = NULL) 
-	{
-		//echo '<pre>'; print_r($_POST); echo '</pre>'; die();
-		$this->load->helper('url');
-		
-		//$id = $this->input->post('scholarship_id');
-		
+	public function update_scholarship_term() {
+
+		$s_id = $this->input->post('scholarship_id');
+		$t_id = $this->input->post('term_id');
+
 		$data = array(
-				'batch' => $this->input->post('batch'),
-				'school_id' => $this->input->post('school_id'),
-				'course' => $this->input->post('course'),
-				'major' => $this->input->post('major'),
-				'scholarship_status' => $this->input->post('scholarship_status'),
-				'disability' => $this->input->post('disability'),
-				'senior_citizen' => $this->input->post('senior_citizen'),
-				'parent_support_status' => $this->input->post('parent_support_status'),
-				'scholarship_remarks' => $this->input->post('scholarship_remarks'),
-		);
-		
-		$this->db->where('scholarship_id', $scholarship_id);
-		$this->db->update('scholarships', $data);
-		
-		//add audit trail
-		$altered = $this->input->post('altered'); //hidden field that tracks form edits; see form
-		if (strlen($altered) > 0) 
-		{
-			$user = $this->ion_auth->user()->row();
-			$data3 = array(
-						'scholarship_id' => $scholarship_id,
-						'user' => $user->username,
-						'activity' => 'modified',
-						'mod_details' => $altered
+			'scholarship_id' => $s_id,
+			'award_no' => $this->input->post('award_no'),
+			'year_level' => $this->input->post('year_level'),
+			'school_year' => $this->input->post('school_year'),
+			'guardian_combined_income' => $this->input->post('guardian_combined_income'),
+			'gwa_1' => $this->input->post('gwa_1'),
+			'gwa_2' => $this->input->post('gwa_2'),
+			'3_4_gwa' => $this->input->post('3_4_gwa'),
+			'grade_points' => $this->input->post('grade_points'),
+			'income_points' => $this->input->post('income_points'),
+			'rank_points' => $this->input->post('rank_points'),
+			'notes' => $this->input->post('notes')
 			);
-			$this->db->insert('audit_trail', $data3);
-		}
+
+		$this->db->where('term_id', $t_id);
+		$this->db->update('scholarships_term_details', $data);
+
+		//add audit trail
+		$user = $this->ion_auth->user()->row();
+		$data = array(
+					'scholarship_id' => $s_id,
+					'user' => $user->username,
+					'activity' => 'modified',
+					'mod_details' => 'trashed term record with ID '.$t_id
+				);
+		$this->db->insert('audit_trail', $data);
 		
-		return;
 	}
 
-	public function show_activities($nv_id) {
+	public function trash_term($s_id = FALSE, $t_id = FALSE) {
+
+		if ($t_id === FALSE || $s_id === FALSE) {
+			return 0;
+		}
+
+		$data = array(
+				'trash' => 1
+			);
+		
+		$this->db->where('term_id', $t_id);
+		$this->db->update('scholarships_term_details', $data);
+
+		//add audit trail
+		$user = $this->ion_auth->user()->row();
+		$data = array(
+					'scholarship_id' => $s_id,
+					'user' => $user->username,
+					'activity' => 'modified',
+					'mod_details' => 'trashed term record with ID '.$t_id
+				);
+		$this->db->insert('audit_trail', $data);
+		
+	}
+
+	public function show_activities($s_id) {
 		$this->db->select('*');
 		$this->db->from('audit_trail');
 		$this->db->order_by('timestamp', 'desc');
-		$this->db->where("nv_id = '$nv_id' and activity = 'modified'");
+		$this->db->where("scholarship_id = '$s_id' and activity = 'modified'");
 		$this->db->limit(5);
 		$query = $this->db->get();		
 		
@@ -385,7 +463,7 @@ class scholarships_model extends CI_Model {
 		
 		$this->db->select('*');
 		$this->db->from('audit_trail');
-		$this->db->where("nv_id = '$nv_id' and activity = 'created'");
+		$this->db->where("scholarship_id = '$s_id' and activity = 'created'");
 		$query = $this->db->get();		
 		
 		$tracker['created'] = $query->row_array();	

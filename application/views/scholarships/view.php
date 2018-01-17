@@ -145,8 +145,8 @@
 							<td><?php echo $availment['rank_points']; ?></td>
 							<td><?php echo $availment['notes']; ?></td>
 							<td>
-								<a href="<?php echo base_url('scholarships/edit_term/'.$scholar['scholarship_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
-								<a href="<?php echo base_url('scholarships/rem_term/'.$scholar['scholarship_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
+								<a href="<?php echo base_url('scholarships/edit_term/'.$scholar['scholarship_id'].'/'.$availment['term_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
+								<a href="<?php echo base_url('scholarships/rem_term/'.$scholar['scholarship_id'].'/'.$availment['term_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
 							</td>
 						</tr>
 						<?php 

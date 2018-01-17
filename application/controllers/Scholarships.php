@@ -153,7 +153,6 @@ class Scholarships extends CI_Controller {
 			$this->load->helper('form');
 			$this->load->library('form_validation');
 
-			//$data['scholarships'] = $this->scholarships_model->get_scholarships();
 			$data['schools'] = $this->scholarships_model->get_schools(); //display school names in filter dropdown
 			$data['title'] = 'New scholarship';
 
@@ -163,11 +162,6 @@ class Scholarships extends CI_Controller {
 			$this->form_validation->set_rules('course','Course','required');
 			$this->form_validation->set_rules('scholarship_status','Scholarship status','required');
 			
-			//term data
-			//$this->form_validation->set_rules('year_level','Year Level','required');
-			//$this->form_validation->set_rules('school_year','School Year','required');
-			//$this->form_validation->set_rules('guardian_combined_income','Parent/Guardian Combined Income','required');
-
 			if ($this->form_validation->run() === FALSE) {
 				$this->load->view('templates/header', $data);
 				$this->load->view('scholarships/add');
@@ -204,17 +198,30 @@ class Scholarships extends CI_Controller {
 			$data['schools'] = $this->scholarships_model->get_schools(); //display school names in filter dropdown
 			$data['scholarship_id'] = $scholarship_id;
 
-			//primary scholarship data
+			$sch = $this->scholarships_model->get_scholarship_by_id($scholarship_id);
+			if (empty($sch))
+			{
+					show_404();
+			}
+			else{
+				if ($sch['id_no_comelec'] != '') { //then entry must be a registered voter
+					$data['scholar'] = $this->scholarships_model->get_r_scholarship_by_id($scholarship_id);
+				}
+				elseif ($sch['nv_id'] != ''){ //then entry must be a non voter
+					$data['scholar'] = $this->scholarships_model->get_n_scholarship_by_id($scholarship_id);
+				}
+				else{
+					show_404();
+				}
+			}
+
+
+			//scholarship data
 			$this->form_validation->set_rules('batch','Batch','required');
 			$this->form_validation->set_rules('school_id','School ID','required');
 			$this->form_validation->set_rules('course','Course','required');
 			$this->form_validation->set_rules('scholarship_status','Scholarship Status','required');
 			
-			//term data
-			//$this->form_validation->set_rules('year_level','Year Level','required');
-			//$this->form_validation->set_rules('school_year','School Year','required');
-			//$this->form_validation->set_rules('guardian_combined_income','Parent/Guardian Combined Income','required');
-
 			//upon submission of edit action
 			if ($this->input->post('action') == 1) {
 				
@@ -296,6 +303,58 @@ class Scholarships extends CI_Controller {
 				$this->load->view('templates/footer');
 			}
 			
+		}
+
+		public function edit_term($s_id = FALSE, $t_id = FALSE) {
+			if (!$this->ion_auth->in_group('admin')) {
+				redirect('scholarships'); 
+			}
+			//echo $s_id.' - '.$t_id;
+
+			$this->load->helper('form');
+			$this->load->library('form_validation');
+
+			//$data['scholarships'] = $this->scholarships_model->get_scholarships();
+			$data['title'] = 'Edit scholarship term details';
+			$data['s_id'] = $s_id;
+			$data['t_id'] = $t_id;
+			$data['s_term'] = $this->scholarships_model->get_single_term_details($t_id);
+
+			//term data
+			$this->form_validation->set_rules('year_level','Year Level','required');
+			$this->form_validation->set_rules('school_year','School Year','required');
+			$this->form_validation->set_rules('guardian_combined_income','Parent/Guardian Combined Income','required');
+
+			if ($this->form_validation->run() === FALSE) {
+				$this->load->view('templates/header', $data);
+				$this->load->view('scholarships/edit_term');
+				$this->load->view('templates/footer');
+
+			}
+			else {
+				//echo '<pre>'; print_r($_POST); echo '</pre>'; 
+				
+				//insert into scholarships table
+				$this->scholarships_model->update_scholarship_term();
+				$data['alert_success'] = 'Entry updated.';
+				$data['s_id'] = $this->input->post('scholarship_id');
+				
+				$this->load->view('templates/header', $data);
+				$this->load->view('scholarships/edit_term');
+				$this->load->view('templates/footer');
+			}
+			
+		}
+
+		public function rem_term($s_id = FALSE, $t_id = FALSE) {
+			if (!$this->ion_auth->in_group('admin')) {
+				redirect('scholarships'); 
+			}
+
+			//echo $s_id.' - '.$t_id;
+			$this->scholarships_model->trash_term($s_id, $t_id);
+			redirect('scholarships/view/'.$s_id);
+
 		}
 		
 		public function all_to_excel() {
