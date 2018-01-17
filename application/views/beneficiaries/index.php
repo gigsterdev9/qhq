@@ -117,11 +117,12 @@
 							foreach ($rvoters as $rv): 
 							//echo '<pre>'; print_r($rvoter); echo '</pre>';
 							if (is_array($rv)) { //do not display 'result_count' 
+								$fullname = strtoupper($rv['lname'].', '.$rv['fname']);
 						?>
 						<tr>
 							<td>
 								<a href="<?php echo site_url('beneficiaries/view/'.$rv['ben_id']); ?>">
-									<span class="glyphicon glyphicon-file"></span> <?php echo $rv['lname'].', '.$rv['fname']; ?>
+									<span class="glyphicon glyphicon-file"></span> <?php echo $fullname; ?>
 								</a>
 							</td>
 							<td><?php echo $rv['dob']; ?></td>
@@ -144,7 +145,7 @@
 			<?php 
 				} 
 				else{
-					echo '<div class="message">Currently, there are no registered voters found in this page of the beneficiaries list.</div>';
+					echo '<div class="message">Currently, there are no registered voters found in this page of the Beneficiaries list.</div>';
 				}
 
 				if (count($nonvoters) > 0) {
@@ -172,11 +173,12 @@
 						foreach ($nonvoters as $nv): 
 						//echo '<pre>'; print_r($rvoter); echo '</pre>';
 						if (is_array($nv)) { //do not display 'result_count' 
+							$fullname =  strtoupper($nv['lname'].', '.$nv['fname']);
 					?>
 					<tr>
 						<td>
 							<a href="<?php echo site_url('beneficiaries/view/'.$nv['nv_id']); ?>">
-								<span class="glyphicon glyphicon-file"></span> <?php echo $nv['lname'].', '.$nv['fname']; ?>
+								<span class="glyphicon glyphicon-file"></span> <?php echo $fullname; ?>
 							</a>
 						</td>
 						<td><?php echo $nv['dob']; ?></td>
@@ -199,7 +201,7 @@
 			<?php 
 				} 
 				else{
-					echo '<div class="message">Currently, there are no non-voters found in this page of the beneficiaries list.</div>';
+					echo '<div class="message">Currently, there are no non-voters found in this page of the Beneficiaries list.</div>';
 				}
 			?>
 

@@ -95,47 +95,107 @@
 			<?php if ($record_count > 0) { ?>	
 			<div class="page-links"><?php echo $links; ?></div>
 			
-				<table class="table table-striped">
-				<thead>
-					<tr>
-						<th width="20%">Full Name</th>
-						<th width="10%">Birthdate</th>
-						<th width="5%">Age</th>
-						<th width="20%">School</th>
-						<th width="5%">District</th>
-						<th width="5%">Sex</th>
-						<th width="10%">Mobile Number</th>
-						<th width="10%">Email</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php
-						//echo '<pre>'; print_r($scholarships); echo '</pre>';
-						foreach ($scholarships as $scholarship) :
-						if (is_array($scholarship)) { //do not display 'result_count' 
-							$fullname = strtoupper($scholarship['lname'].', '.$scholarship['fname']);
-					?>
-					<tr>
-						<td>
-							<a href="<?php echo site_url('scholarships/view/'.$scholarship['scholarship_id']); ?>">
-								<span class="glyphicon glyphicon-file"></span> <?php echo $fullname ?>
-							</a>
-						</td>
-						<td><?php echo $scholarship['dob']; ?></td>
-						<td><?php echo $scholarship['age']; ?></td>
-						<td><?php echo $scholarship['school_name']; ?></td>
-						<td><?php echo $scholarship['district']; ?></td>
-						<td><?php echo $scholarship['sex']; ?></td>
-						<td><?php echo $scholarship['mobile_no']; ?></td>
-						<td><?php echo $scholarship['email']; ?></td>
-					</tr>
-					<?php 
-						} 
-						endforeach; 
-					?>
-				</tbody>
-				</table>
+				<?php if (count($r_scholars) > 0) { ?>
+					<div class="index-section-title"><h4>Registered Voters</h4></div>
+					<table class="table table-striped">
+					<thead>
+						<tr>
+							<th width="20%">Full Name</th>
+							<th width="10%">Birthdate</th>
+							<th width="5%">Age</th>
+							<th width="20%">School</th>
+							<th width="5%">District</th>
+							<th width="5%">Sex</th>
+							<th width="10%">Mobile Number</th>
+							<th width="10%">Email</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php
+							//echo '<pre>'; print_r($r_scholars); echo '</pre>';
+							foreach ($r_scholars as $scholar) :
+							if (is_array($scholar)) { //do not display 'result_count' 
+								$fullname = strtoupper($scholar['lname'].', '.$scholar['fname']);
+						?>
+						<tr>
+							<td>
+								<a href="<?php echo site_url('scholarships/view/'.$scholar['scholarship_id']); ?>">
+									<span class="glyphicon glyphicon-file"></span> <?php echo $fullname ?>
+								</a>
+							</td>
+							<td><?php echo $scholar['dob']; ?></td>
+							<td><?php echo $scholar['age']; ?></td>
+							<td><?php echo $scholar['school_name']; ?></td>
+							<td><?php echo $scholar['district']; ?></td>
+							<td><?php echo $scholar['sex']; ?></td>
+							<td><?php echo $scholar['mobile_no']; ?></td>
+							<td><?php echo $scholar['email']; ?></td>
+						</tr>
+						<?php 
+							} 
+							endforeach; 
+						?>
+					</tbody>
+					</table>
 
+				<?php 
+					} 
+					else{
+						echo '<div class="message">Currently, there are no registered voters found in this page of the Scholarships list.</div>';
+					}
+
+					if (count($n_scholars) > 0) {
+				?>
+					
+					<div class="index-section-title"><h4>Non Voters</h4></div>
+					<table class="table table-striped">
+					<thead>
+						<tr>
+							<th width="20%">Full Name</th>
+							<th width="10%">Birthdate</th>
+							<th width="5%">Age</th>
+							<th width="20%">School</th>
+							<th width="5%">District</th>
+							<th width="5%">Sex</th>
+							<th width="10%">Mobile Number</th>
+							<th width="10%">Email</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php
+							//echo '<pre>'; print_r($r_scholars); echo '</pre>';
+							foreach ($n_scholars as $scholar) :
+							if (is_array($scholar)) { //do not display 'result_count' 
+								$fullname = strtoupper($scholar['lname'].', '.$scholar['fname']);
+						?>
+						<tr>
+							<td>
+								<a href="<?php echo site_url('scholarships/view/'.$scholar['scholarship_id']); ?>">
+									<span class="glyphicon glyphicon-file"></span> <?php echo $fullname ?>
+								</a>
+							</td>
+							<td><?php echo $scholar['dob']; ?></td>
+							<td><?php echo $scholar['age']; ?></td>
+							<td><?php echo $scholar['school_name']; ?></td>
+							<td><?php echo $scholar['district']; ?></td>
+							<td><?php echo $scholar['sex']; ?></td>
+							<td><?php echo $scholar['mobile_no']; ?></td>
+							<td><?php echo $scholar['email']; ?></td>
+						</tr>
+						<?php 
+							} 
+							endforeach; 
+						?>
+					</tbody>
+					</table>
+
+				<?php 
+					}
+					else{
+						echo '<div class="message">Currently, there are no non-voters found in this page of the Scholarships list.</div>';
+					}
+				?>
+			
 			<div class="page-links"><?php echo $links; ?></div>
 
 			<?php } ?>

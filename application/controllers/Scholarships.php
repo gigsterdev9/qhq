@@ -18,7 +18,7 @@ class Scholarships extends CI_Controller {
 					redirect('auth/login');
 				}
 
-				//$this->output->enable_profiler(TRUE);	
+				$this->output->enable_profiler(TRUE);	
 				
         }
 
@@ -92,7 +92,8 @@ class Scholarships extends CI_Controller {
 					//Display all
 					//implement pagination
 					$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-					$data['scholarships'] = $this->scholarships_model->get_scholarships($config["per_page"], $page);
+					$data['n_scholars'] = $this->scholarships_model->get_n_scholarships($config["per_page"], $page);
+					$data['r_scholars'] = $this->scholarships_model->get_r_scholarships($config["per_page"], $page); 
 					$data['record_count'] = $this->scholarships_model->record_count();
 						$config['total_rows'] = $data['record_count'];
 						$this->pagination->initialize($config);
@@ -105,18 +106,33 @@ class Scholarships extends CI_Controller {
 				$this->load->view('scholarships/index', $data);
 				$this->load->view('templates/footer');
 				
+				$this->output->cache(1);
+				//$this->output->delete_cache();
 				//$this->output->enable_profiler(TRUE);
         }
 
-        public function view($scholar_id = NULL) {
+        public function view($s_id = NULL) {
 
-                $data['scholar'] = $this->scholarships_model->get_scholarship_by_id($scholar_id);
-                if (empty($data['scholar']))
+                $sch = $this->scholarships_model->get_scholarship_by_id($s_id);
+                if (empty($sch))
 				{
 				        show_404();
 				}
-				$data['availments'] = $this->scholarships_model->get_term_details($scholar_id);
-                $data['tracker'] = $this->scholarships_model->show_activities($scholar_id);
+				else{
+					//echo '<pre>'; print_r($sch); echo '</pre>'; die();
+					if ($sch['id_no_comelec'] != '') { //then entry must be a registered voter
+						$data['scholar'] = $this->scholarships_model->get_r_scholarship_by_id($s_id);
+					}
+					elseif ($sch['nv_id'] != ''){ //then entry must be a non voter
+						$data['scholar'] = $this->scholarships_model->get_n_scholarship_by_id($s_id);
+					}
+					else{
+						show_404();
+					}
+				}
+
+				$data['availments'] = $this->scholarships_model->get_term_details($s_id);
+                $data['tracker'] = $this->scholarships_model->show_activities($s_id);
                 
                 //echo '<pre>'; print_r($data); echo '</pre>'; die();
                 

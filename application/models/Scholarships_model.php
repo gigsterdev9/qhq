@@ -13,13 +13,13 @@ class scholarships_model extends CI_Model {
 	
 	public function get_scholarships($limit = 0, $start = 0) {
 		
-		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(non_voters.dob, '%Y-%m-%d'))/365)) as age");
-		$this->db->from('scholarships');
-		$this->db->join('beneficiaries', 'scholarships.ben_id = beneficiaries.ben_id');
-		$this->db->join('non_voters', 'non_voters.nv_id = beneficiaries.nv_id');
-		$this->db->join('schools', 'scholarships.school_id = schools.school_id');
-		$this->db->where('non_voters.trash = 0');
-		$this->db->order_by('non_voters.lname', 'ASC');
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('scholarships s');
+		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
+		$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
+		$this->db->join('schools', 's.school_id = schools.school_id');
+		$this->db->where('n.trash = 0');
+		$this->db->order_by('n.lname', 'ASC');
 		$this->db->limit($limit, $start);
 		$query = $this->db->get();
 
@@ -27,27 +27,80 @@ class scholarships_model extends CI_Model {
 
 	}
 	
-	public function get_scholarship_by_id($id = FALSE) {
+	public function get_n_scholarships($limit = 0, $start = 0) {
+		
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('scholarships s');
+		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
+		$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
+		$this->db->join('schools', 's.school_id = schools.school_id');
+		$this->db->where('n.trash = 0');
+		$this->db->order_by('n.lname', 'ASC');
+		$this->db->limit($limit, $start);
+		$query = $this->db->get();
+
+		return $query->result_array();
+
+	}
+
+	public function get_r_scholarships($limit = 0, $start = 0) {
+		
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('scholarships s');
+		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
+		$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
+		$this->db->join('schools', 's.school_id = schools.school_id');
+		$this->db->where('r.trash = 0');
+		$this->db->order_by('r.lname', 'ASC');
+		$this->db->limit($limit, $start);
+		$query = $this->db->get();
+
+		return $query->result_array();
+
+	}
+
+	public function get_scholarship_by_id($id = FALSE, $flag = FALSE) {
 		if ($id === FALSE)
 		{
 			return 0;
 		}
 		
-		/*
+		//$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(non_voters.dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->select('*');
-		$this->db->from('rvoters');
-		$this->db->where("id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
-		*/
-
-		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(non_voters.dob, '%Y-%m-%d'))/365)) as age");
-		$this->db->from('scholarships');
-		$this->db->join('beneficiaries', 'scholarships.ben_id = beneficiaries.ben_id');
-		$this->db->join('non_voters', 'non_voters.nv_id = beneficiaries.nv_id');
-		$this->db->join('schools', 'scholarships.school_id = schools.school_id');
-		$this->db->where("scholarships.scholarship_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
+		$this->db->from('scholarships s');
+		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
+		//$this->db->join('non_voters', 'non_voters.nv_id = beneficiaries.nv_id');
+		//$this->db->join('schools', 'scholarships.school_id = schools.school_id');
+		$this->db->where("s.scholarship_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
 		$query = $this->db->get();		
 
 		return $query->row_array();
+	}
+
+	public function get_n_scholarship_by_id($id) {
+		
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('scholarships s');
+		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
+		$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
+		$this->db->join('schools', 's.school_id = schools.school_id');
+		$this->db->where("s.scholarship_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
+		$query = $this->db->get();
+
+		return $query->row_array(); //nv_id column has unique attrib
+	}
+
+	public function get_r_scholarship_by_id($id) {
+		
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('scholarships s');
+		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
+		$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
+		$this->db->join('schools', 's.school_id = schools.school_id');
+		$this->db->where("s.scholarship_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
+		$query = $this->db->get();
+
+		return $query->row_array(); //nv_id column has unique attrib
 	}
 
 	public function get_scholarship_by_ben_id($id = FALSE, $flag = FALSE) {
