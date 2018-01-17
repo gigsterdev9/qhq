@@ -162,8 +162,29 @@ class beneficiaries_model extends CI_Model {
 	}
 	
 	
-	public function get_recent_beneficiaries($count_limit = 5)
-	{
+	public function get_ben_by_nvid($id) {
+		$this->db->select('*');
+		$this->db->from('beneficiaries');
+		$this->db->join('non_voters', 'non_voters.nv_id = beneficiaries.nv_id');
+		$this->db->where("beneficiaries.nv_id = '$id'");
+		$query = $this->db->get();
+
+		return $query->row_array(); //nv_id column has unique attrib
+	}
+
+	public function get_ben_by_comid($id) {
+		$this->db->select('*');
+		$this->db->from('beneficiaries');
+		$this->db->join('rvoters', 'rvoters.id_no_comelec = beneficiaries.id_no_comelec');
+		$this->db->where("beneficiaries.id_no_comelec = '$id'");
+		$query = $this->db->get();
+
+		return $query->row_array(); //id_no_comelec has unique attrib
+	}
+
+
+
+	public function get_recent_beneficiaries($count_limit = 5) {
 				
 		$this->db->select('id, fname, lname');
 		$this->db->from('beneficiaries');

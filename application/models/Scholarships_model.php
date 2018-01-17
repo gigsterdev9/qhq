@@ -27,8 +27,7 @@ class scholarships_model extends CI_Model {
 
 	}
 	
-	public function get_scholarship_by_id($id = FALSE)
-	{
+	public function get_scholarship_by_id($id = FALSE) {
 		if ($id === FALSE)
 		{
 			return 0;
@@ -49,6 +48,31 @@ class scholarships_model extends CI_Model {
 		$query = $this->db->get();		
 
 		return $query->row_array();
+	}
+
+	public function get_scholarship_by_ben_id($id = FALSE, $flag = FALSE) {
+		if ($id === FALSE || $flag === FALSE) {
+			return 0;
+		}
+
+		$this->db->select('*');
+		$this->db->from('beneficiaries');
+		$this->db->join('scholarships','scholarships.ben_id = beneficiaries.ben_id');
+		if ($flag == 'n') {
+			$this->db->join('non_voters','beneficiaries.nv_id = non_voters.nv_id');
+		}
+		elseif ($flag == 'r') {
+			$this->db->join('rvoters', 'beneficiaries.id_no_comelec = rvoters.id_no_comelec');
+		}
+		else { 
+			//nothing
+		}
+		$this->db->where("beneficiaries.ben_id = '$id'");
+		$query = $this->db->get();
+
+		echo $this->db->last_query();
+		return $query->row_array();
+
 	}
 
 	public function get_term_details($id = FALSE) {

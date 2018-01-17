@@ -116,12 +116,12 @@
 						<?php 
 							foreach ($rvoters as $rv): 
 							//echo '<pre>'; print_r($rvoter); echo '</pre>';
-							if (is_array($nv)) { //do not display 'result_count' 
+							if (is_array($rv)) { //do not display 'result_count' 
 						?>
 						<tr>
 							<td>
-								<a href="<?php echo site_url('beneficiaries/view/'.$rv['id']); ?>">
-									<span class="glyphicon glyphicon-file"></span> <?php echo $rv['lname'].', '.$nv['fname']; ?>
+								<a href="<?php echo site_url('beneficiaries/view/'.$rv['ben_id']); ?>">
+									<span class="glyphicon glyphicon-file"></span> <?php echo $rv['lname'].', '.$rv['fname']; ?>
 								</a>
 							</td>
 							<td><?php echo $rv['dob']; ?></td>

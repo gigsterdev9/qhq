@@ -81,7 +81,7 @@ class Scholarships extends CI_Controller {
 				}
 				elseif ($this->input->post('search_param') != NULL)
 				{
-					//$data['grants'] = array(1, 2, 3);
+					//$data['scholarships'] = array(1, 2, 3);
 					$search_param = $this->input->post('search_param');
 					$data['scholarships'] = $this->scholarships_model->search_scholarships($search_param);
 					$data['searchval'] = $search_param;
@@ -136,7 +136,6 @@ class Scholarships extends CI_Controller {
 			$this->load->helper('form');
 			$this->load->library('form_validation');
 
-			$data['non_voters'] = $this->nonvoters_model->get_nonvoters();
 			//$data['scholarships'] = $this->scholarships_model->get_scholarships();
 			$data['schools'] = $this->scholarships_model->get_schools(); //display school names in filter dropdown
 			$data['title'] = 'New scholarship';
@@ -146,12 +145,12 @@ class Scholarships extends CI_Controller {
 			$this->form_validation->set_rules('school_id','School ID','required');
 			$this->form_validation->set_rules('course','Course','required');
 			$this->form_validation->set_rules('major','Major','required');
-			$this->form_validation->set_rules('scholarship_status','Amount requested','required');
+			$this->form_validation->set_rules('scholarship_status','Scholarship status','required');
 			
 			//term data
-			$this->form_validation->set_rules('year_level','Year Level','required');
-			$this->form_validation->set_rules('school_year','School Year','required');
-			$this->form_validation->set_rules('guardian_combined_income','Parent/Guardian Combined Income','required');
+			//$this->form_validation->set_rules('year_level','Year Level','required');
+			//$this->form_validation->set_rules('school_year','School Year','required');
+			//$this->form_validation->set_rules('guardian_combined_income','Parent/Guardian Combined Income','required');
 
 			if ($this->form_validation->run() === FALSE) {
 				$this->load->view('templates/header', $data);
@@ -161,13 +160,14 @@ class Scholarships extends CI_Controller {
 			}
 			else
 			{
-				$this->grants_model->set_grants();
-				
-				$data['title'] = 'Grant item entered';
-				$data['alert_success'] = 'Grant entry successful.';
+				//insert into beneficiaries table 
+
+				//insert into scholarships table
+				//$this->scholarships_model->set_scholarship();
+				$data['alert_success'] = 'New entry successful.';
 				
 				$this->load->view('templates/header', $data);
-				$this->load->view('grants/add');
+				$this->load->view('scholarships/add');
 				$this->load->view('templates/footer');
 			}
 		}
@@ -242,116 +242,12 @@ class Scholarships extends CI_Controller {
 			}
 		}
 		
-		
-		public function add_historic()
-		{
-			
-			if (!$this->ion_auth->in_group('admin'))
-			{
-				redirect('grants');
-			}
-			
-			$this->load->helper('form');
-			$this->load->library('form_validation');
-
-			$data['title'] = 'Add historical grant';
-
-			$this->form_validation->set_rules('title', 'Title', 'required');
-			$this->form_validation->set_rules('proponent', 'Proponent', 'required');
-
-			if ($this->form_validation->run() === FALSE)
-			{
-				$this->load->view('templates/header', $data);
-				$this->load->view('grants/add_historic');
-				$this->load->view('templates/footer');
-
-			}
-			else
-			{
-				$this->grants_model->set_historical_grants();
-				
-				//$data['title'] = 'Enter new grant (Historical)';
-				$data['alert_success'] = 'Grant entry successful.';
-				
-				$this->load->view('templates/header', $data);
-				$this->load->view('grants/add_historic');
-				$this->load->view('templates/footer');
-			}
-		}
-		
-		
-		public function edit_historic($id)
-		{
-			
-			if (!$this->ion_auth->in_group('admin'))
-			{
-				redirect('grants');
-			}
-			
-			
-			
-			//echo '<pre>'; print_r($data); echo '</pre>';
-			if (empty($data['grant_item']))
-			{
-				show_404();
-			}
-			
-			$this->load->helper('form');
-			$this->load->library('form_validation');
-
-			$data['title'] = 'Edit historical grant';
-
-			$this->form_validation->set_rules('title', 'Title', 'required');
-			$this->form_validation->set_rules('proponent', 'Proponent', 'required');
-
-			if ($this->form_validation->run() === FALSE)
-			{
-				$data['grant_item'] = $this->grants_model->get_historical_grant_by_id($id);
-				
-				$this->load->view('templates/header', $data);
-				$this->load->view('grants/edit_historic');
-				$this->load->view('templates/footer');
-
-			}
-			else
-			{
-				unset($data['grant_item']);
-				$this->grants_model->update_historical_grants($id);
-				//$data['grant_item'] = $this->grants_model->get_historical_grant_by_id($id);
-				$data['alert_success'] = 'Entry update successful.';
-				
-				$this->load->view('templates/header', $data);
-				$this->load->view('grants/edit_historic');
-				$this->load->view('templates/footer');
-			}
-		}
-		
-		
-		public function historic($slug = NULL)
-        {
-        
-        		$data['historical_item'] = $this->grants_model->get_historical_grants($slug);
-            
-                if (empty($data['historical_item']))
-				{
-				        show_404();
-				}
-				
-				$data['title'] = $data['historical_item']['title'];
-				//echo '<pre>'; print_r($data); echo '</pre>';
-				
-				$this->load->view('templates/header', $data);
-				$this->load->view('grants/view_historic', $data);
-				$this->load->view('templates/footer');
-				
-        }
-        
-        public function all_to_excel() {
+		public function all_to_excel() {
         //export all data to Excel file
         
         	$this->load->library('export');
-			$sql = $this->grants_model->get_grants();
-			$this->export->to_excel($sql, 'allgrants'); 
+			$sql = $this->scholarships_model->get_scholarships();
+			$this->export->to_excel($sql, 'allscholarships'); 
 	
 			//$this->output->enable_profiler(TRUE);	
         }
@@ -363,7 +259,7 @@ class Scholarships extends CI_Controller {
         	//echo '<pre>'; print_r($filter); echo '</pre>';
         	$field = key($filter);
         	$value = $filter[key($filter)];
-        	$sql = $this->grants_model->filter_grants($field, $value);
+        	$sql = $this->scholarships_model->filter_scholarships($field, $value);
 			//echo '<pre>'; print_r($sql); echo '</pre>';
 			$filename = 'filtered_'.$field.'_'.$value.'_'.date('Y-m-d-Hi');
 			echo $filename;
@@ -377,7 +273,7 @@ class Scholarships extends CI_Controller {
         	
         	$search = $this->uri->segment(3);
 			//echo $search;
-        	$sql = $this->grants_model->search_grants($search);
+        	$sql = $this->scholarships_model->search_scholarships($search);
 			$filename = 'results_'.$search.'_'.date('Y-m-d-Hi');
 			//echo $filename;
 			$this->export->to_excel($sql, $filename); 

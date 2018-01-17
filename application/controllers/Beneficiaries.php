@@ -8,6 +8,7 @@ class Beneficiaries extends CI_Controller {
 				$this->load->model('beneficiaries_model');
 				$this->load->model('rvoters_model');
 				$this->load->model('nonvoters_model');
+				$this->load->model('scholarships_model');
                 $this->load->helper('url');
                 $this->load->helper('form');
 				$this->load->library('ion_auth');
@@ -133,22 +134,22 @@ class Beneficiaries extends CI_Controller {
         public function view($id = NULL) {
 		//essentially classifies a beneficiary as either a registered voter or a non-voter and loads the appropriate viewing pages 
 
-                $beneficiary = $this->beneficiaries_model->get_beneficiary_by_id($id);
-                if (empty($beneficiary)) {
+                $ben = $this->beneficiaries_model->get_beneficiary_by_id($id);
+                if (empty($ben)) {
 				    show_404();
 				}
 				else{
-					//echo '<pre>'; print_r($beneficiary); echo '</pre>'; die();
-					if ($beneficiary['id_no_comelec'] != '') { //then entry must be a registered voter
-						$data['rvoter'] = $this->rvoters_model->get_beneficiary_by_comelec_id($id);
+					//echo '<pre>'; print_r($ben); echo '</pre>'; die();
+					if ($ben['id_no_comelec'] != '') { //then entry must be a registered voter
+						$data['rvoter'] = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
 						$data['tracker'] = $this->rvoters_model->show_activities($data['rvoter']['id']);
 					
 						$this->load->view('templates/header', $data);
-						$this->load->view('nonvoters/view', $data);
+						$this->load->view('rvoters/view', $data);
 						$this->load->view('templates/footer');	
 					}
-					elseif ($beneficiary['nv_id'] != ''){ //then entry must be a non voter
-						$data['nonvoter'] = $this->nonvoters_model->get_nonvoter_by_id($id);
+					elseif ($ben['nv_id'] != ''){ //then entry must be a non voter
+						$data['nonvoter'] = $this->nonvoters_model->get_nonvoter_by_id($ben['nv_id']);
 						$data['tracker'] = $this->nonvoters_model->show_activities($id);
                 	
 						$this->load->view('templates/header', $data);
@@ -171,12 +172,12 @@ class Beneficiaries extends CI_Controller {
 
 			$rvoter_match = $this->rvoters_model->find_rvoter_match($fname, $mname, $lname, $dob);
 			$nvoter_match = $this->nonvoters_model->find_nvoter_match($fname, $mname, $lname, $dob);
-
+			
 			//registered voter matches
 			if (isset($rvoter_match) && $rvoter_match != NULL) {
-				echo 'Possible match(es) in REGISTERED VOTERS.';
+				echo '<br />Possible match in REGISTERED VOTERS.';
 				foreach($rvoter_match as $rmatch) {
-					$match_name = $rmatch['fname'] .' '.$rmatch['mname'].' '.$rmatch['lname'].' ('.$rmatch['dob'].')';
+					//$match_name = $rmatch['fname'] .' '.$rmatch['mname'].' '.$rmatch['lname'].' ('.$rmatch['dob'].')';
 					
 					echo '<div class="radio">';
 					echo '<label><input type="radio" name="optradio" id="optradio" value="id_no_comelec|'.$rmatch['id_no_comelec'].'"> ';
@@ -184,15 +185,16 @@ class Beneficiaries extends CI_Controller {
 					echo 'COMELEC ID No. '.$rmatch['id_no_comelec'].' | Address: '.$rmatch['address'].' | Barangay'.$rmatch['barangay'].' | District :'.$rmatch['district'];
 					echo '</label></div>';
 				
+					$id_nos_comelec[] = $rmatch['id_no_comelec'];
 				}
 				$show_last_radio = true;
 			}
 
 			//Non voter matches
 			if (isset($nvoter_match) && $nvoter_match != NULL) {
-				echo 'Possible match(es) in NON-VOTERS.';
+				echo '<br />Possible match in NON-VOTERS.';
 				foreach($nvoter_match as $nmatch) {
-					$match_name = $nmatch['fname'] .' '.$nmatch['mname'].' '.$nmatch['lname'].' ('.$nmatch['dob'].')';
+					//$match_name = $nmatch['fname'] .' '.$nmatch['mname'].' '.$nmatch['lname'].' ('.$nmatch['dob'].')';
 					
 					echo '<div class="radio">';
 					echo '<label><input type="radio" name="optradio" id="optradio" value="nv_id|'.$nmatch['nv_id'].'">';
@@ -200,12 +202,60 @@ class Beneficiaries extends CI_Controller {
 					echo 'ID No. '.$nmatch['id_no'].' | Address: '.$nmatch['address'].' | Barangay'.$nmatch['barangay'].' | District :'.$nmatch['district'];
 					echo '</div>';
 				
+					$nv_ids[] = $nmatch['nv_id'];
+
 				}
 				$show_last_radio = true;
 			}
-							
+			
+			//Ben table matches
+			if (isset($id_nos_comelec) && is_array($id_nos_comelec)) {
+				foreach ($id_nos_comelec as $id_no_comelec) {
+					//echo $id_no_comelec;
+					$ben_ids_com[] = $this->beneficiaries_model->get_ben_by_comid($id_no_comelec);
+				}
+			}
+			
+			if (isset($nv_ids) && is_array($nv_ids)) {
+				foreach ($nv_ids as $nv_id) {
+					//echo $nv_id;
+					$ben_ids_nv[] = $this->beneficiaries_model->get_ben_by_nvid($nv_id);
+				}
+			}
+
+			//Scholarship table matches
+			if (isset($ben_ids_com) && is_array($ben_ids_com)) {
+				foreach ($ben_ids_com as $ben) {
+					$s_match = $this->scholarships_model->get_scholarship_by_ben_id($ben['ben_id'], 'r');
+				}
+				$show_last_radio = true;
+			}
+			
+			if (isset($ben_ids_nv) && is_array($ben_ids_nv)) {
+				foreach ($ben_ids_nv as $ben) {
+					$s_match = $this->scholarships_model->get_scholarship_by_ben_id($ben['ben_id'], 'n');
+				}
+				$show_last_radio = true;
+			}
+			//echo '<pre>'; print_r($s_match); echo '</pre>';
+			if (isset($s_match)) {
+				echo '<br />Possible match in SCHOLARSHIPS.';
+				echo '<div class="radio">';
+				echo '<label><input type="radio" name="optradio" id="optradio" value="ben_id|'.$s_match['ben_id'].'">';
+				//echo '<a href="#" data-toggle="modal" data-target="#quick-view-'.$nmatch['nv_id'].'">'.$match_name.'</a>';
+				if ($s_match['nv_id'] != '') {
+					 echo ($s_match['id_no_comelec'] != '') ? 'COMELEC ID No.'.$s_match['id_no_comelec'] : 'ID No.'.$s_match['nv_id'] ;
+				}
+				else{
+					echo 'COMELEC ID No.'.$s_match['id_no_comelec'];
+				}
+				echo ' | Address: '.$s_match['address'].' | Barangay'.$s_match['barangay'].' | District :'.$s_match['district'];
+				echo '</div>';
+			}	
+
 			if (isset($show_last_radio)) {
-				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#with-match" id="btn-existing-ben" >Continue</button><br />';
+				echo '<br /><br />';
+				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#with-match" id="btn-existing-ben" >Continue</button><br /><br />';
 				echo 'If none of the above is an actual match, you may proceed to ' .
 						'<a href="'.base_url('nonvoters/add').'?fname='.$fname.'&mname='.$mname.'&lname='.$lname.'&dob='.$dob.'">create a new beneficiary entry</a>. <br />';
 			}
