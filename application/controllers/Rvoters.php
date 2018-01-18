@@ -5,7 +5,8 @@ class Rvoters extends CI_Controller {
         public function __construct()
         {
                 parent::__construct();
-                $this->load->model('rvoters_model');
+				$this->load->model('rvoters_model');
+				$this->load->model('scholarships_model');
                 $this->load->helper('url');
                 $this->load->helper('form');
 				$this->load->library('ion_auth');
@@ -132,6 +133,8 @@ class Rvoters extends CI_Controller {
                 if (empty($data['rvoter'])) {
 				    show_404();
 				}
+
+				$data['scholarships'] = $this->scholarships_model->get_r_scholarships_by_id($data['rvoter']['id_no_comelec']);
 
 				$data['tracker'] = $this->rvoters_model->show_activities($id);
                 $id = $data['rvoter']['id'];

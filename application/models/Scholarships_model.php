@@ -7,11 +7,12 @@ class scholarships_model extends CI_Model {
 		$this->load->database();
 	}
         
-    public function record_count() {
+    public function record_count() { //count all scholarship records
         return $this->db->count_all("scholarships");
 	}
 	
-	public function get_scholarships($limit = 0, $start = 0) {
+	/*
+	public function get_scholarships($limit = 0, $start = 0) { //list all scholarships for registered voters
 		
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('scholarships s');
@@ -26,8 +27,9 @@ class scholarships_model extends CI_Model {
 		return $query->result_array();
 
 	}
-	
-	public function get_n_scholarships($limit = 0, $start = 0) {
+	*/
+
+	public function get_n_scholarships($limit = 0, $start = 0) { //list all scholarships for non voters
 		
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('scholarships s');
@@ -43,7 +45,7 @@ class scholarships_model extends CI_Model {
 
 	}
 
-	public function get_r_scholarships($limit = 0, $start = 0) {
+	public function get_r_scholarships($limit = 0, $start = 0) { //list all scholarships for registered voters
 		
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('scholarships s');
@@ -59,39 +61,24 @@ class scholarships_model extends CI_Model {
 
 	}
 
-	public function get_scholarship_by_id($id = FALSE, $flag = FALSE) {
-		if ($id === FALSE)
-		{
+	public function get_scholarship_by_id($id = FALSE, $flag = FALSE) { //scholarship details without the joins yet
+		if ($id === FALSE) {
 			return 0;
 		}
 		
-		//$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(non_voters.dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->select('*');
 		$this->db->from('scholarships s');
 		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
-		//$this->db->join('non_voters', 'non_voters.nv_id = beneficiaries.nv_id');
-		//$this->db->join('schools', 'scholarships.school_id = schools.school_id');
 		$this->db->where("s.scholarship_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
 		$query = $this->db->get();		
 
 		return $query->row_array();
 	}
 
-	public function get_n_scholarship_by_id($id) {
-		
-		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
-		$this->db->from('scholarships s');
-		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
-		$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
-		$this->db->join('schools', 's.school_id = schools.school_id');
-		$this->db->where("s.scholarship_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
-		$query = $this->db->get();
-
-		//echo $this->db->last_query();
-		return $query->row_array(); //nv_id column has unique attrib
-	}
-
-	public function get_r_scholarship_by_id($id) {
+	public function get_r_scholarship_by_id($id = FALSE) { //retrieve record for one registered voter scholarship 
+		if ($id === FALSE) {
+			return 0;
+		}
 		
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('scholarships s');
@@ -105,7 +92,60 @@ class scholarships_model extends CI_Model {
 		return $query->row_array(); //nv_id column has unique attrib
 	}
 
-	public function get_scholarship_by_ben_id($id = FALSE, $flag = FALSE) {
+
+	public function get_r_scholarships_by_id($id = FALSE) { //retrieve all scholarship records related to one registered voter
+		if ($id === FALSE) {
+			return 0;
+		}
+		
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('scholarships s');
+		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
+		$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
+		$this->db->join('schools', 's.school_id = schools.school_id');
+		$this->db->where("r.id_no_comelec = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
+		$query = $this->db->get();
+
+		//echo $this->db->last_query();
+		return $query->result_array(); //nv_id column has unique attrib
+	}
+
+	
+	public function get_scholarship_by_comid($id = FALSE) { //retrieve record for one registered voter using id_no_comelec
+		if ($id === FALSE) {
+			return 0;
+		}
+		
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('scholarships s');
+		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
+		$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
+		$this->db->join('schools', 's.school_id = schools.school_id');
+		$this->db->where("r.id_no_comelec = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
+		$query = $this->db->get();
+
+		//echo $this->db->last_query();
+		return $query->row_array(); //nv_id column has unique attrib
+	}
+	
+	public function get_n_scholarship_by_id($id = FALSE) { //retrieve record for one non voter scholarship 
+		if ($id === FALSE) {
+			return 0;
+		}
+
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('scholarships s');
+		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
+		$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
+		$this->db->join('schools', 's.school_id = schools.school_id');
+		$this->db->where("s.scholarship_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
+		$query = $this->db->get();
+
+		//echo $this->db->last_query();
+		return $query->row_array(); //nv_id column has unique attrib
+	}
+
+	public function get_scholarship_by_ben_id($id = FALSE, $flag = FALSE) { //retrieve scholarship record using ben_id
 		if ($id === FALSE || $flag === FALSE) {
 			return 0;
 		}
@@ -130,7 +170,7 @@ class scholarships_model extends CI_Model {
 
 	}
 
-	public function get_term_details($id = FALSE) {
+	public function get_term_details($id = FALSE) { //retrieve related scholarship term details
 		
 		if ($id === FALSE)
 		{
@@ -146,7 +186,7 @@ class scholarships_model extends CI_Model {
 	} 
 
 	
-	public function get_single_term_details($id = FALSE) {
+	public function get_single_term_details($id = FALSE) { //retrieve individual scholarship term details
 		
 		if ($id === FALSE)
 		{
@@ -271,18 +311,36 @@ class scholarships_model extends CI_Model {
 		
 		$trash = ( $this->input->post('trash') !== null )  ? $this->input->post('trash') : 0 ;
 		
-		//prep data for beneficiary table
-		$data = array(
-				'id_no_comelec' => $id_no_comelec,
-				'nv_id' => $nv_id,
-				'trash' => $trash
-		);
+		//check if id already exists in beneficiary table 
+		$this->db->select('*');
+		$this->db->from('beneficiaries');
+		$this->db->where("$new_id[0]", "$new_id[1]");
+		$query = $this->db->get();
 
-		//insert new beneficiary
-		$this->db->insert('beneficiaries', $data);
+		$result = $query->result_array();
+		$id_exists = count($result);
+		//echo '<pre>'; print_r($result); echo '</pre>';
 		
-		$ben_id = $this->db->insert_id();
+		if ($id_exists == 0) { //only create record in beneficiary table when 
+
+			//prep data for beneficiary table
+			$data = array(
+					//'id_no_comelec' => $id_no_comelec,
+					//'nv_id' => $nv_id,
+					$new_id[0] => $new_id[1],	
+					'trash' => $trash
+			);
+
+			//insert new beneficiary
+			$this->db->insert('beneficiaries', $data);
+			//grab newly created ben_id
+			$ben_id = $this->db->insert_id();
 		
+		}
+		else{
+			$ben_id = $result['ben_id'];
+		}
+
 		//prep data for scholarship table
 		$data = array(
 				'ben_id' => $ben_id,
@@ -372,6 +430,7 @@ class scholarships_model extends CI_Model {
 				'gwa_2' => $this->input->post('gwa_2'),
 				'3_4_gwa' => $this->input->post('3_4_gwa'),
 				'grade_points' => $this->input->post('grade_points'),
+				'income_points' => $this->input->post('income_points'),
 				'rank_points' => $this->input->post('rank_points'),
 				'notes' => $this->input->post('notes')
 		);
@@ -424,6 +483,7 @@ class scholarships_model extends CI_Model {
 				);
 		$this->db->insert('audit_trail', $data);
 		
+		return;
 	}
 
 	public function trash_term($s_id = FALSE, $t_id = FALSE) {
@@ -449,6 +509,7 @@ class scholarships_model extends CI_Model {
 				);
 		$this->db->insert('audit_trail', $data);
 		
+		return;
 	}
 
 	public function show_activities($s_id) {

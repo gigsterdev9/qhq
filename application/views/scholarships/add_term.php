@@ -15,7 +15,7 @@
 		?>
 			<div class="alert alert-success">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<?php echo $alert_success ?> <a href="<?php echo base_url('scholarships') ?>">Return to Index.</a>
+				<?php echo $alert_success ?> <a href="<?php echo base_url('scholarships/view/'.$s_id) ?>">Return to Scholarship details.</a>
 			</div>
 		<?php
 		}
@@ -89,9 +89,9 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-2" for="rank_ponts">Rank Points</label>
+						<label class="control-label col-sm-2" for="rank_points">Rank Points</label>
 						<div class="col-sm-10">	
-							<input type="text" class="form-control" name="rank_ponts" value="<?php echo set_value('rank_ponts'); ?>" />
+							<input type="text" class="form-control" name="rank_points" value="<?php echo set_value('rank_points'); ?>" />
 						</div>
 					</div>
 					<div class="form-group">

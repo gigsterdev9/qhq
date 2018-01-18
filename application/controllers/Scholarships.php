@@ -296,6 +296,7 @@ class Scholarships extends CI_Controller {
 				
 				//insert into scholarships table
 				$this->scholarships_model->set_scholarship_term();
+				$data['s_id'] = $this->input->post('scholarship_id');
 				$data['alert_success'] = 'New entry created.';
 				
 				$this->load->view('templates/header', $data);

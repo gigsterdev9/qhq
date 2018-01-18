@@ -156,14 +156,15 @@
 				</tbody>
 			</table>
 
+			<?php if (!empty($scholarships)) { ?>}
 			<h4>Scholarship</h4>	
 			<table class="table table-striped">
 				<thead>
 					<tr>
 						<th width="2%">&nbsp;</th>
-						<th width="10%">Date</th>
-						<th width="20%">Assistance Type</th>
-						<th width="10%">Amount</th>
+						<th width="10%">Batch</th>
+						<th width="20%">School</th>
+						<th width="10%"></th>
 						<th width="10%">Institution</th>
 						<th width="10%">Release Date</th>
 						<th>Remarks</th>
@@ -171,35 +172,29 @@
 				</thead>
 				<tbody>
 					<?php 
-						$services = array(
-										array('date' => '2017-02-20', 
-											'assistance_type' => 'Financial Assistance', 
-											'amount' => '1,500.00', 
-											'institution' => 'N/A',
-											'release_date' => '2017-02-25',
-											'remarks' => 'Lorem ipsum dolor consectitur sit amet.'),
-									);
-
-						foreach ($services as $service): 
-						//echo '<pre>'; print_r($rvoter); echo '</pre>';
-						if (is_array($rvoter)) { //do not display 'result_count' 
+						//echo '<pre>'; print_r($scholarships); echo '</pre>';
+						foreach ($scholarships as $scholarship): 
+						
+							if (is_array($scholarship)) { //do not display 'result_count' 
 					?>
-					<tr>
-						<td><a href="#"><span class="glyphicon glyphicon-file"></span></a></td>
-						<td><?php echo $service['date']; ?></td>
-						<td><?php echo $service['assistance_type']; ?></td>
-						<td><?php echo $service['amount']; ?></td>
-						<td><?php echo $service['institution']; ?></td>
-						<td><?php echo $service['release_date']; ?></td>
-						<td><?php echo $service['remarks']; ?></td>
-					</tr>
+						<tr>
+							<td><a href="<?php echo base_url('scholarships/view/'.$scholarship['scholarship_id']); ?>"><span class="glyphicon glyphicon-file"></span></a></td>
+							<td><?php echo $scholarship['batch']; ?></td>
+							<td><?php echo $scholarship['school_name']; ?></td>
+							<td><?php echo $scholarship['course']; ?></td>
+							<td><?php echo $scholarship['major']; ?></td>
+							<td><?php echo $scholarship['scholarship_status']; ?></td>
+							<td><?php echo $scholarship['scholarship_remarks']; ?></td>
+						</tr>
 					<?php 
-						}
+							}
+						
 						endforeach;
 					?>
 				</tbody>
 			</table>
-
+			<?php } ?>
+			<!--
 			<h4>Livelihood</h4>	
 			<table class="table table-striped">
 				<thead>
@@ -249,7 +244,7 @@
 					?>
 				</tbody>
 			</table>
-
+			-->
 			</div>
 			<div class="text-right back-link"><a href="javascript:history.go(-1)">&laquo; Back</a></div>
 		</div>

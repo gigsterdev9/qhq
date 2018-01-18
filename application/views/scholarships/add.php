@@ -15,7 +15,7 @@
 		?>
 			<div class="alert alert-success">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<?php echo $alert_success ?> <a href="<?php echo base_url('rvoters') ?>">Return to Index.</a>
+				<?php echo $alert_success ?> <a href="<?php echo base_url('scholarships') ?>">Return to Index.</a>
 			</div>
 		<?php
 		}
