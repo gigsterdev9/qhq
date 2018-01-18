@@ -110,6 +110,22 @@ class scholarships_model extends CI_Model {
 		return $query->result_array(); //nv_id column has unique attrib
 	}
 
+	public function get_n_scholarships_by_id($id = FALSE) { //retrieve all scholarship records related to one non voter
+		if ($id === FALSE) {
+			return 0;
+		}
+		
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('scholarships s');
+		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
+		$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
+		$this->db->join('schools', 's.school_id = schools.school_id');
+		$this->db->where("n.nv_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
+		$query = $this->db->get();
+
+		//echo $this->db->last_query();
+		return $query->result_array(); //nv_id column has unique attrib
+	}
 	
 	public function get_scholarship_by_comid($id = FALSE) { //retrieve record for one registered voter using id_no_comelec
 		if ($id === FALSE) {

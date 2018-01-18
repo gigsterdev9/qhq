@@ -134,8 +134,10 @@ class Rvoters extends CI_Controller {
 				    show_404();
 				}
 
+				//retrieve scholarship related data
 				$data['scholarships'] = $this->scholarships_model->get_r_scholarships_by_id($data['rvoter']['id_no_comelec']);
 
+				//retrieve audit trail
 				$data['tracker'] = $this->rvoters_model->show_activities($id);
                 $id = $data['rvoter']['id'];
 				

@@ -5,7 +5,8 @@ class Nonvoters extends CI_Controller {
         public function __construct()
         {
                 parent::__construct();
-                $this->load->model('nonvoters_model');
+				$this->load->model('nonvoters_model');
+				$this->load->model('scholarships_model');
                 $this->load->helper('url');
                 $this->load->helper('form');
 				$this->load->library('ion_auth');
@@ -129,7 +130,11 @@ class Nonvoters extends CI_Controller {
                 if (empty($data['nonvoter'])) {
 				    show_404();
 				}
+				
+				//retrieve scholarship related data
+				$data['scholarships'] = $this->scholarships_model->get_n_scholarships_by_id($data['nonvoter']['nv_id']);
 
+				//retrieve audit trail
 				$data['tracker'] = $this->nonvoters_model->show_activities($id);
                 $id = $data['nonvoter']['nv_id'];
 				
