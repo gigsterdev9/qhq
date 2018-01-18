@@ -148,9 +148,8 @@
 				</tbody>
 			</table>
 
-			
+			<h4>Scholarship <small>[ <a href="<?php base_url('scholarships/add') ?>">New Entry</a> ]</small></h4>
 			<?php if (!empty($scholarships)) { ?>
-			<h4>Scholarship</h4>	
 			<table class="table table-striped">
 				<thead>
 					<tr>
