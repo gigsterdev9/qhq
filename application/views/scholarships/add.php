@@ -191,7 +191,7 @@ $(document).ready(function() {
 
 		$.ajax({
 			"type" : "POST",
-			"url" : "<?php echo base_url('beneficiaries/match_find'); ?>",
+			"url" : "<?php echo base_url('beneficiaries/match_find/scholarships'); ?>",
 			"data" : $("#form-match-find").serialize(), // serializes the form's elements.
 			"success" : function(data) {
 				//console.log(data);

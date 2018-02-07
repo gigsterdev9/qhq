@@ -15,7 +15,7 @@
 		?>
 			<div class="alert alert-success">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<?php echo $alert_success ?> <a href="<?php echo base_url('scholarships') ?>">Return to Index.</a>
+				<?php echo $alert_success ?> <a href="<?php echo base_url('services') ?>">Return to Index.</a>
 			</div>
 		<?php
 		}
@@ -23,7 +23,7 @@
 		if ( $this->input->POST('action') === null ) {
 			//begin match find form
 			$attributes = array('class' => 'form-horizontal', 'role' => 'form', 'id' => 'form-match-find');
-			echo form_open('scholarships/add', $attributes); 
+			echo form_open('services/add', $attributes); 
 		?>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="fname">First Name<span class="text-info">*</span></label>
@@ -72,7 +72,7 @@
 			}
 			//begin main add scholarship form
 			$attributes = array('class' => 'form-horizontal', 'role' => 'form', 'id' => 'form-new-scholarship');
-			echo form_open('scholarships/add', $attributes); 
+			echo form_open('services/add', $attributes); 
 		?>
 		<!-- display the remainder of the form only if no match is found -->
 				<div class="match-found alert alert-warning collapse" id="match-found"></div> 
@@ -191,7 +191,7 @@ $(document).ready(function() {
 
 		$.ajax({
 			"type" : "POST",
-			"url" : "<?php echo base_url('beneficiaries/match_find'); ?>",
+			"url" : "<?php echo base_url('beneficiaries/match_find/services'); ?>",
 			"data" : $("#form-match-find").serialize(), // serializes the form's elements.
 			"success" : function(data) {
 				//console.log(data);

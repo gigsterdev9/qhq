@@ -163,7 +163,7 @@ class Beneficiaries extends CI_Controller {
 				
 		}
 		
-		public function match_find() {
+		public function match_find($module = FALSE) {
 			//echo '<pre>'; print_r($_POST); echo '</pre>'; die();
 			$fname = $this->input->post('fname');
 			$mname = $this->input->post('mname');
@@ -239,7 +239,7 @@ class Beneficiaries extends CI_Controller {
 			}
 			
 			//echo '<pre>'; print_r($s_match); echo '</pre>';
-			if (isset($s_match)) {
+			if (isset($s_match) && $module == 'scholarships') {
 				echo '<br />Possible match in SCHOLARSHIPS.';
 				echo '<div class="radio">';
 				//echo '<a href="#" data-toggle="modal" data-target="#quick-view-'.$nmatch['nv_id'].'">'.$match_name.'</a>';

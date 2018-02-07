@@ -146,7 +146,6 @@ class Services extends CI_Controller {
 			$this->load->helper('form');
 			$this->load->library('form_validation');
 
-			$data['schools'] = $this->services_model->get_schools(); //display school names in filter dropdown
 			$data['title'] = 'New service';
 
 			//primary service data

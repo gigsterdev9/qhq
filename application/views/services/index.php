@@ -55,7 +55,7 @@
 	</div>
 	<p>&nbsp;</p>
 	<h3>
-		<span class="glyphicon glyphicon-folder-open"></span>&nbsp; List of services
+		<span class="glyphicon glyphicon-folder-open"></span>&nbsp; List of Service Availment
 	</h3>
 	<div class="container-fluid message"><?php echo $record_count ?> records found.
 		<?php 
