@@ -1,29 +1,29 @@
 <?php //echo '<pre>'; print_r($nonvoters); echo '</pre>'; ?>
 <div class="container">
 	<h2><span class="glyphicon glyphicon-folder-open"></span>&nbsp; <?php echo $title; ?></h2>
+	<?php
+		if ($this->ion_auth->in_group('admin')) {
+			echo '<div class="container-fluid text-right"><a href="services/add"><span class="glyphicon glyphicon-plus-sign"></span> New entry</a></div>';
+		}
+	?>
 	<p>&nbsp;</p>
 	<div class="container-fluid text-right">
 		<?php 
 			$attributes = array('class' => 'form-inline', 'role' => 'form', 'method' => 'GET');
-			echo form_open('beneficiaries/', $attributes); 
+			echo form_open('services/', $attributes); 
 		?>
 			<div class="form-group" id="search_bar">
 				<label class="control-label" for="title">Search</label> &nbsp; 
 				<input type="input" class="form-control" name="search_param" />
 				<input type="submit" class="form-control" value="&raquo;" />
-				<br />
-				<span id="search_in">
-				Search in: 
-					<input type="checkbox" name="s_key[]" value="s_name" checked /> Name
-					<input type="checkbox" name="s_key[]" value="s_address" />Address
-				</span> 
 			</div>
 		<?php echo form_close();?>
+		<a href="services/advanced">Advanced Search &raquo;</a>
 	</div>
 	<div class="container-fluid">
 		<?php 
 			$attributes = array('class' => 'form-inline', 'role' => 'form', 'method' => 'GET');
-			echo form_open('beneficiaries/', $attributes); 
+			echo form_open('services/', $attributes); 
 		?>
 			<div class="form-group">
 				<label class="control-label" for="title">Filter by:</label> &nbsp; 
@@ -59,7 +59,7 @@
 	<p>&nbsp;</p>
 		
 	<h3>
-		<span class="glyphicon glyphicon-folder-open"></span>&nbsp; Beneficiaries
+		<span class="glyphicon glyphicon-folder-open"></span>&nbsp; List of Recipients
 	</h3>
 	<div class="container-fluid message"><?php echo $total_result_count ?> records found. 
 		<?php 
@@ -73,13 +73,13 @@
 		<small>
 		<?php 
 			if (isset($filterval)) { 
-				$url = 'beneficiaries/filtered_to_excel/'.$filterval[0].'/'.$filterval[1];
+				$url = 'services/filtered_to_excel/'.$filterval[0].'/'.$filterval[1];
 			} 
 			else if (isset($searchval)) {
-				$url = 'beneficiaries/results_to_excel/'.$searchval;
+				$url = 'services/results_to_excel/'.$searchval;
 			}
 			else {
-				$url = 'beneficiaries/all_to_excel';
+				$url = 'services/all_to_excel';
 			}
 			
 			if ($total_result_count > 0) //echo '<a href="'.$url.'" target="_blank">Export to Excel &raquo;</a>';	
@@ -116,13 +116,12 @@
 						<?php 
 							foreach ($rvoters as $rv): 
 							//echo '<pre>'; print_r($rvoter); echo '</pre>';
-							if (is_array($rv)) { //do not display 'result_count' 
-								$fullname = strtoupper($rv['lname'].', '.$rv['fname']);
+							if (is_array($nv)) { //do not display 'result_count' 
 						?>
 						<tr>
 							<td>
-								<a href="<?php echo site_url('beneficiaries/view/'.$rv['ben_id']); ?>">
-									<span class="glyphicon glyphicon-file"></span> <?php echo $fullname; ?>
+								<a href="<?php echo site_url('services/view/'.$rv['id']); ?>">
+									<span class="glyphicon glyphicon-file"></span> <?php echo $rv['lname'].', '.$nv['fname']; ?>
 								</a>
 							</td>
 							<td><?php echo $rv['dob']; ?></td>
@@ -145,7 +144,7 @@
 			<?php 
 				} 
 				else{
-					echo '<div class="message">Currently, there are no registered voters found in this page of the Beneficiaries list.</div>';
+					echo '<div class="message">No registered voters found in the services list.</div>';
 				}
 
 				if (count($nonvoters) > 0) {
@@ -173,12 +172,11 @@
 						foreach ($nonvoters as $nv): 
 						//echo '<pre>'; print_r($rvoter); echo '</pre>';
 						if (is_array($nv)) { //do not display 'result_count' 
-							$fullname =  strtoupper($nv['lname'].', '.$nv['fname']);
 					?>
 					<tr>
 						<td>
-							<a href="<?php echo site_url('beneficiaries/view/'.$nv['ben_id']); ?>">
-								<span class="glyphicon glyphicon-file"></span> <?php echo $fullname; ?>
+							<a href="<?php echo site_url('services/view/'.$nv['nv_id']); ?>">
+								<span class="glyphicon glyphicon-file"></span> <?php echo $nv['lname'].', '.$nv['fname']; ?>
 							</a>
 						</td>
 						<td><?php echo $nv['dob']; ?></td>
@@ -201,7 +199,7 @@
 			<?php 
 				} 
 				else{
-					echo '<div class="message">Currently, there are no non-voters found in this page of the Beneficiaries list.</div>';
+					echo '<div class="message">No non-voters found in the services list.</div>';
 				}
 			?>
 

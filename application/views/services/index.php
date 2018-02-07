@@ -1,19 +1,18 @@
-<?php //echo '<pre>'; print_r($nonvoters); echo '</pre>'; ?>
 <div class="container">
 	<h2><span class="glyphicon glyphicon-folder-open"></span>&nbsp; <?php echo $title; ?></h2>
 	<?php
 		if ($this->ion_auth->in_group('admin')) {
-			echo '<div class="container-fluid text-right"><a href="scholarships/add"><span class="glyphicon glyphicon-plus-sign"></span> New entry</a></div>';
+			echo '<div class="container-fluid text-right"><a href="'.base_url('services/add').'"><span class="glyphicon glyphicon-plus-sign"></span> New entry</a></div>';
 		}
 	?>
 	<p>&nbsp;</p>
 	<div class="container-fluid text-right">
 		<?php 
-			$attributes = array('class' => 'form-inline', 'role' => 'form', 'method' => 'GET');
+			$attributes = array('class' => 'form-inline', 'role' => 'form');
 			echo form_open('services/', $attributes); 
 		?>
-			<div class="form-group" id="search_bar">
-				<label class="control-label" for="title">Search</label> &nbsp; 
+			<div class="form-group">
+				<label class="control-label" for="title">Search services</label> &nbsp; 
 				<input type="input" class="form-control" name="search_param" />
 				<input type="submit" class="form-control" value="&raquo;" />
 			</div>
@@ -22,7 +21,7 @@
 	</div>
 	<div class="container-fluid">
 		<?php 
-			$attributes = array('class' => 'form-inline', 'role' => 'form', 'method' => 'GET');
+			$attributes = array('class' => 'form-inline', 'role' => 'form');
 			echo form_open('services/', $attributes); 
 		?>
 			<div class="form-group">
@@ -31,7 +30,7 @@
 					<option value=""></option>
 					<option value="brgy">Barangay</option>
 					<option value="district">District</option>
-					<option value="age">Age</option>
+					<option value="gender">Gender</option>
 				</select>
 				<select name="filter_by_brgy" id="filter_by_brgy" class="form-control" style="display:none">
 					<option value="Concepcion Uno">Concepcion Uno</option>
@@ -46,44 +45,40 @@
 					<option value="1">1</option>
 					<option value="2">2</option>
 				</select>
-				<select name="filter_by_age_operand" id="filter_by_age_operand" class="form-control" style="display:none">
-					<option value="above">Above</option>
-					<option value="below">Below</option>
-					<option value="between">Between</option>
+				<select name="filter_by_gender" id="filter_by_gender" class="form-control" style="display:none">
+					<option value="M">Male</option>
+					<option value="F">Female</option>
 				</select>
-				<input type="input" class="form-control" name="filter_by_age_value" id="filter_by_age_value" style="display:none" />
 				<input type="submit" class="form-control" value="&raquo;" />
 			</div>
 		<?php echo form_close();?>
 	</div>
 	<p>&nbsp;</p>
-		
 	<h3>
-		<span class="glyphicon glyphicon-folder-open"></span>&nbsp; List of Recipients
+		<span class="glyphicon glyphicon-folder-open"></span>&nbsp; List of services
 	</h3>
-	<div class="container-fluid message"><?php echo $total_result_count ?> records found. 
+	<div class="container-fluid message"><?php echo $record_count ?> records found.
 		<?php 
 			if (isset($filterval)) {
-				$filter = (is_array($filterval)) ? '<br />Filter parameters: '. ucfirst($filterval[0]).' / '.$filterval[1] .' '. $filterval[2] : '' ; 
+				$filter = (is_array($filterval)) ? '<br />Filter parameters: '. ucfirst($filterval[0]).' / '.$filterval[1] : '' ; 
 				echo $filter; 
 			}
 		?>
-	</div> 
+	</div>
 	<div class="container-fluid">
 		<small>
 		<?php 
-			if (isset($filterval)) { 
+			if (isset($filterval)) 			{ 
 				$url = 'services/filtered_to_excel/'.$filterval[0].'/'.$filterval[1];
-			} 
-			else if (isset($searchval)) {
+			}
+			else if (isset($searchval))	{
 				$url = 'services/results_to_excel/'.$searchval;
 			}
 			else {
 				$url = 'services/all_to_excel';
 			}
 			
-			if ($total_result_count > 0) //echo '<a href="'.$url.'" target="_blank">Export to Excel &raquo;</a>';	
-				echo '<a href="#">Export to Excel &raquo;</a>';	
+			if ($record_count > 0) echo '<a href="'.$url.'" target="_blank">Export to Excel &raquo;</a>';	
 		?>
 		</small>
 	</div>
@@ -91,174 +86,145 @@
 	<div class="panel panel-default">
 		<div class="table-responsive show-records">
 		
-			<?php if ($total_result_count > 0) { ?>	
+			<?php if ($record_count > 0) { ?>	
 			<div class="page-links"><?php echo $links; ?></div>
 			
-			<?php if (count($rvoters) > 0) { ?>
-				<div class="index-section-title"><h4>Registered Voters</h4></div>
-				<table class="table table-striped">
+				<?php if (count($r_services) > 0) { ?>
+					<div class="index-section-title"><h4>Registered Voters</h4></div>
+					<table class="table table-striped">
 					<thead>
 						<tr>
-							<th width="30%">Full Name</th>
+							<th width="20%">Full Name</th>
 							<th width="10%">Birthdate</th>
-							<th width="30%">Address</th>
-							<th width="10%">Barangay</th>
+							<th width="5%">Age</th>
+							<th width="20%">School</th>
 							<th width="5%">District</th>
 							<th width="5%">Sex</th>
-							<!--
 							<th width="10%">Mobile Number</th>
 							<th width="10%">Email</th>
-							<th width="10%">Referee</th>
-							-->
 						</tr>
 					</thead>
 					<tbody>
-						<?php 
-							foreach ($rvoters as $rv): 
-							//echo '<pre>'; print_r($rvoter); echo '</pre>';
-							if (is_array($nv)) { //do not display 'result_count' 
+						<?php
+							//echo '<pre>'; print_r($r_services); echo '</pre>';
+							foreach ($r_services as $service) :
+							if (is_array($service)) { //do not display 'result_count' 
+								$fullname = strtoupper($service['lname'].', '.$service['fname']);
 						?>
 						<tr>
 							<td>
-								<a href="<?php echo site_url('services/view/'.$rv['id']); ?>">
-									<span class="glyphicon glyphicon-file"></span> <?php echo $rv['lname'].', '.$nv['fname']; ?>
+								<a href="<?php echo site_url('services/view/'.$service['service_id']); ?>">
+									<span class="glyphicon glyphicon-file"></span> <?php echo $fullname ?>
 								</a>
 							</td>
-							<td><?php echo $rv['dob']; ?></td>
-							<td><?php echo $rv['address']; ?></td>
-							<td><?php echo $rv['barangay']; ?></td>
-							<td><?php echo $rv['district']; ?></td>
-							<td><?php echo $rv['sex']; ?></td>
-							<!--
-							<td><?php echo $rv['mobile_no']; ?></td>
-							<td><?php echo $rv['email']; ?></td>
-							<td><?php echo $rv['referee']; ?></td>
-							-->
+							<td><?php echo $service['dob']; ?></td>
+							<td><?php echo $service['age']; ?></td>
+							<td><?php echo $service['school_name']; ?></td>
+							<td><?php echo $service['district']; ?></td>
+							<td><?php echo $service['sex']; ?></td>
+							<td><?php echo $service['mobile_no']; ?></td>
+							<td><?php echo $service['email']; ?></td>
 						</tr>
 						<?php 
-							}
-							endforeach;
+							} 
+							endforeach; 
 						?>
 					</tbody>
-				</table>
-			<?php 
-				} 
-				else{
-					echo '<div class="message">No registered voters found in the services list.</div>';
-				}
+					</table>
 
-				if (count($nonvoters) > 0) {
-			?>
+				<?php 
+					} 
+					else{
+						echo '<div class="message">Currently, there are no registered voters found in this page of the services list.</div>';
+					}
 
-			<div class="index-section-title"><h4>Non Voters</h4></div>
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th width="30%">Full Name</th>
-						<th width="10%">Birthdate</th>
-						<th width="30%">Address</th>
-						<th width="10%">Barangay</th>
-						<th width="5%">District</th>
-						<th width="5%">Sex</th>
-						<!--
-						<th width="10%">Mobile Number</th>
-						<th width="10%">Email</th>
-						<th width="10%">Referee</th>
-						-->
-					</tr>
-				</thead>
-				<tbody>
-					<?php 
-						foreach ($nonvoters as $nv): 
-						//echo '<pre>'; print_r($rvoter); echo '</pre>';
-						if (is_array($nv)) { //do not display 'result_count' 
-					?>
-					<tr>
-						<td>
-							<a href="<?php echo site_url('services/view/'.$nv['nv_id']); ?>">
-								<span class="glyphicon glyphicon-file"></span> <?php echo $nv['lname'].', '.$nv['fname']; ?>
-							</a>
-						</td>
-						<td><?php echo $nv['dob']; ?></td>
-						<td><?php echo $nv['address']; ?></td>
-						<td><?php echo $nv['barangay']; ?></td>
-						<td><?php echo $nv['district']; ?></td>
-						<td><?php echo $nv['sex']; ?></td>
-						<!--
-						<td><?php echo $nv['mobile_no']; ?></td>
-						<td><?php echo $nv['email']; ?></td>
-						<td><?php echo $nv['referee']; ?></td>
-						-->
-					</tr>
-					<?php 
-						}
-						endforeach;
-					?>
-				</tbody>
-			</table>
-			<?php 
-				} 
-				else{
-					echo '<div class="message">No non-voters found in the services list.</div>';
-				}
-			?>
+					if (count($n_services) > 0) {
+				?>
+					
+					<div class="index-section-title"><h4>Non Voters</h4></div>
+					<table class="table table-striped">
+					<thead>
+						<tr>
+							<th width="20%">Full Name</th>
+							<th width="10%">Birthdate</th>
+							<th width="5%">Age</th>
+							<th width="20%">School</th>
+							<th width="5%">District</th>
+							<th width="5%">Sex</th>
+							<th width="10%">Mobile Number</th>
+							<th width="10%">Email</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php
+							//echo '<pre>'; print_r($r_services); echo '</pre>';
+							foreach ($n_services as $service) :
+							if (is_array($service)) { //do not display 'result_count' 
+								$fullname = strtoupper($service['lname'].', '.$service['fname']);
+						?>
+						<tr>
+							<td>
+								<a href="<?php echo site_url('services/view/'.$service['service_id']); ?>">
+									<span class="glyphicon glyphicon-file"></span> <?php echo $fullname ?>
+								</a>
+							</td>
+							<td><?php echo $service['dob']; ?></td>
+							<td><?php echo $service['age']; ?></td>
+							<td><?php echo $service['school_name']; ?></td>
+							<td><?php echo $service['district']; ?></td>
+							<td><?php echo $service['sex']; ?></td>
+							<td><?php echo $service['mobile_no']; ?></td>
+							<td><?php echo $service['email']; ?></td>
+						</tr>
+						<?php 
+							} 
+							endforeach; 
+						?>
+					</tbody>
+					</table>
 
+				<?php 
+					}
+					else{
+						echo '<div class="message">Currently, there are no non-voters found in this page of the services list.</div>';
+					}
+				?>
+			
 			<div class="page-links"><?php echo $links; ?></div>
 
 			<?php } ?>
 
 		</div>
 	</div>
+	
+	
 </div>
 <script>
 	$('#filter_by').on('change', function(){
 		var myval = $(this).val();
 		//alert(myval);
 		
-		switch (myval) {
-			case 'brgy':
-				$('#filter_by_brgy').show();
-					$('#filter_by_brgy').prop('disabled', false);
-				$('#filter_by_district').hide();
-					$('#filter_by_district').prop('disabled', true);
-				$('#filter_by_age_operand').hide();
-					$('#filter_by_age_operand').prop('disabled', true);
-				$('#filter_by_age_value').hide();
-					$('#filter_by_age_value').prop('disabled', true);
-				break;
-			case 'district':
-				$('#filter_by_brgy').hide();
-					$('#filter_by_brgy').prop('disabled', true);
-				$('#filter_by_district').show();
-					$('#filter_by_district').prop('disabled', false);
-				$('#filter_by_age_operand').hide();
-					$('#filter_by_age_operand').prop('disabled', true);
-				$('#filter_by_age_value').hide();
-					$('#filter_by_age_value').prop('disabled', true);
-				break;
-			case 'age':
-				$('#filter_by_brgy').hide();
-					$('#filter_by_brgy').prop('disabled', true);
-				$('#filter_by_district').hide();
-					$('#filter_by_district').prop('disabled', true);
-				$('#filter_by_age_operand').show();
-					$('#filter_by_age_operand').prop('disabled', false);
-				$('#filter_by_age_value').show();
-					$('#filter_by_age_value').prop('disabled', false);
-				break;
-			default:
-			
-		}
-
-	});
-
-
-	$('#filter_by_age_operand').on('change', function(){
-		var myval = $(this).val();
-		
-		if (myval == 'between') {
-			$('#filter_by_age_value').attr("placeholder", "18 and 25");
-		}
-		
+    	if (myval == 'brgy') {
+    		$('#filter_by_brgy').show();
+    		$('#filter_by_school').hide();
+			$('#filter_by_district').hide();
+			$('#filter_by_gender').hide();
+    	}
+    	else if(myval == 'district'){
+    		$('#filter_by_brgy').hide();
+    		$('#filter_by_school').hide();
+			$('#filter_by_district').show();
+			$('#filter_by_gender').hide();
+    	}
+		else if(myval == 'gender'){
+    		$('#filter_by_brgy').hide();
+    		$('#filter_by_school').hide();
+			$('#filter_by_district').hide();
+			$('#filter_by_gender').show();
+    	}
+    	else{
+    		
+    	}
+    	
 	});
 </script>

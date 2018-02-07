@@ -10,7 +10,7 @@ class services_model extends CI_Model {
         return $this->db->count_all("services");
     }
 
-	public function get_nv_services($limit = 0, $start = 0) {
+	public function get_n_services($limit = 0, $start = 0) {
 		
 		$this->db->select("*");
 		$this->db->from('beneficiaries');
@@ -25,7 +25,7 @@ class services_model extends CI_Model {
 
 	}
 
-	public function get_rv_services($limit = 0, $start = 0) {
+	public function get_r_services($limit = 0, $start = 0) {
 		
 		$this->db->select("*");
 		$this->db->from('beneficiaries');

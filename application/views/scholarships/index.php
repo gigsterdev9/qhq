@@ -12,7 +12,7 @@
 			echo form_open('scholarships/', $attributes); 
 		?>
 			<div class="form-group">
-				<label class="control-label" for="title">Search Scholars</label> &nbsp; 
+				<label class="control-label" for="title">Search</label> &nbsp; 
 				<input type="input" class="form-control" name="search_param" />
 				<input type="submit" class="form-control" value="&raquo;" />
 			</div>
@@ -95,7 +95,7 @@
 			<?php if ($record_count > 0) { ?>	
 			<div class="page-links"><?php echo $links; ?></div>
 			
-				<?php if (count($r_scholars) > 0) { ?>
+				<?php if (count($r_scholars) > 0 && $r_scholars != 0) { //echo '<pre>'; print_r($r_scholars); echo '</pre>'; die(); ?>
 					<div class="index-section-title"><h4>Registered Voters</h4></div>
 					<table class="table table-striped">
 					<thead>
@@ -141,10 +141,10 @@
 				<?php 
 					} 
 					else{
-						echo '<div class="message">Currently, there are no registered voters found in this page of the Scholarships list.</div>';
+						//echo '<div class="message">Currently, there are no registered voters found in this page of the Scholarships list.</div>';
 					}
 
-					if (count($n_scholars) > 0) {
+					if (count($n_scholars && $n_scholars != 0) > 0) {
 				?>
 					
 					<div class="index-section-title"><h4>Non Voters</h4></div>

@@ -6,8 +6,8 @@ class scholarships_model extends CI_Model {
 	{
 		$this->load->database();
 	}
-        
-    public function record_count() { //count all scholarship records
+	
+	public function record_count() { //count all scholarship records
         return $this->db->count_all("scholarships");
 	}
 	
@@ -47,6 +47,7 @@ class scholarships_model extends CI_Model {
 
 	public function get_r_scholarships($limit = 0, $start = 0) { //list all scholarships for registered voters
 		
+		/*
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('scholarships s');
 		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
@@ -58,7 +59,40 @@ class scholarships_model extends CI_Model {
 		$query = $this->db->get();
 
 		return $query->result_array();
+		*/
 
+		$this->db->select('*');
+		$this->db->from('beneficiaries');
+		$this->db->where("id_no_comelec != '' and trash = 0");
+		$this->db->limit($limit, $start);
+		$query1 = $this->db->get();
+		$result1 = $query1->result_array();
+
+		if (is_array($result1)) {
+			foreach ($result1 as $r1) {
+				
+				$ben_id = $r1['ben_id'];
+				
+				$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
+				$this->db->from('scholarships s');
+				$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
+				$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
+				$this->db->join('schools sc', 'sc.school_id = s.school_id');
+				$this->db->where("s.ben_id = '$ben_id'");
+				$this->db->order_by('r.lname', 'ASC');
+				$q = $this->db->get();
+				
+				$r_scholarships[] = $q->row_array();
+			}
+
+			if (isset($r_scholarships)) {
+				return $r_scholarships; 
+			}
+			return 0;
+		}
+		else {
+			return 0;
+		}
 	}
 
 	public function get_scholarship_by_id($id = FALSE, $flag = FALSE) { //scholarship details without the joins yet
@@ -108,6 +142,7 @@ class scholarships_model extends CI_Model {
 
 		//echo $this->db->last_query();
 		return $query->result_array(); //nv_id column has unique attrib
+
 	}
 
 	public function get_n_scholarships_by_id($id = FALSE) { //retrieve all scholarship records related to one non voter

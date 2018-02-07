@@ -1,4 +1,3 @@
-<?php //echo '<pre>'; print_r($scholar); echo '</pre>'; ?>
 <div class="container">
 <h2><?php echo $title; ?></h2>
 <p><a href="javascript:history.go(-1)" ><span class="glyphicon glyphicon-remove-sign"></span> Cancel</a></p>
@@ -28,8 +27,8 @@
 				<div class="form-group">
 					<div class="col-sm-12">
 						<h4>
-							<a href="<?php echo base_url('scholarships/view/'.$scholarship_id); ?>">
-							<?php echo $scholar['fname'].' '.$scholar['mname'].' '.$scholar['lname']; ?>
+							<a href="<?php echo base_url('scholarships').'/view/'.$scholarship_id; ?>">
+							<?php echo $scholarship['fname'].' '.$scholarship['mname'].' '.$scholarship['lname']; ?>
 							</a>
 						</h4>
 					</div>
