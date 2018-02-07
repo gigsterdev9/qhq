@@ -122,8 +122,8 @@ class Rvoters extends CI_Controller {
 				$this->load->view('rvoters/index', $data);
 				$this->load->view('templates/footer');
 				
-				$this->output->cache(1);
-				//$this->output->delete_cache();
+				//$this->output->cache(1);
+				$this->output->delete_cache();
 				
         }
 

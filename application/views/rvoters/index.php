@@ -42,12 +42,22 @@
 					<option value="age">Age</option>
 				</select>
 				<select name="filter_by_brgy" id="filter_by_brgy" class="form-control" style="display:none">
+					<option value="">&nbsp;</option>
+					<option value="Barangka">Barangka</option>
 					<option value="Concepcion Uno">Concepcion Uno</option>
 					<option value="Concepcion Dos">Concepcion Dos</option>
 					<option value="Fortune">Fortune</option>
+					<option value="Industrial Valley Complex">Industrial Valley Complex</option>
+					<option value="Jesus Dela Peña">Jesus Dela Peña</option>
+					<option value="Kalumpang">Kalumpang</option>
+					<option value="Malanday">Malanday</option>
 					<option value="Marikina Heights">Marikina Heights</option>
 					<option value="Nangka">Nangka</option>
 					<option value="Parang">Parang</option>
+					<option value="San Roque">San Roque</option>
+					<option value="Santa Elena">Santa Elena</option>
+					<option value="Santo Niño">Santo Niño</option>
+					<option value="Tañong">Tañong</option>
 					<option value="Tumana">Tumana</option>
 				</select>
 				<select name="filter_by_district" id="filter_by_district" class="form-control" style="display:none">
