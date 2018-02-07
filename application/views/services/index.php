@@ -89,19 +89,18 @@
 			<?php if ($record_count > 0) { ?>	
 			<div class="page-links"><?php echo $links; ?></div>
 			
-				<?php if (count($r_services) > 0) { ?>
+				<?php if (count($r_services) > 0) { 
+							//print_r($r_services);
+					?>
 					<div class="index-section-title"><h4>Registered Voters</h4></div>
 					<table class="table table-striped">
 					<thead>
 						<tr>
-							<th width="20%">Full Name</th>
-							<th width="10%">Birthdate</th>
-							<th width="5%">Age</th>
-							<th width="20%">School</th>
-							<th width="5%">District</th>
-							<th width="5%">Sex</th>
-							<th width="10%">Mobile Number</th>
-							<th width="10%">Email</th>
+							<th width="10%">Full Name</th>
+							<th width="20%">Address</th>
+							<th width="10%">Requested by</th>
+							<th width="10%">Relationship</th>
+							<th width="20%">Particulars</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -113,17 +112,27 @@
 						?>
 						<tr>
 							<td>
-								<a href="<?php echo site_url('services/view/'.$service['service_id']); ?>">
+								<a href="<?php echo site_url('services/view/'.$service['ben_id']); ?>">
 									<span class="glyphicon glyphicon-file"></span> <?php echo $fullname ?>
 								</a>
 							</td>
-							<td><?php echo $service['dob']; ?></td>
-							<td><?php echo $service['age']; ?></td>
-							<td><?php echo $service['school_name']; ?></td>
-							<td><?php echo $service['district']; ?></td>
-							<td><?php echo $service['sex']; ?></td>
-							<td><?php echo $service['mobile_no']; ?></td>
-							<td><?php echo $service['email']; ?></td>
+							<td><?php echo $service['address']; ?></td>
+							<td>
+								<?php 
+									if (empty($service['n_req_id'])) {
+										$req_link = base_url('rvoters/view/'.$service['req_id']);
+
+									}
+									else { 
+										$req_link = base_url('nonvoters/view/'.$service['nv_id']);
+									}
+									echo '<a href="'.$req_link.'">';
+									echo $service['req_fname'].' '.$service['req_lname']; //echo $service['r_req_id'] . $service['n_req_id'] ; 
+									echo '</a>';
+								?>
+							</td>
+							<td><?php echo $service['relationship']; ?></td>
+							<td><?php echo $service['particulars']; ?></td>
 						</tr>
 						<?php 
 							} 
@@ -139,20 +148,18 @@
 					}
 
 					if (count($n_services) > 0) {
+						//print_r($n_services);
 				?>
 					
 					<div class="index-section-title"><h4>Non Voters</h4></div>
 					<table class="table table-striped">
 					<thead>
 						<tr>
-							<th width="20%">Full Name</th>
-							<th width="10%">Birthdate</th>
-							<th width="5%">Age</th>
-							<th width="20%">School</th>
-							<th width="5%">District</th>
-							<th width="5%">Sex</th>
-							<th width="10%">Mobile Number</th>
-							<th width="10%">Email</th>
+							<th width="10%">Full Name</th>
+							<th width="20%">Address</th>
+							<th width="10%">Requested by</th>
+							<th width="10%">Relationship</th>
+							<th width="20%">Particulars</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -164,17 +171,27 @@
 						?>
 						<tr>
 							<td>
-								<a href="<?php echo site_url('services/view/'.$service['service_id']); ?>">
+								<a href="<?php echo site_url('services/view/'.$service['ben_id']); ?>">
 									<span class="glyphicon glyphicon-file"></span> <?php echo $fullname ?>
 								</a>
 							</td>
-							<td><?php echo $service['dob']; ?></td>
-							<td><?php echo $service['age']; ?></td>
-							<td><?php echo $service['school_name']; ?></td>
-							<td><?php echo $service['district']; ?></td>
-							<td><?php echo $service['sex']; ?></td>
-							<td><?php echo $service['mobile_no']; ?></td>
-							<td><?php echo $service['email']; ?></td>
+							<td><?php echo $service['address']; ?></td>
+							<td>
+								<?php 
+									if (empty($service['n_req_id'])) {
+										$req_link = base_url('rvoters/view/'.$service['req_id']);
+
+									}
+									else { 
+										$req_link = base_url('nonvoters/view/'.$service['nv_id']);
+									}
+									echo '<a href="'.$req_link.'">';
+									echo $service['req_fname'].' '.$service['req_lname']; //echo $service['r_req_id'] . $service['n_req_id'] ; 
+									echo '</a>';
+								?>
+							</td>
+							<td><?php echo $service['relationship']; ?></td>
+							<td><?php echo $service['particulars']; ?></td>
 						</tr>
 						<?php 
 							} 

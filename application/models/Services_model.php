@@ -12,43 +12,131 @@ class services_model extends CI_Model {
 
 	public function get_n_services($limit = 0, $start = 0) {
 		
-		$this->db->select("*");
+		$this->db->select('*');
 		$this->db->from('beneficiaries');
-		$this->db->join('non_voters', 'non_voters.nv_id = beneficiaries.nv_id');
-		$this->db->join('services', 'services.ben_id = beneficiaries.ben_id');
-		$this->db->where('beneficiaries.trash = 0');
-		$this->db->order_by('non_voters.lname', 'ASC');
-		$this->db->limit($limit, $start);
-		$query = $this->db->get();
+		$this->db->where("nv_id != '' and trash = 0");
+		//$this->db->limit($limit, $start);
+		$query1 = $this->db->get();
+		$result1 = $query1->result_array();
 
-		return $query->result_array();
+		//echo '<pre>'; print_r($result1); echo '</pre>'; die();
+		if (is_array($result1)) {
+			foreach ($result1 as $r1) {
+				
+				$ben_id = $r1['ben_id'];
+				
+				$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
+				$this->db->from('services s');
+				$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
+				$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
+				$this->db->where("s.ben_id = '$ben_id'");
+				$this->db->order_by('n.lname', 'ASC');
+				$q = $this->db->get();
+				
+				$ns[] = $q->row_array(); 
+			}
+
+			//echo '<pre>'; print_r($n_services); echo '</pre>'; die();
+			if (isset($ns)) {
+				
+				foreach($ns as $n) {
+					//echo '<pre>'; print_r($n); echo '</pre>'; 
+					if ($n != '') {
+						if ($n['n_req_id'] == '' || $n['n_req_id'] == NULL) {
+							$x = $this->rvoters_model->get_rvoter_by_comelec_id($n['r_req_id']);
+							$n['req_fname'] = $x['fname'];
+							$n['req_lname'] = $x['lname'];
+							$n['req_id'] = $x['id'];
+						} 
+						elseif($n['r_req_id'] == '' || $n['n_req_id'] == NULL) {
+							$y = $this->nonvoters_model->get_nonvoter_by_id($n['n_req_id']);
+							$n['req_fname'] = $y['fname'];
+							$n['req_lname'] = $y['lname'];
+						}
+						else{
+							return 0;
+						}
+					}
+					$n_services[] = $n;
+				}
+				
+				//return $ns; 
+				return $n_services; 
+			}
+			return 0;
+		}
+		else {
+			return 0;
+		}
 
 	}
 
 	public function get_r_services($limit = 0, $start = 0) {
 		
-		$this->db->select("*");
+		$this->db->select('*');
 		$this->db->from('beneficiaries');
-		$this->db->join('rvoters', 'rvoters.id_no_comelec = beneficiaries.id_no_comelec');
-		$this->db->join('services', 'services.ben_id = beneficiaries.ben_id');
-		$this->db->where('beneficiaries.trash = 0'); 
-		$this->db->order_by('rvoters.lname', 'ASC');
+		$this->db->where("id_no_comelec != '' and trash = 0");
 		$this->db->limit($limit, $start);
-		$query = $this->db->get();
+		$query1 = $this->db->get();
+		$result1 = $query1->result_array();
 
-		return $query->result_array();
+		if (is_array($result1)) {
+			foreach ($result1 as $r1) {
+				
+				$ben_id = $r1['ben_id'];
+				
+				$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
+				$this->db->from('services s');
+				$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
+				$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
+				$this->db->where("s.ben_id = '$ben_id'");
+				$this->db->order_by('r.lname', 'ASC');
+				$q = $this->db->get();
+				
+				$rs[] = $q->row_array();
+			}
+
+			if (isset($rs)) {
+				foreach($rs as $r) {
+					//echo '<pre>'; print_r($n); echo '</pre>'; 
+					if ($r != '') {
+						if ($r['n_req_id'] == '' || $r['n_req_id'] == NULL) {
+							$x = $this->rvoters_model->get_rvoter_by_comelec_id($r['r_req_id']);
+							$r['req_fname'] = $x['fname'];
+							$r['req_lname'] = $x['lname'];
+							$r['req_id'] = $x['id'];
+						} 
+						elseif($r['r_req_id'] == '' || $r['n_req_id'] == NULL) {
+							$y = $this->nonvoters_model->get_nonvoter_by_id($r['n_req_id']);
+							$r['req_fname'] = $y['fname'];
+							$r['req_lname'] = $y['lname'];
+						}
+						else{
+							return 0;
+						}
+					}
+					$r_services[] = $r;
+				}
+
+				return $r_services; 
+			}
+			return 0;
+		}
+		else {
+			return 0;
+		}
 
 	}
 
 
-	public function get_beneficiary_by_id($id = FALSE)
+	public function get_service_by_id($id = FALSE)
 	{
 		if ($id === FALSE) {
 			return 0; 
 		}
 		
 		$this->db->select("*");
-		$this->db->from('beneficiaries');
+		$this->db->from('services');
 		$this->db->where("ben_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
 		$query = $this->db->get();		
 

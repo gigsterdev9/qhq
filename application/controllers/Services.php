@@ -99,41 +99,41 @@ class Services extends CI_Controller {
 				$this->load->view('services/index', $data);
 				$this->load->view('templates/footer');
 				
-				$this->output->cache(1);
-				//$this->output->delete_cache();
+				//$this->output->cache(1);
+				$this->output->delete_cache();
 				
         }
 
-        public function view($s_id = NULL) {
+        public function view($id = NULL) {
+			//essentially classifies a beneficiary as either a registered voter or a non-voter and loads the appropriate viewing pages 
 
-                $sch = $this->services_model->get_service_by_id($s_id);
-                if (empty($sch))
-				{
-				        show_404();
+			$ben = $this->beneficiaries_model->get_beneficiary_by_id($id);
+			if (empty($ben)) {
+				show_404();
+			}
+			else{
+				//echo '<pre>'; print_r($ben); echo '</pre>'; die();
+				if ($ben['id_no_comelec'] != '') { //then entry must be a registered voter
+					$data['rvoter'] = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
+					$data['tracker'] = $this->rvoters_model->show_activities($data['rvoter']['id']);
+				
+					$this->load->view('templates/header', $data);
+					$this->load->view('rvoters/view', $data);
+					$this->load->view('templates/footer');	
+				}
+				elseif ($ben['nv_id'] != ''){ //then entry must be a non voter
+					$data['nonvoter'] = $this->nonvoters_model->get_nonvoter_by_id($ben['nv_id']);
+					$data['tracker'] = $this->nonvoters_model->show_activities($id);
+				
+					$this->load->view('templates/header', $data);
+					$this->load->view('nonvoters/view', $data);
+					$this->load->view('templates/footer');		
 				}
 				else{
-					//echo '<pre>'; print_r($sch); echo '</pre>'; die();
-					if ($sch['id_no_comelec'] != '') { //then entry must be a registered voter
-						$data['service'] = $this->services_model->get_r_service_by_id($s_id);
-					}
-					elseif ($sch['nv_id'] != ''){ //then entry must be a non voter
-						$data['service'] = $this->services_model->get_n_service_by_id($s_id);
-					}
-					else{
-						show_404();
-					}
+					show_404();
 				}
+			}
 
-				$data['availments'] = $this->services_model->get_term_details($s_id);
-                $data['tracker'] = $this->services_model->show_activities($s_id);
-                
-                //echo '<pre>'; print_r($data); echo '</pre>'; die();
-                
-				$this->load->view('templates/header', $data);
-				$this->load->view('services/view', $data);
-				$this->load->view('templates/footer');
-				
-				//$this->output->enable_profiler(TRUE);
         }
         
         

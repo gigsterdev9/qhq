@@ -18,7 +18,7 @@ class Scholarships extends CI_Controller {
 					redirect('auth/login');
 				}
 
-				$this->output->enable_profiler(TRUE);	
+				//$this->output->enable_profiler(TRUE);	
 				
         }
 
