@@ -89,10 +89,18 @@
 							<p><strong><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Recent Service Recipients</strong></p>
 							<ul class="list-group">
 								<?php 
-									foreach ($recent_rvoters as $recent_rvoter) 
+									foreach ($recent_service_availments['r'] as $rsa) 
 									{
-										$link = base_url('rvoters/view/'.$recent_rvoter['id']);
-										$display = $recent_rvoter['fname'].' '.$recent_rvoter['lname'].'<br />(Service availed)';
+										$link = base_url('services/view/'.$rsa['ben_id']);
+										$display = $rsa['fname'].' '.$rsa['lname'].', VID: '.$rsa['id_no_comelec'].'<br />'.
+													'('.ucfirst($rsa['service_type']).' Assistance)';
+										echo '<li class="list-group-item"><a href="'.$link.'">'.$display.'</a></li>';
+									}
+								
+									foreach ($recent_service_availments['n'] as $rsa) 
+									{
+										$link = base_url('services/view/'.$rsa['ben_id']);
+										$display = $rsa['fname'].' '.$rsa['lname'].'<br />('.ucfirst($rsa['service_type']).' Assistance)';
 										echo '<li class="list-group-item"><a href="'.$link.'">'.$display.'</a></li>';
 									}
 								?>

@@ -6,6 +6,7 @@ class Pages extends CI_Controller {
         {
         	parent::__construct();
 			$this->load->model('rvoters_model');
+			$this->load->model('services_model');
 			$this->load->model('scholarships_model');
             $this->load->helper('url');
             $this->load->library('ion_auth');
@@ -42,7 +43,8 @@ class Pages extends CI_Controller {
 		    }
 		    
 		    if ($page == 'dashboard') {
-				$data['recent_rvoters'] = $this->rvoters_model->get_recent_rvoters(20);
+				//$data['recent_rvoters'] = $this->rvoters_model->get_recent_rvoters(20);
+				$data['recent_service_availments'] = $this->services_model->get_recent_service_availments(10);
 				$data['recent_scholars'] = $this->scholarships_model->get_recent_scholars(20);
 		    }
 		    $data['title'] = ucfirst($page); // Capitalize the first letter

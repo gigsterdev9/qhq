@@ -129,8 +129,7 @@ class services_model extends CI_Model {
 	}
 
 
-	public function get_service_by_id($id = FALSE)
-	{
+	public function get_service_by_id($id = FALSE) {
 		if ($id === FALSE) {
 			return 0; 
 		}
@@ -240,29 +239,36 @@ class services_model extends CI_Model {
 		$result_array['result_count'] = $result_count;
 
 		return $result_array;
-		/*
-		$this->db->select('*');
-		$this->db->from('beneficiaries');
-		$this->db->where("lname like '%$search_param%' or fname like '%$search_param%' and trash = 0");
-		$query = $this->db->get();		
-
-		return $query->result_array();
-		*/
-
+		
 	}
 	
 	
-	public function get_recent_beneficiaries($count_limit = 5)
-	{
+	public function get_recent_service_availments($count_limit = 5) {
 				
-		$this->db->select('id, fname, lname');
-		$this->db->from('beneficiaries');
-		$this->db->where("trash = 0");
-		$this->db->order_by('id', 'DESC');
-		$this->db->limit($count_limit);
-		$query = $this->db->get();		
+		$this->db->select("fname, lname, s.ben_id, b.id_no_comelec, service_type");
+		$this->db->from('services s');
+		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
+		$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
+		$this->db->where("b.id_no_comelec != '' and r.trash = 0");
+		$this->db->order_by('r.lname', 'ASC');
+		$this->db->limit($count_limit, 0);
+		$query = $this->db->get();
 
-		return $query->result_array();
+		$recent_availments['r'] = $query->result_array();
+
+		$this->db->select("fname, lname, s.ben_id, service_type");
+		$this->db->from('services s');
+		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
+		$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
+		$this->db->where("b.nv_id != '' and n.trash = 0");
+		$this->db->order_by('n.lname', 'ASC');
+		$this->db->limit($count_limit, 0);
+		$query = $this->db->get();
+
+		$recent_availments['n'] = $query->result_array();
+
+		return $recent_availments;
+
 	}
 	
 	public function set_beneficiary() //new voter
