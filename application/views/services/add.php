@@ -1,4 +1,7 @@
-<?php //echo '<pre>'; print_r($_POST); echo '</pre>'; ?>
+<?php 
+//echo '<pre>'; print_r($_POST); echo '</pre>'; 
+//echo '<pre>'; echo $ben_id; echo '</pre>'; 
+?>
 <div class="container">
 <h2><?php echo $title; ?></h2>
 <p><a href="javascript:history.go(-1)" ><span class="glyphicon glyphicon-remove-sign"></span> Cancel</a></p>
@@ -20,6 +23,7 @@
 		<?php
 		}
 	
+
 		if ( $this->input->POST('action') === null) {
 			//begin match find form
 			$attributes = array('class' => 'form-horizontal', 'role' => 'form', 'id' => 'form-match-find');

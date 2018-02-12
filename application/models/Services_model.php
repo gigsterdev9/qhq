@@ -448,38 +448,33 @@ class services_model extends CI_Model {
 
 	}
 	
-	public function set_beneficiary() //new voter
+	public function set_service() //new service
 	{
 		$this->load->helper('url');
 		
 		$data = array(
-				'fname' => $this->input->post('fname'),
-				'lname' => $this->input->post('lname'),
-				'dob' => $this->input->post('dob'),
-				'address' => $this->input->post('address'),
-				'barangay' => $this->input->post('barangay'),
-				'district' => $this->input->post('district'),
-				'sex' => $this->input->post('sex'),
-				'code' => $this->input->post('code'),
-				'id_no' => $this->input->post('id_no'),
-				'id_no_comelec' => $this->input->post('id_no_comelec'),
-				'precinct' => $this->input->post('precinct'),
-				'mobile_no' => $this->input->post('mobile_no'),
-				'email' => $this->input->post('email'),
-				'referee' => $this->input->post('referee'),
-				//'voters_id' => $this->input->post('voters_id'),
-				'status' => $this->input->post('status'),
-				'remarks' => $this->input->post('remarks')
+				'req_date' => $this->input->post('req_date'),
+				'ben_id' => $this->input->post('ben_id'),
+				'n_req_id' => $this->input->post('n_req_id'),
+				'r_req_id' => $this->input->post('r_req_id'),
+				'relationship' => $this->input->post('relationship'),
+				'service_type' => $this->input->post('service_type'),
+				'particulars' => $this->input->post('particulars'),
+				'amount' => $this->input->post('amount'),
+				's_status' => $this->input->post('s_status'),
+				'action_officer' => $this->input->post('action_officer'),
+				'recommendation' => $this->input->post('recommendation'),
+				's_remarks' => $this->input->post('s_remarks'),
+				'trash' => 0
 		);
 		//insert new voter
-		$this->db->insert('beneficiaries', $data);
+		$this->db->insert('services', $data);
 		
 		$rvid = $this->db->insert_id();
-		
 		//add audit trail
 		$user = $this->ion_auth->user()->row();
 		$data1 = array(
-					'project_id' => $rvid,
+					'id' => $rvid,
 					'user' => $user->username,
 					'activity' => 'created'
 		);
@@ -490,7 +485,7 @@ class services_model extends CI_Model {
 	
 	
 	//update individual voter
-	public function update_beneficiary() {
+	public function update_service() {
 		//echo '<pre>'; print_r($_POST); echo '</pre>'; die();
 		$this->load->helper('url');
 		

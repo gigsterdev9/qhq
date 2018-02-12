@@ -115,6 +115,7 @@ class Services extends CI_Controller {
 			//$data['tracker'] = $this->rvoters_model->show_activities($id);
 			$data['tracker'] = 0;
 
+			
 			$this->load->view('templates/header', $data);
 			$this->load->view('services/view', $data);
 			$this->load->view('templates/footer');
@@ -123,11 +124,11 @@ class Services extends CI_Controller {
 		}
         
         
-        public function add($ben_id = FALSE) {
+        public function add() {
 			if (!$this->ion_auth->in_group('admin')) {
 				redirect('services');
 			}
-
+			
 			$this->load->helper('form');
 			$this->load->library('form_validation');
 
@@ -140,12 +141,6 @@ class Services extends CI_Controller {
 			$this->form_validation->set_rules('service_status','service status','required');
 			
 			if ($this->form_validation->run() === FALSE) {
-				
-				if ($ben_id == TRUE) {
-					$data['ben_id'] = $ben_id;
-				}
-				//echo '<pre>'; print_r($data); echo '</pre>'; 
-
 				$this->load->view('templates/header', $data);
 				$this->load->view('services/add');
 				$this->load->view('templates/footer');
@@ -251,7 +246,7 @@ class Services extends CI_Controller {
 		}
 
 
-		public function add_term($id = FALSE) {
+		public function add_exist($id = FALSE) {
 			if (!$this->ion_auth->in_group('admin')) {
 				redirect('services'); 
 			}
@@ -263,14 +258,15 @@ class Services extends CI_Controller {
 			$data['title'] = 'New service term';
 			$data['service_id'] = $id;
 
-			//term data
-			$this->form_validation->set_rules('year_level','Year Level','required');
-			$this->form_validation->set_rules('school_year','School Year','required');
-			$this->form_validation->set_rules('guardian_combined_income','Parent/Guardian Combined Income','required');
+			//availment data
+			$this->form_validation->set_rules('req_date','Request date','required');
+			$this->form_validation->set_rules('service_type','Type','required');
+			$this->form_validation->set_rules('particulars','Particulars','required');
+			$this->form_validation->set_rules('request_status','Request status','required');
 
 			if ($this->form_validation->run() === FALSE) {
 				$this->load->view('templates/header', $data);
-				$this->load->view('services/add_term');
+				$this->load->view('services/add_exist');
 				$this->load->view('templates/footer');
 
 			}
@@ -278,12 +274,12 @@ class Services extends CI_Controller {
 				//echo '<pre>'; print_r($_POST); echo '</pre>'; 
 				
 				//insert into services table
-				$this->services_model->set_service_term();
+				$this->services_model->set_service();
 				$data['s_id'] = $this->input->post('service_id');
 				$data['alert_success'] = 'New entry created.';
 				
 				$this->load->view('templates/header', $data);
-				$this->load->view('services/add_term');
+				$this->load->view('services/add_exist');
 				$this->load->view('templates/footer');
 			}
 			

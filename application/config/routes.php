@@ -81,6 +81,8 @@ $route['scholarships'] = 'scholarships';
 $route['services/view/(:any)'] = 'services/view/$1';
 $route['services/edit/(:any)'] = 'services/edit/$1';
 $route['services/add'] = 'services/add';
+$route['scholarships/add_exist'] = 'scholarships/add_exist';
+$route['scholarships/edit_exist'] = 'scholarships/edit_exist';
 $route['services/(:any)'] = 'services';
 $route['services'] = 'services';
 

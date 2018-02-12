@@ -144,19 +144,22 @@ class Beneficiaries extends CI_Controller {
 					if ($ben['id_no_comelec'] != '') { //then entry must be a registered voter
 						$data['rvoter'] = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
 						$data['services'] = $this->services_model->get_r_services_by_comelec_id($ben['id_no_comelec']);
+						$data['scholarships'] = $this->scholarships_model->get_r_scholarships_by_id($ben['id_no_comelec']);
 						$data['tracker'] = $this->rvoters_model->show_activities($data['rvoter']['id']);
 					
 						$this->load->view('templates/header', $data);
 						$this->load->view('rvoters/view', $data);
 						$this->load->view('templates/footer');	
 					}
-					elseif ($ben['nv_id'] != ''){ //then entry must be a non voter
-
-						//if both nv_id and comelec id are present, priority is given to data attached to comelec id
+					elseif ($ben['nv_id'] != ''){ 
+						//then entry must be a non voter
+						//but if both nv_id and comelec id are present, priority is given to data attached to comelec id
+						
 						if ($ben['id_no_comelec'] == '') {
 							
 							$data['nonvoter'] = $this->nonvoters_model->get_nonvoter_by_id($ben['nv_id']);
 							$data['services'] = $this->services_model->get_n_services_by_nvid($ben['nv_id']);
+							$data['scholarships'] = $this->scholarships_model->get_n_scholarships_by_id($ben['nv_id']);
 							$data['tracker'] = $this->nonvoters_model->show_activities($id);
 						
 							$this->load->view('templates/header', $data);
@@ -167,6 +170,7 @@ class Beneficiaries extends CI_Controller {
 							
 							$data['rvoter'] = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
 							$data['services'] = $this->services_model->get_r_services_by_comelec_id($ben['id_no_comelec']);
+							$data['scholarships'] = $this->scholarships_model->get_r_scholarships_by_id($ben['id_no_comelec']);
 							$data['tracker'] = $this->rvoters_model->show_activities($data['rvoter']['id']);
 						
 							$this->load->view('templates/header', $data);
