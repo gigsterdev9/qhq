@@ -241,7 +241,6 @@ class services_model extends CI_Model {
 		$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
 		$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
 		$this->db->where("b.id_no_comelec = '$comelec_id'");
-		$this->db->order_by('r.lname', 'ASC');
 		$q = $this->db->get();
 				
 		$rs[] = $q->row_array();
@@ -256,10 +255,11 @@ class services_model extends CI_Model {
 						$r['req_lname'] = $x['lname'];
 						$r['req_id'] = $x['id'];
 					} 
-					elseif($r['r_req_id'] == '' || $r['n_req_id'] == NULL) {
+					elseif($r['r_req_id'] == '' || $r['r_req_id'] == NULL) {
 						$y = $this->nonvoters_model->get_nonvoter_by_id($r['n_req_id']);
 						$r['req_fname'] = $y['fname'];
 						$r['req_lname'] = $y['lname'];
+						$r['req_id'] = $y['nv_id'];
 					}
 					else{
 						return 0;
@@ -269,6 +269,49 @@ class services_model extends CI_Model {
 			}
 
 			return $r_services; 
+		}
+		else{
+
+			return 0;
+		}
+
+	}
+
+	public function get_n_services_by_nvid($nv_id = FALSE) { //retrieve all records related to one nv id
+		
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('services s');
+		$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
+		$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
+		$this->db->where("b.nv_id = '$nv_id'");
+		$q = $this->db->get();
+				
+		$ns[] = $q->row_array();
+		
+		if (isset($ns)) {
+			foreach($ns as $n) {
+				//echo '<pre>'; print_r($n); echo '</pre>'; 
+				if ($n != '') {
+					if ($n['n_req_id'] == '' || $n['n_req_id'] == NULL) {
+						$x = $this->rvoters_model->get_rvoter_by_comelec_id($n['r_req_id']);
+						$n['req_fname'] = $x['fname'];
+						$n['req_lname'] = $x['lname'];
+						$n['req_id'] = $x['id'];
+					} 
+					elseif($n['r_req_id'] == '' || $n['r_req_id'] == NULL) {
+						$y = $this->nonvoters_model->get_nonvoter_by_id($n['n_req_id']);
+						$n['req_fname'] = $y['fname'];
+						$n['req_lname'] = $y['lname'];
+						$n['req_id'] = $y['nv_id'];
+					}
+					else{
+						return 0;
+					}
+				}
+				$n_services[] = $n;
+			}
+
+			return $n_services; 
 		}
 		else{
 

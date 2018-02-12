@@ -92,9 +92,12 @@
 		
 		<div class="service-history-details text-left">
 			<h3>AVAILMENT HISTORY</h3>
-			<div class="text-right"><a href="<?php echo base_url('services/add/'); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
 			<div class="table-responsive show-records" >
-			<h4>Social Services</h4>	
+			<?php if (count($services) > 0) {  ?>
+			<div class="text-right"><a href="<?php echo base_url('services/add/'); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
+			<?php } ?>
+			<h4>Social Services <small> [ <a href="<?php echo base_url('services/add') ?>">New Entry</a> ]</small></h4>	
+			<?php if (count($services) > 0) {  ?>
 			<table class="table table-striped">
 				<thead>
 					<tr>
@@ -111,35 +114,6 @@
 				</thead>
 				<tbody>
 					<?php 
-
-						/*
-						$services = array(
-										array('date' => '2017-11-02', 
-											'assistance_type' => 'Burial Assistance', 
-											'amount' => '10,000.00', 
-											'institution' => 'N/A',
-											'release_date' => '2017-11-04',
-											'remarks' => 'Lorem ipsum dolor consectitur sit amet.'),
-										array('date' => '2017-10-01', 
-											'assistance_type' => 'Medical Assistance', 
-											'amount' => '5,000.00', 
-											'institution' => 'PGH',
-											'release_date' => '2017-10-03',
-											'remarks' => 'Lorem ipsum dolor consectitur sit amet.'),
-										array('date' => '2017-08-10', 
-											'assistance_type' => 'Medical Assistance', 
-											'amount' => '2,000.00', 
-											'institution' => 'PGH',
-											'release_date' => '2017-08-11',
-											'remarks' => 'Lorem ipsum dolor consectitur sit amet.'),
-										array('date' => '2017-02-20', 
-											'assistance_type' => 'Financial Assistance', 
-											'amount' => '1,500.00', 
-											'institution' => 'N/A',
-											'release_date' => '2017-02-25',
-											'remarks' => 'Lorem ipsum dolor consectitur sit amet.'),
-									);
-						*/
 
 						foreach ($services as $service): 
 						//echo '<pre>'; print_r($rvoter); echo '</pre>';
@@ -177,8 +151,15 @@
 					?>
 				</tbody>
 			</table>
+			<?php } ?>
 
-			<h4>Scholarship <!-- <small> [ <a href="<?php echo base_url('scholarships/add') ?>">New Entry</a> ]</small> --> </h4> 
+			<div class="col-sm-12 buffer">&nbsp;</div>
+			<div class="col-sm-12 buffer">&nbsp;</div>
+
+			<?php if (count($scholarships) > 0) {  ?>
+			<div class="text-right"><a href="<?php echo base_url('scholarships/add/'); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
+			<?php } ?>
+			<h4>Scholarship <small> [ <a href="<?php echo base_url('scholarships/add') ?>">New Entry</a> ]</small></h4> 
 			<?php if (!empty($scholarships)) { ?>
 			<table class="table table-striped">
 				<thead>

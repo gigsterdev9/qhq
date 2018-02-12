@@ -115,8 +115,6 @@ class Services extends CI_Controller {
 			//$data['tracker'] = $this->rvoters_model->show_activities($id);
 			$data['tracker'] = 0;
 
-			//TO-DO: pull up availment history for particular beneficiary
-
 			
 			$this->load->view('templates/header', $data);
 			$this->load->view('services/view', $data);

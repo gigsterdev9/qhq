@@ -140,7 +140,7 @@ class Rvoters extends CI_Controller {
 				}
 
 				//retrieve scholarship related data
-				$data['scholarships'] = $this->scholarships_model->get_r_scholarships_by_id($data['rvoter']['id_no_comelec']);
+				$data['scholarships'] = $this->scholarships_model->get_r_scholarships_by_id($comelec_id);
 				//retrieve services related data
 				$data['services'] = $this->services_model->get_r_services_by_comelec_id($comelec_id);
 				//retrieve audit trail
