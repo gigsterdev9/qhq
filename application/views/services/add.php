@@ -20,7 +20,7 @@
 		<?php
 		}
 	
-		if ( $this->input->POST('action') === null ) {
+		if ( $this->input->POST('action') === null) {
 			//begin match find form
 			$attributes = array('class' => 'form-horizontal', 'role' => 'form', 'id' => 'form-match-find');
 			echo form_open('services/add', $attributes); 
@@ -70,7 +70,7 @@
 			<!-- end: match find form -->
 		<?php
 			}
-			//begin main add scholarship form
+			//begin main add services form
 			$attributes = array('class' => 'form-horizontal', 'role' => 'form', 'id' => 'form-new-scholarship');
 			echo form_open('services/add', $attributes); 
 		?>

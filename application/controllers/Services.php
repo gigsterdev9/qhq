@@ -115,7 +115,6 @@ class Services extends CI_Controller {
 			//$data['tracker'] = $this->rvoters_model->show_activities($id);
 			$data['tracker'] = 0;
 
-			
 			$this->load->view('templates/header', $data);
 			$this->load->view('services/view', $data);
 			$this->load->view('templates/footer');
@@ -124,12 +123,11 @@ class Services extends CI_Controller {
 		}
         
         
-        public function add() {
-			if (!$this->ion_auth->in_group('admin'))
-			{
+        public function add($ben_id = FALSE) {
+			if (!$this->ion_auth->in_group('admin')) {
 				redirect('services');
 			}
-			
+
 			$this->load->helper('form');
 			$this->load->library('form_validation');
 
@@ -142,6 +140,12 @@ class Services extends CI_Controller {
 			$this->form_validation->set_rules('service_status','service status','required');
 			
 			if ($this->form_validation->run() === FALSE) {
+				
+				if ($ben_id == TRUE) {
+					$data['ben_id'] = $ben_id;
+				}
+				//echo '<pre>'; print_r($data); echo '</pre>'; 
+
 				$this->load->view('templates/header', $data);
 				$this->load->view('services/add');
 				$this->load->view('templates/footer');
