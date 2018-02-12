@@ -246,7 +246,7 @@ class Services extends CI_Controller {
 		}
 
 
-		public function add_exist($id = FALSE) {
+		public function add_exist($ben_id = FALSE) { 
 			if (!$this->ion_auth->in_group('admin')) {
 				redirect('services'); 
 			}
@@ -255,10 +255,34 @@ class Services extends CI_Controller {
 			$this->load->library('form_validation');
 
 			//$data['services'] = $this->services_model->get_services();
-			$data['title'] = 'New service term';
-			$data['service_id'] = $id;
+			$data['title'] = 'New availment';
+			$data['ben_id'] = $ben_id;
 
-			//availment data
+				$ben = $this->beneficiaries_model->get_beneficiary_by_id($ben_id);
+				//echo '<pre>'; print_r($ben); echo '</pre>'; die();
+				if ($ben['id_no_comelec'] != '') { //then entry must be a registered voter
+					$rv_details = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
+					$data['recipient_fullname'] = $rv_details['fname'].' '.$rv_details['lname'];
+				}
+				elseif ($ben['nv_id'] != ''){ 
+					//then entry must be a non voter
+					//but if both nv_id and comelec id are present, priority is given to data attached to comelec id
+					
+					if ($ben['id_no_comelec'] == '') {
+
+						$nv_details = $this->nonvoters_model->get_nonvoter_by_id($ben['nv_id']);
+						$data['recipient_fullname'] = $nv_details['fname'].' '.$nv_details['lname'];
+					}
+					else{
+						
+						$rv_details = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
+						$data['recipient_fullname'] = $rv_details['fname'].' '.$rv_details['lname'];
+					}
+
+				}
+			//echo '<pre>'; print_r($data); echo '</pre>'; //die();
+
+			//availment data validation
 			$this->form_validation->set_rules('req_date','Request date','required');
 			$this->form_validation->set_rules('service_type','Type','required');
 			$this->form_validation->set_rules('particulars','Particulars','required');

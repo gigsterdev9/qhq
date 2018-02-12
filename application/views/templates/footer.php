@@ -30,14 +30,19 @@
 
 		<!-- SCRIPTS -->
 
-		<!-- nav menu script -->
 		<script>
 			$(document).ready(function(){
-			$('.dropdown-submenu a.test').on("click", function(e){
-				$(this).next('ul').toggle();
-				e.stopPropagation();
-				e.preventDefault();
-			});
+				
+				//nav menu script 
+				$('.dropdown-submenu a.test').on("click", function(e){
+					$(this).next('ul').toggle();
+					e.stopPropagation();
+					e.preventDefault();
+				});
+
+				//initialize enhanced select dropdown fields
+				$('.select2-single').select2();
+
 			});
 		</script>
 
