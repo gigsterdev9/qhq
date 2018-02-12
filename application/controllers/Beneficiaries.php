@@ -156,7 +156,7 @@ class Beneficiaries extends CI_Controller {
 						if ($ben['id_no_comelec'] == '') {
 							
 							$data['nonvoter'] = $this->nonvoters_model->get_nonvoter_by_id($ben['nv_id']);
-							$data['services'] = $this->services_model->get_n_services_by_nv_id($ben['nv_id']);
+							$data['services'] = $this->services_model->get_n_services_by_nvid($ben['nv_id']);
 							$data['tracker'] = $this->nonvoters_model->show_activities($id);
 						
 							$this->load->view('templates/header', $data);

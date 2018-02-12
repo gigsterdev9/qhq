@@ -93,11 +93,11 @@
 		<div class="service-history-details text-left">
 			<h3>AVAILMENT HISTORY</h3>
 			<div class="table-responsive show-records" >
-			<?php if (count($services) > 0) {  ?>
+			<?php if (!empty($services)) {  ?>
 			<div class="text-right"><a href="<?php echo base_url('services/add/'); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
 			<?php } ?>
 			<h4>Social Services <small> [ <a href="<?php echo base_url('services/add') ?>">New Entry</a> ]</small></h4>	
-			<?php if (count($services) > 0) {  ?>
+			<?php if (!empty($services)) {  ?>
 			<table class="table table-striped">
 				<thead>
 					<tr>
@@ -156,7 +156,7 @@
 			<div class="col-sm-12 buffer">&nbsp;</div>
 			<div class="col-sm-12 buffer">&nbsp;</div>
 
-			<?php if (count($scholarships) > 0) {  ?>
+			<?php if (!empty($scholarships)) {  ?>
 			<div class="text-right"><a href="<?php echo base_url('scholarships/add/'); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
 			<?php } ?>
 			<h4>Scholarship <small> [ <a href="<?php echo base_url('scholarships/add') ?>">New Entry</a> ]</small></h4> 
