@@ -1,10 +1,16 @@
+ <?php 
+ //echo '<pre>'; print_r($service); echo '</pre>'; //die(); 
+ $profile_id = ($service['id_no_comelec'] == '') ? $service['nv_id'] : $service['id_no_comelec'] ;
+ $link_id = ($service['id_no_comelec'] == '') ? $service['nv_id'] : $service['id'] ;
+ $module = ($service['id_no_comelec'] == '') ? 'nonvoters' : 'rvoters' ;
+  ?>
  <div class="container">
-	<h2><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Scholarship Grant Details</h2> 
-	<h3><a href="<?php echo site_url('beneficiaries/view/'.$scholar['ben_id']); ?>">
-			<span class="glyphicon glyphicon-file"></span> <?php echo $scholar['fname'].' '.$scholar['lname'].' ('.$scholar['id_no'].')'; ?> 
+	<h2><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Service Availment Details</h2> 
+	<h3><a href="<?php echo site_url($module.'/view/'.$link_id); ?>">
+			<span class="glyphicon glyphicon-file"></span> <?php echo $service['fname'].' '.$service['lname'].' ('.$profile_id.')'; ?> 
  		</a>
 		<?php if ($this->ion_auth->in_group('admin')) { ?>
-			<small>[&nbsp;<a href="<?php echo base_url('scholarships/edit/'.$scholar['scholarship_id']); ?>">Edit</a>&nbsp;]</small>
+			<small>[&nbsp;<a href="<?php echo base_url('services/edit/'.$service['service_id']); ?>">Edit</a>&nbsp;]</small>
 		<?php } ?>
 	</h3>
 	<div class="panel panel-default">
@@ -23,81 +29,52 @@
 				}
 				?>
 				<div class="col-sm-6" >
-					<div class="col-sm-3 control-label">First Name</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['fname']; ?>&nbsp;</div>
+					<div class="col-sm-3 control-label">Request date</div>
+					<div class="col-sm-9 control-value"><?php echo $service['req_date']; ?>&nbsp;</div>
 
-					<div class="col-sm-3 control-label">Middle Name</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['mname']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label">Last Name</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['lname']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label">Birthdate</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['dob']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label">Address</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['address']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label">Barangay</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['barangay']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label">District</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['district']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label">Sex</div>
+					<div class="col-sm-3 control-label">Requested by</div>
 					<div class="col-sm-9 control-value">
 						<?php 
-						switch ($scholar['sex']) {
-							case 'M': echo 'Male'; break;
-							case 'F': echo 'Female'; break;
-							default:
+						if (empty($service['n_req_id'])) {
+							$req_link = base_url('rvoters/view/'.$service['req_id']);
 						}
-						?>&nbsp;
+						else { 
+							$req_link = base_url('nonvoters/view/'.$service['n_req_id']);
+						}
+						echo '<a href="'.$req_link.'">';
+						echo $service['req_fname'].' '.$service['req_lname'].'</a>';
+						?>
+						&nbsp;
 					</div>
 
-					<div class="col-sm-12 buffer">&nbsp;</div>
+					<div class="col-sm-3 control-label">Relationship</div>
+					<div class="col-sm-9 control-value"><?php echo $service['relationship']; ?>&nbsp;</div>
 
-					<div class="col-sm-3 control-label">Mobile No.</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['mobile_no']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label">Email</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['email']; ?>&nbsp;</div>
-
+					<div class="col-sm-3 control-label">Service Type</div>
+					<div class="col-sm-9 control-value"><?php echo $service['service_type']; ?>&nbsp;</div>
 					
+					<div class="col-sm-3 control-label">Amount</div>
+					<div class="col-sm-9 control-value"><?php echo $service['amount']; ?>&nbsp;</div>
+
+					<div class="col-sm-3 control-label">Particulars</div>
+					<div class="col-sm-9 control-value"><?php echo $service['particulars']; ?>&nbsp;</div>
 
 				</div>
 
 				<div class="col-sm-6">
-					<div class="col-sm-3 control-label" >Batch</div>
-					<div class="col-sm-9 control-value" ><?php echo $scholar['batch']; ?>&nbsp;</div>
+					<div class="col-sm-3 control-label">Request status</div>
+					<div class="col-sm-9 control-value"><?php echo $service['s_status']; ?>&nbsp;</div>
 
-					<div class="col-sm-3 control-label" >School</div>
-					<div class="col-sm-9 control-value" ><?php echo $scholar['school_name']; ?>&nbsp;</div>
+					<div class="col-sm-3 control-label">Action officer</div>
+					<div class="col-sm-9 control-value"><?php echo $service['action_officer']; ?>&nbsp;</div>
 
-					<div class="col-sm-3 control-label ">Course</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['course']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label ">Major</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['major']; ?>&nbsp;</div>
-				
-					<div class="col-sm-3 control-label ">Status</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['scholarship_status']; ?>&nbsp;</div>
+					<div class="col-sm-3 control-label" >Recommendation</div>
+					<div class="col-sm-9 control-value" ><?php echo $service['recommendation']; ?>&nbsp;</div>
 
 					<div class="col-sm-12 buffer">&nbsp;</div>
-
-					<div class="col-sm-3 control-label" >Disability</div>
-					<div class="col-sm-9 control-value" ><?php echo $scholar['disability']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label ">Senior Citizen</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['senior_citizen']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label ">Parental Support</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['parent_support_status']; ?>&nbsp;</div>
-
-					<div class="col-sm-12 buffer">&nbsp;</div>
-
-					<div class="col-sm-3 control-label">Remarks</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['scholarship_remarks']; ?>&nbsp;</div>
+					
+					<div class="col-sm-3 control-label" >Remarks</div>
+					<div class="col-sm-9 control-value" ><?php echo $service['s_remarks']; ?>&nbsp;</div>
 
 				</div>
 				<?php //echo '<pre>'; print_r($scholar); echo '</pre>'; ?>
@@ -105,71 +82,70 @@
 		</div>
 		
 		<div class="service-history-details text-left">
-			<h3>SCHOLARSHIP AVAILMENT HISTORY</h3>
-			<div class="text-right"><a href="<?php echo base_url('scholarships/add_term/'.$scholar['scholarship_id']); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
+			<h3>OTHER AVAILMENT RECORDS</h3>
+			<div class="text-right"><a href="<?php echo base_url(); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
 			<div class="table-responsive show-records" >
-				
+			<?php 
+			if (count($services) > 1) { 	
+			?>
 			<table class="table table-striped">
 				<thead>
 					<tr>
 						<th width="2%">&nbsp;</th>
-						<th width="15%">Award No.</th>
-						<th width="10%">School Year</th>
-						<th width="5%">Year Level</th>
-						<th width="5%">GWA 1</th>
-						<th width="5%">GWA 2</th>
-						<th width="10%">Parent/Guardian Income *</th>
-						<th width="5%">Grade Points</th>
-						<th width="5%">Income Points</th>
-						<th width="5%">Rank Points</th>
-						<th>Remarks</th>
-						<th width="5%">Action</th>
+						<th width="10%">Request date</th>
+						<th width="10%">Type</th>
+						<th width="10%">Amount</th>
+						<th width="15%">Requested by</th>
+						<th width="10%">Relationship</th>
+						<th width="10%">Status</th>
+						<th width="28%">Remarks</th>
+						<th widht="5%">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php 
-						foreach ($availments as $availment): 
-						//echo '<pre>'; print_r($scholar); echo '</pre>';
-							if (is_array($availment)) { 
-						?>
-						<tr>
-							<td><a href="#"><span class="glyphicon glyphicon-file"></span></a></td>
-							<td><?php echo $availment['award_no']; ?></td>
-							<td><?php echo $availment['school_year']; ?></td>
-							<td><?php echo $availment['year_level']; ?></td>
-							<td><?php echo $availment['gwa_1']; ?></td>
-							<td><?php echo $availment['gwa_2']; ?></td>
-							<td><?php echo $availment['guardian_combined_income']; ?></td>
-							<td><?php echo $availment['grade_points']; ?></td>
-							<td><?php echo $availment['income_points']; ?></td>
-							<td><?php echo $availment['rank_points']; ?></td>
-							<td><?php echo $availment['notes']; ?></td>
-							<td>
-								<a href="<?php echo base_url('scholarships/edit_term/'.$scholar['scholarship_id'].'/'.$availment['term_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
-								<a href="<?php echo base_url('scholarships/rem_term/'.$scholar['scholarship_id'].'/'.$availment['term_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
-							</td>
-						</tr>
-						<?php 
-							}
+						foreach ($services as $s): 
+						//echo '<pre>'; print_r($rvoter); echo '</pre>';
+						if ($service['service_id'] != $s['service_id']) { 
+					?>
+					<tr>
+						<td><a href="#"><span class="glyphicon glyphicon-file"></span></a></td>
+						<td><?php echo $s['req_date']; ?></td>
+						<td><?php echo $s['service_type']; ?></td>
+						<td><?php echo $s['amount']; ?></td>
+						<td>
+							<?php 
+								if (empty($s['n_req_id'])) {
+									$req_link = base_url('rvoters/view/'.$s['req_id']);
+								}
+								else { 
+									$req_link = base_url('nonvoters/view/'.$s['nv_id']);
+								}
+								echo '<a href="'.$req_link.'">';
+								echo $s['req_fname'].' '.$s['req_lname']; //echo $s['r_req_id'] . $s['n_req_id'] ; 
+								echo '</a>';
+							?>
+						</td>
+						<td><?php echo $s['relationship']; ?></td>
+						<td><?php echo $s['s_status']; ?></td>
+						<td><?php echo $s['s_remarks']; ?></td>
+						<td>
+							<a href="<?php echo base_url('services/edit/'.$s['service_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
+							<a href="<?php echo base_url('services/trash/'.$s['service_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
+						</td>
+					</tr>
+					<?php 
+						}
 						endforeach;
 					?>
 				</tbody>
 			</table>
-			<i>* Combined income. 1.00 signifies indigent.</i>
-
-				<?php 
-					/*
-					if (is_array($proponent_projects)) 
-					{
-						//print_r($proponent_projects);
-						foreach ($proponent_projects as $project) 
-						{
-							echo '<a href="'.site_url('scholarships/'.$project['slug']).'">'.$project['project_title'].'</a>';
-							echo '<br />';
-						}
-					}
-					*/
-				?>&nbsp;
+			<?php 
+			}
+			else{
+				echo 'No other availment records found.';
+			}
+			?>
 			</div>
 			<div class="text-right back-link"><a href="javascript:history.go(-1)">&laquo; Back</a></div>
 		</div>

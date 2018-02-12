@@ -92,23 +92,27 @@
 		
 		<div class="service-history-details text-left">
 			<h3>AVAILMENT HISTORY</h3>
+			<div class="text-right"><a href="<?php echo base_url('services/add/'); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
 			<div class="table-responsive show-records" >
-			
 			<h4>Social Services</h4>	
 			<table class="table table-striped">
 				<thead>
 					<tr>
 						<th width="2%">&nbsp;</th>
-						<th width="10%">Date</th>
-						<th width="20%">Assistance Type</th>
+						<th width="10%">Request date</th>
+						<th width="10%">Type</th>
 						<th width="10%">Amount</th>
-						<th width="10%">Institution</th>
-						<th width="10%">Release Date</th>
-						<th>Remarks</th>
+						<th width="15%">Requested by</th>
+						<th width="10%">Relationship</th>
+						<th width="10%">Status</th>
+						<th width="28%">Remarks</th>
+						<th widht="5%">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php 
+
+						/*
 						$services = array(
 										array('date' => '2017-11-02', 
 											'assistance_type' => 'Burial Assistance', 
@@ -135,6 +139,7 @@
 											'release_date' => '2017-02-25',
 											'remarks' => 'Lorem ipsum dolor consectitur sit amet.'),
 									);
+						*/
 
 						foreach ($services as $service): 
 						//echo '<pre>'; print_r($rvoter); echo '</pre>';
@@ -142,12 +147,29 @@
 					?>
 					<tr>
 						<td><a href="#"><span class="glyphicon glyphicon-file"></span></a></td>
-						<td><?php echo $service['date']; ?></td>
-						<td><?php echo $service['assistance_type']; ?></td>
+						<td><?php echo $service['req_date']; ?></td>
+						<td><?php echo $service['service_type']; ?></td>
 						<td><?php echo $service['amount']; ?></td>
-						<td><?php echo $service['institution']; ?></td>
-						<td><?php echo $service['release_date']; ?></td>
-						<td><?php echo $service['remarks']; ?></td>
+						<td>
+							<?php 
+								if (empty($service['n_req_id'])) {
+									$req_link = base_url('rvoters/view/'.$service['req_id']);
+								}
+								else { 
+									$req_link = base_url('nonvoters/view/'.$service['nv_id']);
+								}
+								echo '<a href="'.$req_link.'">';
+								echo $service['req_fname'].' '.$service['req_lname']; //echo $service['r_req_id'] . $service['n_req_id'] ; 
+								echo '</a>';
+							?>
+						</td>
+						<td><?php echo $service['relationship']; ?></td>
+						<td><?php echo $service['s_status']; ?></td>
+						<td><?php echo $service['s_remarks']; ?></td>
+						<td>
+							<a href="<?php echo base_url('services/edit/'.$service['service_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
+							<a href="<?php echo base_url('services/trash/'.$service['service_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
+						</td>
 					</tr>
 					<?php 
 						}
@@ -156,7 +178,7 @@
 				</tbody>
 			</table>
 
-			<h4>Scholarship <small>[ <a href="<?php echo base_url('scholarships/add') ?>">New Entry</a> ]</small></h4>
+			<h4>Scholarship <!-- <small> [ <a href="<?php echo base_url('scholarships/add') ?>">New Entry</a> ]</small> --> </h4> 
 			<?php if (!empty($scholarships)) { ?>
 			<table class="table table-striped">
 				<thead>

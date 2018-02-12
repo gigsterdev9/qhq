@@ -9,6 +9,7 @@ class Beneficiaries extends CI_Controller {
 				$this->load->model('rvoters_model');
 				$this->load->model('nonvoters_model');
 				$this->load->model('scholarships_model');
+				$this->load->model('services_model');
                 $this->load->helper('url');
                 $this->load->helper('form');
 				$this->load->library('ion_auth');
@@ -142,6 +143,7 @@ class Beneficiaries extends CI_Controller {
 					//echo '<pre>'; print_r($ben); echo '</pre>'; die();
 					if ($ben['id_no_comelec'] != '') { //then entry must be a registered voter
 						$data['rvoter'] = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
+						$data['services'] = $this->services_model->get_r_services_by_comelec_id($ben['id_no_comelec']);
 						$data['tracker'] = $this->rvoters_model->show_activities($data['rvoter']['id']);
 					
 						$this->load->view('templates/header', $data);
@@ -149,12 +151,29 @@ class Beneficiaries extends CI_Controller {
 						$this->load->view('templates/footer');	
 					}
 					elseif ($ben['nv_id'] != ''){ //then entry must be a non voter
-						$data['nonvoter'] = $this->nonvoters_model->get_nonvoter_by_id($ben['nv_id']);
-						$data['tracker'] = $this->nonvoters_model->show_activities($id);
-                	
-						$this->load->view('templates/header', $data);
-						$this->load->view('nonvoters/view', $data);
-						$this->load->view('templates/footer');		
+
+						//if both nv_id and comelec id are present, priority is given to data attached to comelec id
+						if ($ben['id_no_comelec'] == '') {
+							
+							$data['nonvoter'] = $this->nonvoters_model->get_nonvoter_by_id($ben['nv_id']);
+							$data['services'] = $this->services_model->get_n_services_by_nv_id($ben['nv_id']);
+							$data['tracker'] = $this->nonvoters_model->show_activities($id);
+						
+							$this->load->view('templates/header', $data);
+							$this->load->view('nonvoters/view', $data);
+							$this->load->view('templates/footer');		
+						}
+						else{
+							
+							$data['rvoter'] = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
+							$data['services'] = $this->services_model->get_r_services_by_comelec_id($ben['id_no_comelec']);
+							$data['tracker'] = $this->rvoters_model->show_activities($data['rvoter']['id']);
+						
+							$this->load->view('templates/header', $data);
+							$this->load->view('rvoters/view', $data);
+							$this->load->view('templates/footer');	
+						}
+
 					}
 					else{
 						show_404();

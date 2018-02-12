@@ -100,41 +100,30 @@ class Services extends CI_Controller {
 				$this->load->view('templates/footer');
 				
 				//$this->output->cache(1);
-				$this->output->delete_cache();
+				//$this->output->delete_cache();
 				
         }
 
         public function view($id = NULL) {
-			//essentially classifies a beneficiary as either a registered voter or a non-voter and loads the appropriate viewing pages 
 
-			$ben = $this->beneficiaries_model->get_beneficiary_by_id($id);
-			if (empty($ben)) {
-				show_404();
-			}
-			else{
-				//echo '<pre>'; print_r($ben); echo '</pre>'; die();
-				if ($ben['id_no_comelec'] != '') { //then entry must be a registered voter
-					$data['rvoter'] = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
-					$data['tracker'] = $this->rvoters_model->show_activities($data['rvoter']['id']);
-				
-					$this->load->view('templates/header', $data);
-					$this->load->view('rvoters/view', $data);
-					$this->load->view('templates/footer');	
-				}
-				elseif ($ben['nv_id'] != ''){ //then entry must be a non voter
-					$data['nonvoter'] = $this->nonvoters_model->get_nonvoter_by_id($ben['nv_id']);
-					$data['tracker'] = $this->nonvoters_model->show_activities($id);
-				
-					$this->load->view('templates/header', $data);
-					$this->load->view('nonvoters/view', $data);
-					$this->load->view('templates/footer');		
-				}
-				else{
-					show_404();
-				}
-			}
+			//retrieve service availment details
+			$data['service'] = $this->services_model->get_service_by_id($id);
+			//retrieve availment history data
+				$ben_id = $data['service']['ben_id'];
+			$data['services'] = $this->services_model->get_services_by_id($ben_id);
+			//retrieve audit trail
+			//$data['tracker'] = $this->rvoters_model->show_activities($id);
+			$data['tracker'] = 0;
 
-        }
+			//TO-DO: pull up availment history for particular beneficiary
+
+			
+			$this->load->view('templates/header', $data);
+			$this->load->view('services/view', $data);
+			$this->load->view('templates/footer');
+
+
+		}
         
         
         public function add() {

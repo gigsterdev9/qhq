@@ -90,17 +90,20 @@
 			<div class="page-links"><?php echo $links; ?></div>
 			
 				<?php if (count($r_services) > 0) { 
-							//print_r($r_services);
+							//echo '<pre>'; print_r($r_services); echo '</pre>';
 					?>
 					<div class="index-section-title"><h4>Registered Voters</h4></div>
 					<table class="table table-striped">
 					<thead>
 						<tr>
-							<th width="10%">Full Name</th>
-							<th width="20%">Address</th>
-							<th width="10%">Requested by</th>
-							<th width="10%">Relationship</th>
-							<th width="20%">Particulars</th>
+							<th width="10%">Request date</th>
+							<th width="20%">Recipient</th>
+							<th width="10%">Type</th>
+							<th width="10%">Amount</th>
+							<th width="20%">Requested by</th>
+							<th width="15%">Relationship</th>
+							<th width="10%">Status</th>
+							<th widht="5%">Action</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -112,11 +115,17 @@
 						?>
 						<tr>
 							<td>
-								<a href="<?php echo site_url('services/view/'.$service['ben_id']); ?>">
-									<span class="glyphicon glyphicon-file"></span> <?php echo $fullname ?>
+								<a href="<?php echo site_url('services/view/'.$service['service_id']); ?>">
+									<span class="glyphicon glyphicon-file"></span> <?php echo $service['req_date']; ?>
 								</a>
 							</td>
-							<td><?php echo $service['address']; ?></td>
+							<td>
+								<a href="<?php echo site_url('rvoters/view/'.$service['id']); ?>">
+									 <?php echo $fullname ?>
+								</a>
+							</td>
+							<td><?php echo $service['service_type']; ?></td>
+							<td><?php echo $service['amount']; ?></td>
 							<td>
 								<?php 
 									if (empty($service['n_req_id'])) {
@@ -132,7 +141,11 @@
 								?>
 							</td>
 							<td><?php echo $service['relationship']; ?></td>
-							<td><?php echo $service['particulars']; ?></td>
+							<td><?php echo $service['s_status']; ?></td>
+							<td>
+								<a href="<?php echo base_url('services/edit/'.$service['service_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
+								<a href="<?php echo base_url('services/trash/'.$service['service_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
+							</td>
 						</tr>
 						<?php 
 							} 
@@ -148,34 +161,45 @@
 					}
 
 					if (count($n_services) > 0) {
-						//print_r($n_services);
+						//echo '<pre>'; print_r($n_services); echo '</pre>';
 				?>
 					
 					<div class="index-section-title"><h4>Non Voters</h4></div>
 					<table class="table table-striped">
 					<thead>
 						<tr>
-							<th width="10%">Full Name</th>
-							<th width="20%">Address</th>
-							<th width="10%">Requested by</th>
-							<th width="10%">Relationship</th>
-							<th width="20%">Particulars</th>
+							<th width="10%">Request date</th>
+							<th width="20%">Recipient</th>
+							<th width="10%">Type</th>
+							<th width="10%">Amount</th>
+							<th width="20%">Requested by</th>
+							<th width="15%">Relationship</th>
+							<th width="10%">Status</th>
+							<th widht="5%">Action</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php
-							//echo '<pre>'; print_r($r_services); echo '</pre>';
+							//echo '<pre>'; print_r($n_services); echo '</pre>';
 							foreach ($n_services as $service) :
 							if (is_array($service)) { //do not display 'result_count' 
 								$fullname = strtoupper($service['lname'].', '.$service['fname']);
 						?>
 						<tr>
 							<td>
-								<a href="<?php echo site_url('services/view/'.$service['ben_id']); ?>">
-									<span class="glyphicon glyphicon-file"></span> <?php echo $fullname ?>
+								<a href="<?php echo site_url('services/view/'.$service['service_id']); ?>">
+									<span class="glyphicon glyphicon-file"></span> <?php echo $service['req_date']; ?>
 								</a>
 							</td>
-							<td><?php echo $service['address']; ?></td>
+							<td>
+								<a href="<?php echo site_url('nonvoters/view/'.$service['nv_id']); ?>">
+								 <?php echo $fullname ?>
+								</a>
+							</td>
+							<td>
+								<?php echo $service['service_type']; ?>
+							</td>
+							<td><?php echo $service['amount']; ?></td>
 							<td>
 								<?php 
 									if (empty($service['n_req_id'])) {
@@ -183,7 +207,7 @@
 
 									}
 									else { 
-										$req_link = base_url('nonvoters/view/'.$service['nv_id']);
+										$req_link = base_url('nonvoters/view/'.$service['n_req_id']);
 									}
 									echo '<a href="'.$req_link.'">';
 									echo $service['req_fname'].' '.$service['req_lname']; //echo $service['r_req_id'] . $service['n_req_id'] ; 
@@ -191,7 +215,11 @@
 								?>
 							</td>
 							<td><?php echo $service['relationship']; ?></td>
-							<td><?php echo $service['particulars']; ?></td>
+							<td><?php echo $service['s_status']; ?></td>
+							<td>
+								<a href="<?php echo base_url('services/edit/'.$service['service_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
+								<a href="<?php echo base_url('services/trash/'.$service['service_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
+							</td>
 						</tr>
 						<?php 
 							} 

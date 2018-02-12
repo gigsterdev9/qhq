@@ -115,7 +115,7 @@
 					<tbody>
 						<?php 
 							foreach ($rvoters as $rv): 
-							//echo '<pre>'; print_r($rvoter); echo '</pre>';
+							//echo '<pre>'; print_r($rv); echo '</pre>';
 							if (is_array($rv)) { //do not display 'result_count' 
 								$fullname = strtoupper($rv['lname'].', '.$rv['fname']);
 						?>
@@ -172,7 +172,6 @@
 				<tbody>
 					<?php 
 						foreach ($nonvoters as $nv): 
-						//echo '<pre>'; print_r($rvoter); echo '</pre>';
 						if (is_array($nv)) { //do not display 'result_count' 
 							$fullname =  strtoupper($nv['lname'].', '.$nv['fname']);
 					?>

@@ -7,6 +7,7 @@ class Rvoters extends CI_Controller {
                 parent::__construct();
 				$this->load->model('rvoters_model');
 				$this->load->model('scholarships_model');
+				$this->load->model('services_model');
                 $this->load->helper('url');
                 $this->load->helper('form');
 				$this->load->library('ion_auth');
@@ -129,17 +130,22 @@ class Rvoters extends CI_Controller {
 
         public function view($id = NULL) {
 
-                $data['rvoter'] = $this->rvoters_model->get_rvoter_by_id($id);
-                if (empty($data['rvoter'])) {
+				//retrieve primary data
+				$data['rvoter'] = $this->rvoters_model->get_rvoter_by_id($id);
+				$id = $data['rvoter']['id'];
+				$comelec_id = $data['rvoter']['id_no_comelec'];
+
+				if (empty($data['rvoter'])) {
 				    show_404();
 				}
 
 				//retrieve scholarship related data
 				$data['scholarships'] = $this->scholarships_model->get_r_scholarships_by_id($data['rvoter']['id_no_comelec']);
-
+				//retrieve services related data
+				$data['services'] = $this->services_model->get_r_services_by_comelec_id($comelec_id);
 				//retrieve audit trail
 				$data['tracker'] = $this->rvoters_model->show_activities($id);
-                $id = $data['rvoter']['id'];
+                
 				
 				$this->load->view('templates/header', $data);
 				$this->load->view('rvoters/view', $data);

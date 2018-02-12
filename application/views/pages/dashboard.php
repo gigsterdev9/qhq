@@ -91,7 +91,7 @@
 								<?php 
 									foreach ($recent_service_availments['r'] as $rsa) 
 									{
-										$link = base_url('services/view/'.$rsa['ben_id']);
+										$link = base_url('services/view/'.$rsa['service_id']);
 										$display = $rsa['fname'].' '.$rsa['lname'].', VID: '.$rsa['id_no_comelec'].'<br />'.
 													'('.ucfirst($rsa['service_type']).' Assistance)';
 										echo '<li class="list-group-item"><a href="'.$link.'">'.$display.'</a></li>';
@@ -99,7 +99,7 @@
 								
 									foreach ($recent_service_availments['n'] as $rsa) 
 									{
-										$link = base_url('services/view/'.$rsa['ben_id']);
+										$link = base_url('services/view/'.$rsa['service_id']);
 										$display = $rsa['fname'].' '.$rsa['lname'].'<br />('.ucfirst($rsa['service_type']).' Assistance)';
 										echo '<li class="list-group-item"><a href="'.$link.'">'.$display.'</a></li>';
 									}
