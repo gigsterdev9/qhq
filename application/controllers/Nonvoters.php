@@ -141,7 +141,6 @@ class Nonvoters extends CI_Controller {
 				//retrieve audit trail
 				$data['tracker'] = $this->nonvoters_model->show_activities($id);
                 
-				
 				$this->load->view('templates/header', $data);
 				$this->load->view('nonvoters/view', $data);
 				$this->load->view('templates/footer');

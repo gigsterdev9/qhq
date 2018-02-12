@@ -146,7 +146,6 @@ class Rvoters extends CI_Controller {
 				//retrieve audit trail
 				$data['tracker'] = $this->rvoters_model->show_activities($id);
                 
-				echo '<pre>'; print_r($data); echo '</pre>';
 				$this->load->view('templates/header', $data);
 				$this->load->view('rvoters/view', $data);
 				$this->load->view('templates/footer');
