@@ -93,11 +93,11 @@
 		<div class="service-history-details text-left">
 			<h3>AVAILMENT HISTORY</h3>
 			<div class="table-responsive show-records" >
-			<?php if (!empty($services)) {  ?>
+			<?php if (!empty($services) && (isset($services['service_id']))) {  ?>
 			<div class="text-right"><a href="<?php echo base_url('services/add/'); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
 			<?php } ?>
 			<h4>Social Services <small> [ <a href="<?php echo base_url('services/add') ?>">New Entry</a> ]</small></h4>	
-			<?php if (!empty($services)) {  ?>
+			<?php if (!empty($services) && (isset($services['service_id']))) {  //print_r($services); ?> 
 			<table class="table table-striped">
 				<thead>
 					<tr>
@@ -151,7 +151,12 @@
 					?>
 				</tbody>
 			</table>
-			<?php } ?>
+			<?php 
+			} 
+			else{
+				echo 'No service availment on record.';
+			}
+			?>
 
 			<div class="col-sm-12 buffer">&nbsp;</div>
 			<div class="col-sm-12 buffer">&nbsp;</div>
@@ -196,7 +201,12 @@
 					?>
 				</tbody>
 			</table>
-			<?php } ?>
+			<?php 
+			} 
+			else{
+				echo 'No applications or grants on record.';
+			}
+			?>
 			<!--
 			<h4>Livelihood</h4>	
 			<table class="table table-striped">
