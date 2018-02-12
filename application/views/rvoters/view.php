@@ -94,9 +94,9 @@
 			<h3>AVAILMENT HISTORY</h3>
 			<div class="table-responsive show-records" >
 			<?php if (isset($services[0]['service_id'])) {  ?>
-			<div class="text-right"><a href="<?php echo base_url('services/add/'); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
+			<div class="text-right"><a href="<?php echo base_url('services/add/'.$services[0]['ben_id']); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
 			<?php } ?>
-			<h4>Social Services <small> [ <a href="<?php echo base_url('services/add') ?>">New Entry</a> ]</small></h4>	
+			<h4>Social Services <small> [ <a href="<?php echo base_url('services/add/'.$services[0]['ben_id']) ?>">New Entry</a> ]</small></h4>	
 			<?php if (isset($services[0]['service_id'])) {  //print_r($services); ?> 
 			<table class="table table-striped">
 				<thead>
