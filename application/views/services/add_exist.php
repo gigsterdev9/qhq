@@ -15,22 +15,22 @@
 		?>
 			<div class="alert alert-success">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<?php echo $alert_success ?> <a href="<?php echo base_url('services/view/'.$s_id) ?>">Return to Scholarship details.</a>
+				<?php echo $alert_success ?> <a href="<?php echo base_url('beneficiaries/view/'.$ben_id) ?>">Return to service details.</a>
 			</div>
 		<?php
 		}
 
 			//begin main add scholarship form
 			$attributes = array('class' => 'form-horizontal', 'role' => 'form', 'id' => 'form-new-scholarship');
-			echo form_open('services/add_term', $attributes); 
+			echo form_open('services/add_exist', $attributes); 
 		?>
 				<!-- begin: hidden div -->
 				<div class="with-match" id="with-match">
 					
 					<div class="form-group">
-						<label class="control-label col-sm-2" for="dob">Request date<span class="text-info">*</span></label>
+						<label class="control-label col-sm-2" for="req_date">Request date<span class="text-info">*</span></label>
 						<div class="col-sm-10">
-							<input type='text' class="form-control" name="dob" id='datetimepicker1' value="<?php echo set_value('dob'); ?>" />
+							<input type='text' class="form-control" name="req_date" id='datetimepicker1' value="<?php echo set_value('req_date'); ?>" />
 							<script type="text/javascript">
 								$(function () {
 									$('#datetimepicker1').datetimepicker({
@@ -43,7 +43,8 @@
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="recipient_fullname">Recipient<span class="text-info">*</span></label>
 						<div class="col-sm-10">	
-							<input type="text" class="form-control" name="recipient_fullname" id="recipient_fullname" value="<?php echo $recipient_fullname ?>" readonly />
+							<input type="text" class="form-control" name="recipient_fullname" id="recipient_fullname" 
+								value="<?php echo (isset($recipient_fullname)) ? $recipient_fullname : set_value('recipient_fullname') ?>" readonly />
 						</div>
 					</div>
 					<div class="form-group">
@@ -91,14 +92,14 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-2" for="s_status">Status</label>
+						<label class="control-label col-sm-2" for="s_status">Status<span class="text-info">*</span></label>
 						<div class="col-sm-10">	
 							<select name="s_status" class="form-control select2-single">
 								<option value="">Select</option>
-								<option value="pending" <?php if (set_value('service_type') == 'pending') echo 'selected'; ?> >Pending</option>
-								<option value="released" <?php if (set_value('service_type') == 'released') echo 'selected'; ?> >Released</option>
-								<option value="endorsed" <?php if (set_value('service_type') == 'endorsed') echo 'selected'; ?> >Endorsed</option>
-								<option value="cancelled" <?php if (set_value('service_type') == 'cancelled') echo 'selected'; ?> >Cancelled</option>
+								<option value="pending" <?php if (set_value('s_status') == 'pending') echo 'selected'; ?> >Pending</option>
+								<option value="released" <?php if (set_value('s_status') == 'released') echo 'selected'; ?> >Released</option>
+								<option value="endorsed" <?php if (set_value('s_status') == 'endorsed') echo 'selected'; ?> >Endorsed</option>
+								<option value="cancelled" <?php if (set_value('s_status') == 'cancelled') echo 'selected'; ?> >Cancelled</option>
 							</select>
 						</div>
 					</div>
@@ -126,7 +127,7 @@
 							<!-- audit trail temp values -->
 							<input type="hidden" id="altered" name="altered" value="" />
 							<!-- audit trail temp values -->
-							<input type="hidden" name="ben_id" value="<?php echo $ben_id ?>" />
+							<input type="hidden" name="ben_id" value="<?php echo (isset($ben_id)) ? $ben_id : set_value('ben_id') ?>" />
 							<input type="hidden" name="action" value="1" />
 							<button type="submit" class="btn btn-default">Submit</button>
 						</div>

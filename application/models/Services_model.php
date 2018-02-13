@@ -492,8 +492,7 @@ class services_model extends CI_Model {
 		$data = array(
 				'req_date' => $this->input->post('req_date'),
 				'ben_id' => $this->input->post('ben_id'),
-				'n_req_id' => $this->input->post('n_req_id'),
-				'r_req_id' => $this->input->post('r_req_id'),
+				'req_ben_id' => $this->input->post('req_ben_id'),
 				'relationship' => $this->input->post('relationship'),
 				'service_type' => $this->input->post('service_type'),
 				'particulars' => $this->input->post('particulars'),
@@ -511,9 +510,9 @@ class services_model extends CI_Model {
 		//add audit trail
 		$user = $this->ion_auth->user()->row();
 		$data1 = array(
-					'id' => $rvid,
+					'ben_id' => $rvid,
 					'user' => $user->username,
-					'activity' => 'created'
+					'activity' => 'service availment created'
 		);
 		$this->db->insert('audit_trail', $data1);
 		

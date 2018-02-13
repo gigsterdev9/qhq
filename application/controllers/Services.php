@@ -247,6 +247,7 @@ class Services extends CI_Controller {
 
 
 		public function add_exist($ben_id = FALSE) { 
+		
 			if (!$this->ion_auth->in_group('admin')) {
 				redirect('services'); 
 			}
@@ -254,10 +255,9 @@ class Services extends CI_Controller {
 			$this->load->helper('form');
 			$this->load->library('form_validation');
 
-			//$data['services'] = $this->services_model->get_services();
 			$data['title'] = 'New availment';
 			$data['ben_id'] = $ben_id;
-			
+		
 			//get all possible requestors from within the beneficiaries table 
 			$rv_req = $this->beneficiaries_model->get_rv_beneficiaries();
 			$nv_req = $this->beneficiaries_model->get_nv_beneficiaries();
@@ -268,46 +268,32 @@ class Services extends CI_Controller {
 				$data['requestors'][$ctr]['ben_id'] = $rv['ben_id'];
 				$ctr++;
 			}
-
 			foreach ($nv_req as $nv) {
 				$data['requestors'][$ctr]['fullname'] = $nv['fname'].' '.$nv['mname'].' '.$nv['lname'];
 				$data['requestors'][$ctr]['ben_id'] = $nv['ben_id'];
 				$ctr++;
 			}
-			//echo '<pre>'; print_r($data['requestors']); echo '</pre>'; die();
+
+				
+			$ben = $this->beneficiaries_model->get_beneficiary_by_id($ben_id);
 			
+			if (isset($ben['nv_id']) && $ben['nv_id'] != '') { //then entry must be a non voter
+				$nv_details = $this->nonvoters_model->get_nonvoter_by_id($ben['nv_id']); 
+				$data['recipient_fullname'] = $nv_details['fname'].' '.$nv_details['mname'].' '.$nv_details['lname'];
+			}
 
-				$ben = $this->beneficiaries_model->get_beneficiary_by_id($ben_id);
-				//echo '<pre>'; print_r($ben); echo '</pre>'; die();
-				if ($ben['id_no_comelec'] != '') { //then entry must be a registered voter
-					$rv_details = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
-					$data['recipient_fullname'] = $rv_details['fname'].' '.$rv_details['mname'].' '.$rv_details['lname'];
-				}
-				elseif ($ben['nv_id'] != ''){ 
-					//then entry must be a non voter
-					//but if both nv_id and comelec id are present, priority is given to data attached to comelec id
-					
-					if ($ben['id_no_comelec'] == '') {
-
-						$nv_details = $this->nonvoters_model->get_nonvoter_by_id($ben['nv_id']);
-						$data['recipient_fullname'] = $nv_details['fname'].' '.$nv_details['mname'].' '.$nv_details['lname'];
-					}
-					else{
-						
-						$rv_details = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
-						$data['recipient_fullname'] = $rv_details['fname'].' '.$rv_details['mname'].' '.$rv_details['lname'];
-					}
-
-				}
-			//echo '<pre>'; print_r($data); echo '</pre>'; //die();
-
+			if (isset($ben['id_no_comelec']) && $ben['id_no_comelec']!= '') { //then entry must be a registered voter
+				$rv_details = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
+				$data['recipient_fullname'] = $rv_details['fname'].' '.$rv_details['mname'].' '.$rv_details['lname'];
+			}
+			
 			//availment data validation
 			$this->form_validation->set_rules('req_date','Request date','required');
-			$this->form_validation->set_rules('ben_id','Recipient','required');
+			$this->form_validation->set_rules('ben_id','Recipient ID','required');
 			$this->form_validation->set_rules('req_ben_id','Requestor','required');
 			$this->form_validation->set_rules('service_type','Type','required');
 			$this->form_validation->set_rules('particulars','Particulars','required');
-			$this->form_validation->set_rules('request_status','Request status','required');
+			$this->form_validation->set_rules('s_status','Request status','required');
 
 			if ($this->form_validation->run() === FALSE) {
 				$this->load->view('templates/header', $data);
@@ -316,13 +302,12 @@ class Services extends CI_Controller {
 
 			}
 			else {
-				echo '<pre>'; print_r($_POST); echo '</pre>'; 
 				
 				//insert into services table
 				$this->services_model->set_service();
-				$data['s_id'] = $this->input->post('service_id');
 				$data['alert_success'] = 'New entry created.';
-				
+				$data['ben_id'] = $this->input->post('ben_id'); //for some reason $data['ben_id'] becomes null so need to reset the value
+
 				$this->load->view('templates/header', $data);
 				$this->load->view('services/add_exist');
 				$this->load->view('templates/footer');
