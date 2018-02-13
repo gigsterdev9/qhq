@@ -15,7 +15,7 @@ class services_model extends CI_Model {
 		$this->db->select('*');
 		$this->db->from('beneficiaries');
 		$this->db->where("nv_id != '' and trash = 0");
-		//$this->db->limit($limit, $start);
+		//$this->db->limit($limit, $start); //we leave the limits to the r_services query as the row count for rvoters prevents this from displaying correctly
 		$query1 = $this->db->get();
 		$result1 = $query1->result_array();
 
@@ -41,6 +41,11 @@ class services_model extends CI_Model {
 				foreach($ns as $n) {
 					//echo '<pre>'; print_r($n); echo '</pre>'; 
 					if ($n != '') {
+						$x = $this->beneficiaries_model->get_beneficiary_by_id($n['req_ben_id']);
+							$n['req_fname'] = $x['fname'];
+							$n['req_mname'] = $x['mname'];
+							$n['req_lname'] = $x['lname'];
+						/*
 						if ($n['n_req_id'] == '' || $n['n_req_id'] == NULL) {
 							$x = $this->rvoters_model->get_rvoter_by_comelec_id($n['r_req_id']);
 							$n['req_fname'] = $x['fname'];
@@ -55,6 +60,7 @@ class services_model extends CI_Model {
 						else{
 							return 0;
 						}
+						*/
 					}
 					$n_services[] = $n;
 				}
@@ -99,6 +105,12 @@ class services_model extends CI_Model {
 				foreach($rs as $r) {
 					//echo '<pre>'; print_r($n); echo '</pre>'; 
 					if ($r != '') {
+						
+						$x = $this->beneficiaries_model->get_beneficiary_by_id($r['req_ben_id']);
+							$r['req_fname'] = $x['fname'];
+							$r['req_mname'] = $x['mname'];
+							$r['req_lname'] = $x['lname'];
+						/*
 						if ($r['n_req_id'] == '' || $r['n_req_id'] == NULL) {
 							$x = $this->rvoters_model->get_rvoter_by_comelec_id($r['r_req_id']);
 							$r['req_fname'] = $x['fname'];
@@ -113,6 +125,7 @@ class services_model extends CI_Model {
 						else{
 							return 0;
 						}
+						*/
 					}
 					$r_services[] = $r;
 				}
@@ -243,12 +256,23 @@ class services_model extends CI_Model {
 		$this->db->where("b.id_no_comelec = '$comelec_id'");
 		$q = $this->db->get();
 				
-		$rs[] = $q->row_array();
+		$rs = $q->result_array();
 		
+		if (empty($rs)) {
+			return 0;
+		}
+
 		if (isset($rs)) {
+			
 			foreach($rs as $r) {
-				//echo '<pre>'; print_r($n); echo '</pre>'; 
+				//echo '<pre>'; print_r($r); echo '</pre>'; die();
 				if ($r != '') {
+					//$x = $this->beneficiaries_model->get_beneficiary_by_id($r['req_ben_id']);
+					//	$r['req_fname'] = $x['fname'];
+					//	$r['req_mname'] = $x['mname'];
+					//	$r['req_lname'] = $x['lname'];
+						
+					/*
 					if ($r['n_req_id'] == '' || $r['n_req_id'] == NULL) {
 						$x = $this->rvoters_model->get_rvoter_by_comelec_id($r['r_req_id']);
 						$r['req_fname'] = $x['fname'];
@@ -264,6 +288,7 @@ class services_model extends CI_Model {
 					else{
 						return 0;
 					}
+					*/
 				}
 				$r_services[] = $r;
 			}
@@ -286,12 +311,24 @@ class services_model extends CI_Model {
 		$this->db->where("b.nv_id = '$nv_id'");
 		$q = $this->db->get();
 				
-		$ns[] = $q->row_array();
+		$ns = $q->result_array();
 		
+		if (empty($ns)) {
+			return 0;
+		}
+		//echo '<pre>'; print_r($ns); echo '</pre>'; die();
+
 		if (isset($ns)) {
 			foreach($ns as $n) {
-				//echo '<pre>'; print_r($n); echo '</pre>'; 
+				
 				if ($n != '') {
+					
+					$x = $this->beneficiaries_model->get_beneficiary_by_id($n['req_ben_id']);
+							$n['req_fname'] = $x['fname'];
+							$n['req_mname'] = $x['mname'];
+							$n['req_lname'] = $x['lname'];
+					
+					/*
 					if ($n['n_req_id'] == '' || $n['n_req_id'] == NULL) {
 						$x = $this->rvoters_model->get_rvoter_by_comelec_id($n['r_req_id']);
 						$n['req_fname'] = $x['fname'];
@@ -307,6 +344,7 @@ class services_model extends CI_Model {
 					else{
 						return 0;
 					}
+					*/
 				}
 				$n_services[] = $n;
 			}
@@ -320,7 +358,6 @@ class services_model extends CI_Model {
 
 	}
 
-	
 	public function filter_beneficiaries($limit, $start, $filter_param1 = FALSE, $filter_param2 = FALSE, $filter_operand = FALSE) {
 		
 		if ($filter_param1 === FALSE)

@@ -89,7 +89,7 @@
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="school_id">School Name<span class="text-info">*</span></label>
 						<div class="col-sm-10">	
-							<select name="school_id" class="form-control">
+							<select name="school_id" class="form-control select2-single" style="width: 100%">
 							<?php foreach ($schools as $school): ?>
 								<option value="<?php echo $school['school_id'] ?>" <?php if (set_value('school_id') == $school['school_id'] ) echo 'selected' ?>><?php echo $school['school_name'] ?></option>
 							<?php endforeach; ?>
@@ -112,7 +112,7 @@
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="scholarship_status">Scholarship Status<span class="text-info">*</span></label>
 						<div class="col-sm-10">	
-							<select class="form-control" name="scholarship_status">
+							<select class="form-control select2-single" name="scholarship_status" style="width: 100%">
 								<option value="">Select</option>
 								<option value="Freshman" <?php if (set_value('scholarship_status') == 'Freshman') echo 'selected' ?> >Freshman</option>
 								<option value="Ongoing" <?php if (set_value('scholarship_status') == 'Ongoing') echo 'selected' ?> >Ongoing</option>
@@ -129,7 +129,7 @@
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="senior_citizen">Senior Citizen?</label>
 						<div class="col-sm-10">	
-							<select class="form-control" name="senior_citizen">
+							<select class="form-control select2-single" name="senior_citizen" style="width: 100%">
 								<option value="">Select</option>
 								<option value="Y" <?php if (set_value('senior_citizen') == 'Y') echo 'selected' ?> >Yes</option>
 								<option value="N" <?php if (set_value('senior_citizen') == 'N') echo 'selected' ?> >No</option>
@@ -139,7 +139,7 @@
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="parent_support_status">Solo Parent?</label>
 						<div class="col-sm-10">	
-							<select class="form-control" name="parent_support_status">
+							<select class="form-control select2-single" name="parent_support_status" style="width: 100%">
 								<option value="">Select</option>
 								<option value="Y" <?php if (set_value('parent_support_status') == 'Y') echo 'selected' ?> >Yes</option>
 								<option value="N" <?php if (set_value('parent_support_status') == 'N') echo 'selected' ?> >No</option>

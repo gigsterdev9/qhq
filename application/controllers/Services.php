@@ -5,11 +5,11 @@ class Services extends CI_Controller {
         public function __construct() {
 
 				parent::__construct();
+				$this->load->model('beneficiaries_model');
 				$this->load->model('services_model');
 				$this->load->model('nonvoters_model');
 				$this->load->model('rvoters_model');
-				$this->load->model('beneficiaries_model');
-                $this->load->helper('url');
+				$this->load->helper('url');
                 $this->load->helper('form');
 				$this->load->library('ion_auth');
 				$this->load->library('pagination');
@@ -257,12 +257,31 @@ class Services extends CI_Controller {
 			//$data['services'] = $this->services_model->get_services();
 			$data['title'] = 'New availment';
 			$data['ben_id'] = $ben_id;
+			
+			//get all possible requestors from within the beneficiaries table 
+			$rv_req = $this->beneficiaries_model->get_rv_beneficiaries();
+			$nv_req = $this->beneficiaries_model->get_nv_beneficiaries();
+
+			$ctr = 0;
+			foreach ($rv_req as $rv) {
+				$data['requestors'][$ctr]['fullname'] = $rv['fname'].' '.$rv['mname'].' '.$rv['lname'];
+				$data['requestors'][$ctr]['ben_id'] = $rv['ben_id'];
+				$ctr++;
+			}
+
+			foreach ($nv_req as $nv) {
+				$data['requestors'][$ctr]['fullname'] = $nv['fname'].' '.$nv['mname'].' '.$nv['lname'];
+				$data['requestors'][$ctr]['ben_id'] = $nv['ben_id'];
+				$ctr++;
+			}
+			//echo '<pre>'; print_r($data['requestors']); echo '</pre>'; die();
+			
 
 				$ben = $this->beneficiaries_model->get_beneficiary_by_id($ben_id);
 				//echo '<pre>'; print_r($ben); echo '</pre>'; die();
 				if ($ben['id_no_comelec'] != '') { //then entry must be a registered voter
 					$rv_details = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
-					$data['recipient_fullname'] = $rv_details['fname'].' '.$rv_details['lname'];
+					$data['recipient_fullname'] = $rv_details['fname'].' '.$rv_details['mname'].' '.$rv_details['lname'];
 				}
 				elseif ($ben['nv_id'] != ''){ 
 					//then entry must be a non voter
@@ -271,12 +290,12 @@ class Services extends CI_Controller {
 					if ($ben['id_no_comelec'] == '') {
 
 						$nv_details = $this->nonvoters_model->get_nonvoter_by_id($ben['nv_id']);
-						$data['recipient_fullname'] = $nv_details['fname'].' '.$nv_details['lname'];
+						$data['recipient_fullname'] = $nv_details['fname'].' '.$nv_details['mname'].' '.$nv_details['lname'];
 					}
 					else{
 						
 						$rv_details = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
-						$data['recipient_fullname'] = $rv_details['fname'].' '.$rv_details['lname'];
+						$data['recipient_fullname'] = $rv_details['fname'].' '.$rv_details['mname'].' '.$rv_details['lname'];
 					}
 
 				}
@@ -284,6 +303,8 @@ class Services extends CI_Controller {
 
 			//availment data validation
 			$this->form_validation->set_rules('req_date','Request date','required');
+			$this->form_validation->set_rules('ben_id','Recipient','required');
+			$this->form_validation->set_rules('req_ben_id','Requestor','required');
 			$this->form_validation->set_rules('service_type','Type','required');
 			$this->form_validation->set_rules('particulars','Particulars','required');
 			$this->form_validation->set_rules('request_status','Request status','required');
@@ -295,7 +316,7 @@ class Services extends CI_Controller {
 
 			}
 			else {
-				//echo '<pre>'; print_r($_POST); echo '</pre>'; 
+				echo '<pre>'; print_r($_POST); echo '</pre>'; 
 				
 				//insert into services table
 				$this->services_model->set_service();

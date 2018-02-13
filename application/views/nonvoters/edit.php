@@ -73,7 +73,7 @@
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="barangay">Barangay<span class="text-info">*</span></label>
 						<div class="col-sm-10">
-							<select class="form-control" name="barangay"> 
+							<select class="form-control select2-single" name="barangay"> 
 								<option value="">Select</option>
 								<option value="Concepcion Uno" <?php if (set_value('barangay', $nonvoter['barangay']) == 'Concepcion Uno') echo 'selected' ?> >Concepcion Uno</option>
 								<option value="Concepcion Dos" <?php if (set_value('barangay', $nonvoter['barangay']) == 'Concepcion Dos') echo 'selected' ?> >Concepcion Dos</option>
@@ -88,7 +88,7 @@
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="district">District<span class="text-info">*</span></label>
 						<div class="col-sm-10">
-							<select class="form-control" name="district">
+							<select class="form-control select2-single" name="district">
 								<option value="">Select</option>
 								<option value="1" <?php if (set_value('district', $nonvoter['district']) == '1') echo 'selected' ?> >1</option>
 								<option value="2" <?php if (set_value('district', $nonvoter['district']) == '2') echo 'selected' ?> >2</option>
@@ -98,7 +98,7 @@
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="sex">Sex<span class="text-info">*</span></label>
 						<div class="col-sm-10">
-							<select class="form-control" name="sex">
+							<select class="form-control select2-single" name="sex">
 								<option value="">Select</option>
 								<option value="M" <?php if (set_value('sex', $nonvoter['sex']) == 'M') echo 'selected' ?> >Male</option>
 								<option value="F" <?php if (set_value('sex', $nonvoter['sex']) == 'F') echo 'selected' ?> >Female</option>
@@ -138,7 +138,7 @@
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="status">Status<span class="text-info">*</span></label>
 						<div class="col-sm-10">
-							<select class="form-control" name="nv_status">
+							<select class="form-control select2-single" name="nv_status">
 								<option value="">Select</option>
 								<option value="1" <?php if (set_value('status', $nonvoter['nv_status']) == '1') echo 'selected' ?> >Active</option>
 								<option value="0" <?php if (set_value('status', $nonvoter['nv_status']) == '0') echo 'selected' ?> >Inactive</option>

@@ -48,8 +48,16 @@ class beneficiaries_model extends CI_Model {
 		$this->db->from('beneficiaries');
 		$this->db->where("ben_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
 		$query = $this->db->get();		
+		$r =  $query->row_array();
 
-		return $query->row_array();
+		if (!empty($r['id_no_comelec']))  { //if not empty, then a registered voter
+			$ben = $this->rvoters_model->get_rvoter_by_comelec_id($r['id_no_comelec']);
+		}
+		else{
+			$ben = $this->nonvoters_model->get_nonvoter_by_id($r['nv_id']);
+		}
+
+		return $ben;
 	}
 	
 	

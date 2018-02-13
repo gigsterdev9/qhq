@@ -7,6 +7,7 @@ class Nonvoters extends CI_Controller {
                 parent::__construct();
 				$this->load->model('nonvoters_model');
 				$this->load->model('scholarships_model');
+				$this->load->model('beneficiaries_model');
 				$this->load->model('services_model');
                 $this->load->helper('url');
                 $this->load->helper('form');

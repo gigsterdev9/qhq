@@ -41,7 +41,10 @@
 				});
 
 				//initialize enhanced select dropdown fields
-				$('.select2-single').select2();
+				$('.select2-single').select2({
+					placeholder: 'Select an option'
+				});
+
 
 			});
 		</script>

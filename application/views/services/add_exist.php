@@ -15,18 +15,31 @@
 		?>
 			<div class="alert alert-success">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<?php echo $alert_success ?> <a href="<?php echo base_url('scholarships/view/'.$s_id) ?>">Return to Scholarship details.</a>
+				<?php echo $alert_success ?> <a href="<?php echo base_url('services/view/'.$s_id) ?>">Return to Scholarship details.</a>
 			</div>
 		<?php
 		}
 
 			//begin main add scholarship form
 			$attributes = array('class' => 'form-horizontal', 'role' => 'form', 'id' => 'form-new-scholarship');
-			echo form_open('scholarships/add_term', $attributes); 
+			echo form_open('services/add_term', $attributes); 
 		?>
 				<!-- begin: hidden div -->
 				<div class="with-match" id="with-match">
-						
+					
+					<div class="form-group">
+						<label class="control-label col-sm-2" for="dob">Request date<span class="text-info">*</span></label>
+						<div class="col-sm-10">
+							<input type='text' class="form-control" name="dob" id='datetimepicker1' value="<?php echo set_value('dob'); ?>" />
+							<script type="text/javascript">
+								$(function () {
+									$('#datetimepicker1').datetimepicker({
+										format: 'YYYY-MM-DD',
+									});
+								});
+							</script>
+						</div>
+					</div>
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="recipient_fullname">Recipient<span class="text-info">*</span></label>
 						<div class="col-sm-10">	
@@ -36,13 +49,20 @@
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="req_id">Requested by<span class="text-info">*</span></label>
 						<div class="col-sm-10">	
-							<input type="text" class="form-control" name="req_id" value="<?php echo set_value('req_id'); ?>" />
+							<select name="req_ben_id" class="form-control select2-single">
+								<option value="">Select</option>
+								<?php
+								foreach ($requestors as $r) {
+									echo '<option value="'.$r['ben_id'].'">'.$r['fullname'].'</option>';
+								}
+								?>
+							</select>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="relationship">Relationship<span class="text-info">*</span></label>
 						<div class="col-sm-10">	
-							<input type="text" class="form-control" name="relationship" value="<?php echo set_value('relationship'); ?>" />
+							<input type="text" class="form-control" name="relationship" value="<?php echo set_value('relationship'); ?>" placeholder="e.g. self, mother, uncle, guardian"/>
 						</div>
 					</div>
 					<div class="form-group">
@@ -95,7 +115,7 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-2" for="s_remarks">Remarks<span class="text-info">*</span></label>
+						<label class="control-label col-sm-2" for="s_remarks">Remarks</label>
 						<div class="col-sm-10">	
 							<input type="text" class="form-control" name="s_remarks" value="<?php echo set_value('s_remarks'); ?>" />
 						</div>
@@ -120,11 +140,7 @@
 </div>
 
 <script type="text/javascript">
-//move this to data.js
-
-// Ajax post
 $(document).ready(function() {
-
 	
 
 });

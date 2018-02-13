@@ -128,13 +128,7 @@
 							<td><?php echo $service['amount']; ?></td>
 							<td>
 								<?php 
-									if (empty($service['n_req_id'])) {
-										$req_link = base_url('rvoters/view/'.$service['req_id']);
-
-									}
-									else { 
-										$req_link = base_url('nonvoters/view/'.$service['nv_id']);
-									}
+									$req_link = base_url('beneficiaries/view/'.$service['req_ben_id']);
 									echo '<a href="'.$req_link.'">';
 									echo $service['req_fname'].' '.$service['req_lname']; //echo $service['r_req_id'] . $service['n_req_id'] ; 
 									echo '</a>';
@@ -202,13 +196,7 @@
 							<td><?php echo $service['amount']; ?></td>
 							<td>
 								<?php 
-									if (empty($service['n_req_id'])) {
-										$req_link = base_url('rvoters/view/'.$service['req_id']);
-
-									}
-									else { 
-										$req_link = base_url('nonvoters/view/'.$service['n_req_id']);
-									}
+									$req_link = base_url('beneficiaries/view/'.$service['req_ben_id']);
 									echo '<a href="'.$req_link.'">';
 									echo $service['req_fname'].' '.$service['req_lname']; //echo $service['r_req_id'] . $service['n_req_id'] ; 
 									echo '</a>';
