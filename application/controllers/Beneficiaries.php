@@ -135,6 +135,27 @@ class Beneficiaries extends CI_Controller {
         public function view($id = NULL) {
 		//essentially classifies a beneficiary as either a registered voter or a non-voter and loads the appropriate viewing pages 
 
+				//call to convert registered voter to beneficiary
+				if ($this->input->POST('convert') == TRUE) {
+					
+					$id_no_comelec = $this->input->POST('id_no_comelec');
+					//check if rv_id is already in ben table
+					$check = $this->beneficiaries_model->get_ben_by_comid($id_no_comelec);
+					//echo '<pre>'; print_r($check); echo '</pre>'; 
+					
+					if (empty($check) && $check['ben_id'] == '') {
+						//if does not exist, proceed to create a new ben entry
+						$new_ben_id = $this->beneficiaries_model->set_beneficiary();
+						//then redirect to ben view
+						redirect('beneficiaries/view/'.$new_ben_id);
+					}
+					else{
+						//if already exists, redirect to ben view	
+						redirect('beneficiaries/view/'.$check['ben_id']);
+					}
+				
+				}
+
 				$ben = $this->beneficiaries_model->get_beneficiary_by_id($id);
 				//echo '<pre>'; print_r($ben); echo '</pre>';
 				
@@ -144,10 +165,11 @@ class Beneficiaries extends CI_Controller {
 				else{
 
 					if (isset($ben['id_no_comelec'])) {
+						$data['ben_id'] = $id; //this is the display toggle for the button to convert rv to ben 
 						$data['rvoter'] = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
 						$data['services'] = $this->services_model->get_r_services_by_comelec_id($ben['id_no_comelec']);
 						$data['scholarships'] = $this->scholarships_model->get_r_scholarships_by_id($ben['id_no_comelec']);
-						$data['tracker'] = $this->rvoters_model->show_activities($data['rvoter']['id']);
+						$data['tracker'] = $this->rvoters_model->show_activities($ben['id_no_comelec']);
 					
 						$this->load->view('templates/header', $data);
 						$this->load->view('rvoters/view', $data);

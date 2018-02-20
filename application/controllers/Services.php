@@ -134,6 +134,22 @@ class Services extends CI_Controller {
 
 			$data['title'] = 'New service';
 
+			//get all possible requestors from within the beneficiaries table 
+			$rv_req = $this->beneficiaries_model->get_rv_beneficiaries();
+			$nv_req = $this->beneficiaries_model->get_nv_beneficiaries();
+
+			$ctr = 0;
+			foreach ($rv_req as $rv) {
+				$data['requestors'][$ctr]['fullname'] = $rv['fname'].' '.$rv['mname'].' '.$rv['lname'];
+				$data['requestors'][$ctr]['ben_id'] = $rv['ben_id'];
+				$ctr++;
+			}
+			foreach ($nv_req as $nv) {
+				$data['requestors'][$ctr]['fullname'] = $nv['fname'].' '.$nv['mname'].' '.$nv['lname'];
+				$data['requestors'][$ctr]['ben_id'] = $nv['ben_id'];
+				$ctr++;
+			}
+
 			//primary service data
 			$this->form_validation->set_rules('batch','Batch','required');
 			$this->form_validation->set_rules('school_id','School ID','required');

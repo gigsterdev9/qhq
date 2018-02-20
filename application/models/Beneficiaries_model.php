@@ -39,7 +39,7 @@ class beneficiaries_model extends CI_Model {
 	}
 
 
-	public function get_beneficiary_by_id($id = FALSE) {
+	public function get_beneficiary_by_id($id = FALSE) { //get by ben id
 		if ($id === FALSE) {
 			return 0; 
 		}
@@ -207,6 +207,8 @@ class beneficiaries_model extends CI_Model {
 	{
 		$this->load->helper('url');
 
+		//echo '<pre>'; print_r($this->input->post()); echo '</pre>'; die();
+
 		if ($this->input->post('optradio') != null) {
 			$new_id = explode('|', $this->input->post('optradio'));
 			switch ($new_id[0]) {
@@ -244,13 +246,16 @@ class beneficiaries_model extends CI_Model {
 		//add audit trail
 		$user = $this->ion_auth->user()->row();
 		$data1 = array(
+					'id_no_comelec' => $id_no_comelec,
+					'nv_id' => $nv_id,
 					'ben_id' => $ben_id,
 					'user' => $user->username,
-					'activity' => 'created'
+					'activity' => 'created',
+					'mod_details' => 'made beneficiary'
 		);
 		$this->db->insert('audit_trail', $data1);
 		
-		return;
+		return $ben_id;
 	}
 	
 }

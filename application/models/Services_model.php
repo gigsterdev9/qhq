@@ -157,6 +157,12 @@ class services_model extends CI_Model {
 				//echo '<pre>'; print_r($n); echo '</pre>'; 
 				if ($r != '') {
 					//get requestor details
+					$y = $this->beneficiaries_model->get_beneficiary_by_id($r['req_ben_id']);
+						$r['req_fname'] = $y['fname'];
+						$r['req_mname'] = $y['mname'];
+						$r['req_lname'] = $y['lname'];
+						$r['req_id'] = $y['id'];
+					/*
 					if ($r['n_req_id'] == '' || $r['n_req_id'] == NULL) {
 						$x = $this->rvoters_model->get_rvoter_by_comelec_id($r['r_req_id']);
 						$r['req_fname'] = $x['fname'];
@@ -173,6 +179,7 @@ class services_model extends CI_Model {
 					else{
 						return 0;
 					}
+					*/
 				}
 				$r_services[] = $r;
 			}
@@ -202,7 +209,12 @@ class services_model extends CI_Model {
 		if (isset($s)) {
 			if ($s != '') {
 					
+					//echo '<pre>'; print_r($s); echo '</pre>';
 					//get beneficiary details
+					$x = $this->beneficiaries_model->get_beneficiary_by_id($s['ben_id']);
+					$s = array_merge($s, $x);
+
+					/*
 					if ($s['nv_id'] == '' || $s['nv_id'] == NULL) {
 						$x = $this->rvoters_model->get_rvoter_by_comelec_id($s['id_no_comelec']);
 						//$s['fname'] = $x['fname'];
@@ -220,8 +232,15 @@ class services_model extends CI_Model {
 					else{
 						return 0;
 					}
+					*/
 
 					//get requestor details
+					$y = $this->beneficiaries_model->get_beneficiary_by_id($s['req_ben_id']);
+						$s['req_fname'] = $y['fname'];
+						$s['req_mname'] = $y['mname'];
+						$s['req_lname'] = $y['lname'];
+						$s['req_id'] = $y['id'];
+					/*
 					if ($s['n_req_id'] == '' || $s['n_req_id'] == NULL) {
 						$y = $this->rvoters_model->get_rvoter_by_comelec_id($s['r_req_id']);
 						$s['req_fname'] = $y['fname'];
@@ -236,6 +255,7 @@ class services_model extends CI_Model {
 					else{
 						return 0;
 					}
+					*/
 			}
 			
 			return $s; 

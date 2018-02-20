@@ -278,11 +278,11 @@ class rvoters_model extends CI_Model {
 		return;
 	}
 
-	public function show_activities($rvoter_id) {
+	public function show_activities($id_no_comelec) {
 		$this->db->select('*');
 		$this->db->from('audit_trail');
 		$this->db->order_by('timestamp', 'desc');
-		$this->db->where("rvoter_id = '$rvoter_id' and activity = 'modified'");
+		$this->db->where("id_no_comelec = '$id_no_comelec' and activity = 'modified'");
 		$this->db->limit(5);
 		$query = $this->db->get();		
 		
@@ -290,7 +290,7 @@ class rvoters_model extends CI_Model {
 		
 		$this->db->select('*');
 		$this->db->from('audit_trail');
-		$this->db->where("rvoter_id = '$rvoter_id' and activity = 'created'");
+		$this->db->where("id_no_comelec = '$id_no_comelec' and activity = 'created'");
 		$query = $this->db->get();		
 		
 		$tracker['created'] = $query->row_array();	

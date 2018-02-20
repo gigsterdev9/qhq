@@ -7,6 +7,7 @@ class Rvoters extends CI_Controller {
                 parent::__construct();
 				$this->load->model('rvoters_model');
 				$this->load->model('scholarships_model');
+				$this->load->model('beneficiaries_model');
 				$this->load->model('services_model');
                 $this->load->helper('url');
                 $this->load->helper('form');
@@ -129,31 +130,40 @@ class Rvoters extends CI_Controller {
         }
 
         public function view($id = NULL) {
-
+				
 				//retrieve primary data
 				$data['rvoter'] = $this->rvoters_model->get_rvoter_by_id($id);
 				$id = $data['rvoter']['id'];
-				$comelec_id = $data['rvoter']['id_no_comelec'];
+				$id_no_comelec = $data['rvoter']['id_no_comelec'];
 
 				if (empty($data['rvoter'])) {
 				    show_404();
 				}
 
+				//check if already tagged as beneficiary 
+				$check = $this->beneficiaries_model->get_ben_by_comid($id_no_comelec);
+				if (!empty($check)) {
+					$data['ben_id'] = $check['ben_id'];
+				}
+				else{
+					$data['ben_id'] = '';
+				}
 				//retrieve scholarship related data
-				$data['scholarships'] = $this->scholarships_model->get_r_scholarships_by_id($comelec_id);
+				$data['scholarships'] = $this->scholarships_model->get_r_scholarships_by_id($id_no_comelec);
+
 				//retrieve services related data
-				$data['services'] = $this->services_model->get_r_services_by_comelec_id($comelec_id);
+				$data['services'] = $this->services_model->get_r_services_by_comelec_id($id_no_comelec);
+				
 				//retrieve audit trail
-				$data['tracker'] = $this->rvoters_model->show_activities($id);
+				$data['tracker'] = $this->rvoters_model->show_activities($id_no_comelec);
                 
 				$this->load->view('templates/header', $data);
 				$this->load->view('rvoters/view', $data);
 				$this->load->view('templates/footer');
 				
         }
-        
-        
-        public function add() {
+		
+		public function add() {
 			if (!$this->ion_auth->in_group('admin')) {
 				redirect('rvoters');
 			}
@@ -269,7 +279,6 @@ class Rvoters extends CI_Controller {
 			}
 			
 		}
-		
 		
 		public function all_to_excel() {
         //export all data to Excel file

@@ -85,6 +85,24 @@
 					<div class="col-sm-3 control-label">Remarks</div>
 					<div class="col-sm-9 control-value"><?php echo $rvoter['remarks']; ?>&nbsp;</div>
 
+					<div class="col-sm-3 control-label">&nbsp;</div>
+					<div class="col-sm-9 control-value">
+						<?php 
+						//show conversion button if ben id is absent 
+						if ($ben_id == '' || $ben_id == NULL) {
+							$attributes = array('class' => 'form-horizontal', 'role' => 'form', 'id' => 'form-convert');
+							echo form_open('beneficiaries/view/'.$rvoter['id'], $attributes); 
+						?>
+							<input type="hidden" name="id_no_comelec" value="<?php echo $rvoter['id_no_comelec'] ?>" />
+							<input type="hidden" name="convert" value="true" />
+							<input class="form-control pull-right" type="submit" value="Make a beneficiary" style="width: 120px; font-size: .8em" />
+							</form>
+						<?php 
+						}
+
+						?>
+					</div>
+
 				</div>
 
 			</div>
@@ -96,7 +114,7 @@
 			<?php if (isset($services[0]['service_id'])) {  ?>
 			<div class="text-right"><a href="<?php echo base_url('services/add_exist/'.$services[0]['ben_id']); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
 			<?php } ?>
-			<h4>Social Services <small> [ <a href="<?php echo base_url('services/add_exist/'.$services[0]['ben_id']) ?>">New Entry</a> ]</small></h4>	
+			<h4>Social Services <small> [ <a href="<?php echo base_url('services/add_exist/'.$ben_id) ?>">New Entry</a> ]</small></h4>	
 			<?php if (isset($services[0]['service_id'])) {  //print_r($services); ?> 
 			<table class="table table-striped">
 				<thead>

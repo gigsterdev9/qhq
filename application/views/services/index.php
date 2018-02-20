@@ -120,7 +120,7 @@
 								</a>
 							</td>
 							<td>
-								<a href="<?php echo site_url('rvoters/view/'.$service['id']); ?>">
+								<a href="<?php echo site_url('beneficiaries/view/'.$service['ben_id']); ?>">
 									 <?php echo $fullname ?>
 								</a>
 							</td>
@@ -186,7 +186,7 @@
 								</a>
 							</td>
 							<td>
-								<a href="<?php echo site_url('nonvoters/view/'.$service['nv_id']); ?>">
+								<a href="<?php echo site_url('beneficiaries/view/'.$service['ben_id']); ?>">
 								 <?php echo $fullname ?>
 								</a>
 							</td>
