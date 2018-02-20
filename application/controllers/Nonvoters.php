@@ -6,6 +6,7 @@ class Nonvoters extends CI_Controller {
         {
                 parent::__construct();
 				$this->load->model('nonvoters_model');
+				$this->load->model('rvoters_model');
 				$this->load->model('scholarships_model');
 				$this->load->model('beneficiaries_model');
 				$this->load->model('services_model');
@@ -135,6 +136,14 @@ class Nonvoters extends CI_Controller {
 				    show_404();
 				}
 				
+				//check if already tagged as beneficiary 
+				$check = $this->beneficiaries_model->get_ben_by_nvid($nvid);
+				if (!empty($check)) {
+					$data['ben_id'] = $check['ben_id'];
+				}
+				else{
+					$data['ben_id'] = '';
+				}
 				//retrieve scholarship related data
 				$data['scholarships'] = $this->scholarships_model->get_n_scholarships_by_id($nvid);
 				//retrieve services related data
