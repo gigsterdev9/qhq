@@ -150,9 +150,9 @@
 			<div class="col-sm-12 buffer">&nbsp;</div>
 
 			<?php if (!empty($scholarships)) {  ?>
-			<div class="text-right"><a href="<?php echo base_url('scholarships/add/'); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
+			<div class="text-right"><a href="<?php echo base_url('scholarships/add/'.$ben_id); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
 			<?php } ?>
-			<h4>Scholarship <small>[ <a href="<?php echo base_url('scholarships/add') ?>">New Entry</a> ]</small></h4>
+			<h4>Scholarship <small>[ <a href="<?php echo base_url('scholarships/add/'.$ben_id) ?>">New Entry</a> ]</small></h4>
 			<?php if (!empty($scholarships)) { ?>
 			<table class="table table-striped">
 				<thead>

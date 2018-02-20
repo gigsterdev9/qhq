@@ -114,7 +114,15 @@
 			<?php if (isset($services[0]['service_id'])) {  ?>
 			<div class="text-right"><a href="<?php echo base_url('services/add_exist/'.$services[0]['ben_id']); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
 			<?php } ?>
-			<h4>Social Services <small> [ <a href="<?php echo base_url('services/add_exist/'.$ben_id) ?>">New Entry</a> ]</small></h4>	
+			<h4>Social Services 
+				<?php if ($ben_id == '' || $ben_id == NULL) {
+					echo '<small>(Tag this entry as a beneficiary to be able to add to record service availments.)</small>';
+				}
+				else{
+					echo '<small> [ <a href="'.base_url('services/add_exist/'.$ben_id).'">New Entry</a> ]</small>';
+				} 
+				?>
+			</h4>	
 			<?php if (isset($services[0]['service_id'])) {  //print_r($services); ?> 
 			<table class="table table-striped">
 				<thead>
@@ -177,9 +185,17 @@
 			<div class="col-sm-12 buffer">&nbsp;</div>
 
 			<?php if (!empty($scholarships)) {  ?>
-			<div class="text-right"><a href="<?php echo base_url('scholarships/add/'); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
+			<div class="text-right"><a href="<?php echo base_url('scholarships/add/'.$ben_id); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
 			<?php } ?>
-			<h4>Scholarship <small> [ <a href="<?php echo base_url('scholarships/add') ?>">New Entry</a> ]</small></h4> 
+			<h4>Scholarship 
+				<?php if ($ben_id == '' || $ben_id == NULL) {
+					echo '<small>(Tag this entry as a beneficiary to be able to add to record service availments.)</small>';
+				}
+				else{
+					echo '<small> [ <a href="'.base_url('scholarships/add/'.$ben_id).'">New Entry</a> ]</small>';
+				} 
+				?>
+			</h4> 
 			<?php if (!empty($scholarships)) { ?>
 			<table class="table table-striped">
 				<thead>
