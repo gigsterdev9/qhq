@@ -8,16 +8,22 @@
 	<p>&nbsp;</p>
 	<div class="container-fluid text-right">
 		<?php 
-			$attributes = array('class' => 'form-inline', 'role' => 'form');
+			$attributes = array('class' => 'form-inline', 'role' => 'form', 'method' => 'GET');
 			echo form_open('services/', $attributes); 
 		?>
-			<div class="form-group">
-				<label class="control-label" for="title">Search services</label> &nbsp; 
+			<div class="form-group" id="search_bar">
+				<label class="control-label" for="title">Search</label> &nbsp; 
 				<input type="input" class="form-control" name="search_param" />
 				<input type="submit" class="form-control" value="&raquo;" />
+				<br />
+				<span id="search_in">
+				Search in: 
+					<input type="checkbox" name="s_key[]" value="s_name" checked /> Name
+					<input type="checkbox" name="s_key[]" value="s_address" />Address
+				</span> 
 			</div>
 		<?php echo form_close();?>
-		<a href="services/advanced">Advanced Search &raquo;</a>
+		<!--<a href="services/advanced">Advanced Search &raquo;</a> -->
 	</div>
 	<div class="container-fluid">
 		<?php 
@@ -57,7 +63,7 @@
 	<h3>
 		<span class="glyphicon glyphicon-folder-open"></span>&nbsp; List of Service Availment
 	</h3>
-	<div class="container-fluid message"><?php echo $record_count ?> records found.
+	<div class="container-fluid message"><?php echo $total_result_count ?> records found.
 		<?php 
 			if (isset($filterval)) {
 				$filter = (is_array($filterval)) ? '<br />Filter parameters: '. ucfirst($filterval[0]).' / '.$filterval[1] : '' ; 
@@ -78,7 +84,7 @@
 				$url = 'services/all_to_excel';
 			}
 			
-			if ($record_count > 0) echo '<a href="'.$url.'" target="_blank">Export to Excel &raquo;</a>';	
+			if ($total_result_count > 0) echo '<a href="'.$url.'" target="_blank">Export to Excel &raquo;</a>';	
 		?>
 		</small>
 	</div>
@@ -86,7 +92,7 @@
 	<div class="panel panel-default">
 		<div class="table-responsive show-records">
 		
-			<?php if ($record_count > 0) { ?>	
+			<?php if ($total_result_count > 0) { ?>	
 			<div class="page-links"><?php echo $links; ?></div>
 			
 				<?php if (count($r_services) > 0) { 

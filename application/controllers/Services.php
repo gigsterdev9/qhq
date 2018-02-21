@@ -73,24 +73,34 @@ class Services extends CI_Controller {
 					$data['links'] = $this->pagination->create_links();
 					
 				}
-				elseif ($this->input->post('search_param') != NULL)
-				{
-					//$data['services'] = array(1, 2, 3);
-					$search_param = $this->input->post('search_param');
-					$data['services'] = $this->services_model->search_services($search_param);
-					$data['searchval'] = $search_param;
+				elseif ($this->input->get('search_param') != NULL) {
+
+					$search_param = $this->input->get('search_param');
+					$s_key = $this->input->get('s_key'); 
+
 				}
 				else
 				{
-					//Display all
+					//Display registered first, non-voters next
 					//implement pagination
 					$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-					$data['n_services'] = $this->services_model->get_n_services($config["per_page"], $page);
-					$data['r_services'] = $this->services_model->get_r_services($config["per_page"], $page); 
-					$data['record_count'] = $this->services_model->record_count();
-						$config['total_rows'] = $data['record_count'];
+					$n_s = $this->services_model->get_n_services($config["per_page"], $page);
+						foreach ($n_s as $s) {
+							if (is_array($s)) { //do not display 'result_count' 
+								$data['n_services'][] = $s;
+							}
+						}
+					$r_s = $this->services_model->get_r_services($config["per_page"], $page); 
+						foreach ($r_s as $s) {
+							if (is_array($s)) { //do not display 'result_count' 
+								$data['r_services'][] = $s;
+							}
+						}
+					$data['total_result_count'] = count($data['n_services']) + count($data['r_services']);
+						$config['total_rows'] = $data['total_result_count'];
 						$this->pagination->initialize($config);
 					$data['links'] = $this->pagination->create_links();
+
 				}
                 
                 $data['title'] = 'Service Beneficiaries';

@@ -171,6 +171,8 @@ class beneficiaries_model extends CI_Model {
 		$result_array = 0;
 		return $result_array;
 
+		/* the basic search functionality is embedded into the respective get_nv_beneficiaries and get_rv_beneficiaries methods*/
+
 	}
 	
 	
