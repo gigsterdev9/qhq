@@ -10,12 +10,18 @@ class beneficiaries_model extends CI_Model {
         return $this->db->count_all("beneficiaries");
     }
 
-	public function get_nv_beneficiaries($limit = 0, $start = 0) {
+	public function get_nv_beneficiaries($limit = 0, $start = 0, $where_clause = false) {
 		
 		$this->db->select("*");
 		$this->db->from('beneficiaries');
 		$this->db->join('non_voters', 'non_voters.nv_id = beneficiaries.nv_id');
-		$this->db->where('beneficiaries.trash = 0');
+
+		if ($where_clause === false) {
+			$this->db->where('beneficiaries.trash = 0');
+		}
+		else{
+			$this->db->where($where_clause); 
+		}
 		$this->db->order_by('non_voters.lname', 'ASC');
 		$this->db->limit($limit, $start);
 		$query = $this->db->get();
@@ -24,12 +30,18 @@ class beneficiaries_model extends CI_Model {
 
 	}
 
-	public function get_rv_beneficiaries($limit = 0, $start = 0) {
+	public function get_rv_beneficiaries($limit = 0, $start = 0, $where_clause = false) {
 		
 		$this->db->select("*");
 		$this->db->from('beneficiaries');
 		$this->db->join('rvoters', 'rvoters.id_no_comelec = beneficiaries.id_no_comelec');
-		$this->db->where('beneficiaries.trash = 0'); 
+		
+		if ($where_clause === false) {
+			$this->db->where('beneficiaries.trash = 0'); 
+		}
+		else{
+			$this->db->where($where_clause); 
+		}
 		$this->db->order_by('rvoters.lname', 'ASC');
 		$this->db->limit($limit, $start);
 		$query = $this->db->get();
@@ -120,10 +132,9 @@ class beneficiaries_model extends CI_Model {
 		
 	}
 	
-	public function search_beneficiaries($limit, $start, $search_param = FALSE, $s_key = FALSE)
-	{
-		if ($search_param === FALSE or $s_key === FALSE)
-		{
+	public function search_beneficiaries($limit, $start, $search_param = FALSE, $s_key = FALSE) {
+		/*
+		if ($search_param === FALSE or $s_key === FALSE) {
 			return 0;
 		}
 		
@@ -137,7 +148,7 @@ class beneficiaries_model extends CI_Model {
 			$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or address like '%$search_param%' and trash = 0";
 		}
 		else{
-			
+			$where_clause = '1';
 		}
 
 		$this->db->select('*');
@@ -155,16 +166,10 @@ class beneficiaries_model extends CI_Model {
 		
 		$result_array = $query->result_array();
 		$result_array['result_count'] = $result_count;
-
-		return $result_array;
-		/*
-		$this->db->select('*');
-		$this->db->from('beneficiaries');
-		$this->db->where("lname like '%$search_param%' or fname like '%$search_param%' and trash = 0");
-		$query = $this->db->get();		
-
-		return $query->result_array();
 		*/
+
+		$result_array = 0;
+		return $result_array;
 
 	}
 	

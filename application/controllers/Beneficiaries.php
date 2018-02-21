@@ -94,15 +94,34 @@ class Beneficiaries extends CI_Controller {
 				elseif ($this->input->get('search_param') != NULL) {
 					
 					$search_param = $this->input->get('search_param');
-					$search_key = $this->input->get('s_key'); 
+					$s_key = $this->input->get('s_key'); 
 
-					if (!empty($search_key)) {
+					if (!empty($s_key)) {
+
+						//sort the search key and values
+						if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
+							$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' and beneficiaries.trash = 0";
+						}
+						elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
+							$where_clause = "address like '%$search_param%' and beneficiaries.trash = 0";		
+						}
+						elseif (in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
+							$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or address like '%$search_param%' and  beneficiaries.trash = 0";
+						}
+						else{
+							$where_clause = '1';
+						}
+
 						$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-						$data['nonvoters'] = $this->nonvoters_model->search_rvoters($config["per_page"], $page, $search_param, $search_key);
-							$config['total_rows'] = $data['nonvoters']['result_count'];
+						//$data['nonvoters'] = $this->beneficiaries_model->search_beneficiaries($config["per_page"], $page, $search_param, $search_key);
+						$data['rvoters'] = $this->beneficiaries_model->get_rv_beneficiaries($config["per_page"], $page, $where_clause);
+						$data['nonvoters'] = $this->beneficiaries_model->get_nv_beneficiaries($config["per_page"], $page, $where_clause);
+
+							$config['total_rows'] = count($data['rvoters']) + count($data['nonvoters']);
 							$this->pagination->initialize($config);
 						$data['links'] = $this->pagination->create_links();
 						$data['searchval'] = $search_param;
+						$data['total_result_count'] = count($data['rvoters']) + count($data['nonvoters']);
 					}
 					else {
 						$data['nonvoters']['result_count'] = 0;

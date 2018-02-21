@@ -1,4 +1,3 @@
-<?php //echo '<pre>'; print_r($nonvoters); echo '</pre>'; ?>
 <div class="container">
 	<h2><span class="glyphicon glyphicon-folder-open"></span>&nbsp; <?php echo $title; ?></h2>
 	<p>&nbsp;</p>

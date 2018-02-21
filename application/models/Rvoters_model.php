@@ -115,8 +115,7 @@ class rvoters_model extends CI_Model {
 	
 	public function search_rvoters($limit, $start, $search_param = FALSE, $s_key = FALSE)
 	{
-		if ($search_param === FALSE or $s_key === FALSE)
-		{
+		if ($search_param === FALSE or $s_key === FALSE) {
 			return 0;
 		}
 		
@@ -130,7 +129,7 @@ class rvoters_model extends CI_Model {
 			$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or address like '%$search_param%' and trash = 0";
 		}
 		else{
-			
+			$where_clause = '1';
 		}
 
 		$this->db->select('*');
