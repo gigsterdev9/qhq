@@ -149,15 +149,7 @@ class rvoters_model extends CI_Model {
 		$result_array['result_count'] = $result_count;
 
 		return $result_array;
-		/*
-		$this->db->select('*');
-		$this->db->from('rvoters');
-		$this->db->where("lname like '%$search_param%' or fname like '%$search_param%' and trash = 0");
-		$query = $this->db->get();		
-
-		return $query->result_array();
-		*/
-
+		
 	}
 	
 	

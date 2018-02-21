@@ -12,7 +12,7 @@ h5, .panel-heading {font-size: 1.2em}
 .control-value {font-size: 1.1em; font-weight: bold; padding-bottom: 10px}
 .buffer {height: 30px}
 
-.message { font-weight: bold; text-align: center } 
+.message { font-weight: bold; text-align: center; margin-top: 20px; margin-bottom: 20px } 
 
 #footer-div {padding-bottom: 20px}
 

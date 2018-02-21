@@ -10,6 +10,70 @@ class services_model extends CI_Model {
         return $this->db->count_all("services");
     }
 
+	public function get_r_services($limit = 0, $start = 0) {
+		
+		$this->db->select('*');
+		$this->db->from('beneficiaries');
+		$this->db->where("id_no_comelec != '' and trash = 0");
+		$this->db->limit($limit, $start);
+		$query1 = $this->db->get();
+		$result1 = $query1->result_array();
+
+		if (is_array($result1)) {
+			foreach ($result1 as $r1) {
+				
+				$ben_id = $r1['ben_id'];
+				
+				$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
+				$this->db->from('services s');
+				$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
+				$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
+				$this->db->where("s.ben_id = '$ben_id'");
+				$this->db->order_by('r.lname', 'ASC');
+				$q = $this->db->get();
+				
+				$rs[] = $q->row_array();
+			}
+
+			if (isset($rs)) {
+				foreach($rs as $r) {
+					//echo '<pre>'; print_r($r); echo '</pre>'; 
+					if ($r != '') {
+						
+						$x = $this->beneficiaries_model->get_beneficiary_by_id($r['req_ben_id']);
+							$r['req_fname'] = $x['fname'];
+							$r['req_mname'] = $x['mname'];
+							$r['req_lname'] = $x['lname'];
+						/*
+						if ($r['n_req_id'] == '' || $r['n_req_id'] == NULL) {
+							$x = $this->rvoters_model->get_rvoter_by_comelec_id($r['r_req_id']);
+							$r['req_fname'] = $x['fname'];
+							$r['req_lname'] = $x['lname'];
+							$r['req_id'] = $x['id'];
+						} 
+						elseif($r['r_req_id'] == '' || $r['n_req_id'] == NULL) {
+							$y = $this->nonvoters_model->get_nonvoter_by_id($r['n_req_id']);
+							$r['req_fname'] = $y['fname'];
+							$r['req_lname'] = $y['lname'];
+						}
+						else{
+							return 0;
+						}
+						*/
+					}
+					$r_services[] = $r;
+				}
+
+				return $r_services; 
+			}
+			return 0;
+		}
+		else {
+			return 0;
+		}
+
+	}
+
 	public function get_n_services($limit = 0, $start = 0) {
 		
 		$this->db->select('*');
@@ -67,70 +131,6 @@ class services_model extends CI_Model {
 				
 				//return $ns; 
 				return $n_services; 
-			}
-			return 0;
-		}
-		else {
-			return 0;
-		}
-
-	}
-
-	public function get_r_services($limit = 0, $start = 0) {
-		
-		$this->db->select('*');
-		$this->db->from('beneficiaries');
-		$this->db->where("id_no_comelec != '' and trash = 0");
-		$this->db->limit($limit, $start);
-		$query1 = $this->db->get();
-		$result1 = $query1->result_array();
-
-		if (is_array($result1)) {
-			foreach ($result1 as $r1) {
-				
-				$ben_id = $r1['ben_id'];
-				
-				$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
-				$this->db->from('services s');
-				$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
-				$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
-				$this->db->where("s.ben_id = '$ben_id'");
-				$this->db->order_by('r.lname', 'ASC');
-				$q = $this->db->get();
-				
-				$rs[] = $q->row_array();
-			}
-
-			if (isset($rs)) {
-				foreach($rs as $r) {
-					//echo '<pre>'; print_r($n); echo '</pre>'; 
-					if ($r != '') {
-						
-						$x = $this->beneficiaries_model->get_beneficiary_by_id($r['req_ben_id']);
-							$r['req_fname'] = $x['fname'];
-							$r['req_mname'] = $x['mname'];
-							$r['req_lname'] = $x['lname'];
-						/*
-						if ($r['n_req_id'] == '' || $r['n_req_id'] == NULL) {
-							$x = $this->rvoters_model->get_rvoter_by_comelec_id($r['r_req_id']);
-							$r['req_fname'] = $x['fname'];
-							$r['req_lname'] = $x['lname'];
-							$r['req_id'] = $x['id'];
-						} 
-						elseif($r['r_req_id'] == '' || $r['n_req_id'] == NULL) {
-							$y = $this->nonvoters_model->get_nonvoter_by_id($r['n_req_id']);
-							$r['req_fname'] = $y['fname'];
-							$r['req_lname'] = $y['lname'];
-						}
-						else{
-							return 0;
-						}
-						*/
-					}
-					$r_services[] = $r;
-				}
-
-				return $r_services; 
 			}
 			return 0;
 		}
@@ -437,45 +437,100 @@ class services_model extends CI_Model {
 		
 	}
 	
-	public function search_service_availments($limit, $start, $search_param = FALSE, $s_key = FALSE) {
-		if ($search_param === FALSE or $s_key === FALSE)
-		{
+	public function search_r_services($limit, $start, $where_clause = FALSE) { 
+		if ($where_clause === FALSE) {
 			return 0;
 		}
 		
-		if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
-			$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' and trash = 0";
-		}
-		elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
-			$where_clause = "address like '%$search_param%' and trash = 0";		
-		}
-		elseif (in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
-			$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or address like '%$search_param%' and trash = 0";
-		}
-		else{
-			
-		}
-
-		$this->db->select('*');
-		$this->db->from('beneficiaries');
-		$this->db->where($where_clause);
-		$query = $this->db->get();
-		$result_count = $query->num_rows();
-		
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
-		$this->db->from('beneficiaries');
+		$this->db->from('rvoters r');
+		$this->db->join('beneficiaries b', 'r.id_no_comelec = b.id_no_comelec');
 		$this->db->where($where_clause);
 		$this->db->limit($limit, $start);
 		$this->db->order_by('lname', 'ASC');
 		$query = $this->db->get();		
+		$result1 = $query->result_array();
 		
-		$result_array = $query->result_array();
-		$result_array['result_count'] = $result_count;
+		foreach ($result1 as $r) {
+			$ben_id = $r['ben_id'];
+			$this->db->select('*');
+			$this->db->from('services');
+			$this->db->where("ben_id = '$ben_id'");
+			$this->db->limit(1);
+			$result2 = $this->db->get();
+			
+			if ($result2->num_rows() == 1) {
+				$rs[] = array_merge($r, $result2->row_array());
+			}
+		}
 
-		return $result_array;
-		
+		if (isset($rs)) {
+			
+			foreach($rs as $r) {
+				
+				if ($r != '') {
+	
+					$x = $this->beneficiaries_model->get_beneficiary_by_id($r['req_ben_id']);
+						$r['req_fname'] = $x['fname'];
+						$r['req_mname'] = $x['mname'];
+						$r['req_lname'] = $x['lname'];
+				}
+				$r_services[] = $r;
+			}
+			return $r_services; 
+		}
+		else{
+			return 0;
+		}
+
 	}
 	
+	public function search_n_services($limit, $start, $where_clause = FALSE) { 
+		if ($where_clause === FALSE) {
+			return 0;
+		}
+		
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('non_voters n');
+		$this->db->join('beneficiaries b', 'n.nv_id = b.nv_id');
+		$this->db->where($where_clause);
+		$this->db->limit($limit, $start);
+		$this->db->order_by('lname', 'ASC');
+		$query = $this->db->get();		
+		$result1 = $query->result_array();
+		
+		foreach ($result1 as $r) {
+			$ben_id = $r['ben_id'];
+			$this->db->select('*');
+			$this->db->from('services');
+			$this->db->where("ben_id = '$ben_id'");
+			$this->db->limit(1);
+			$result2 = $this->db->get();
+			
+			if ($result2->num_rows() == 1) {
+				$ns[] = array_merge($r, $result2->row_array());
+			}
+		}
+
+		if (isset($ns) > 0) {
+			
+			foreach($ns as $n) {
+				
+				if ($n != '') {
+					
+					$x = $this->beneficiaries_model->get_beneficiary_by_id($n['req_ben_id']);
+						$n['req_fname'] = $x['fname'];
+						$n['req_mname'] = $x['mname'];
+						$n['req_lname'] = $x['lname'];
+				}
+				$n_services[] = $n;
+			}
+			return $n_services; 
+		}
+		else{
+			return 0;
+		}
+	}
 	
 	public function get_recent_service_availments($count_limit = 5) {
 				

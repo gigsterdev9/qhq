@@ -69,6 +69,10 @@
 				$filter = (is_array($filterval)) ? '<br />Filter parameters: '. ucfirst($filterval[0]).' / '.$filterval[1] : '' ; 
 				echo $filter; 
 			}
+			if (isset($searchval)){
+				$search = '<br />Search parameters: '. ucfirst($searchval);
+				echo $search;
+			}
 		?>
 	</div>
 	<div class="container-fluid">
@@ -95,7 +99,7 @@
 			<?php if ($total_result_count > 0) { ?>	
 			<div class="page-links"><?php echo $links; ?></div>
 			
-				<?php if (count($r_services) > 0) { 
+				<?php if (count($r_services) > 0 && !empty($r_services)) { 
 							//echo '<pre>'; print_r($r_services); echo '</pre>';
 					?>
 					<div class="index-section-title"><h4>Registered Voters</h4></div>
@@ -157,10 +161,17 @@
 				<?php 
 					} 
 					else{
-						echo '<div class="message">Currently, there are no registered voters found in this page of the services list.</div>';
+
+						if (isset($searchval)) {
+							echo '<div class="message">No matches found on registered voters.</div>';
+						}
+						else{
+							echo '<div class="message">Currently, there are no registered voters found in this page of the services list.</div>';
+						}
+
 					}
 
-					if (count($n_services) > 0) {
+					if (count($n_services) > 0 && !empty($n_services)) {
 						//echo '<pre>'; print_r($n_services); echo '</pre>';
 				?>
 					
@@ -225,7 +236,13 @@
 				<?php 
 					}
 					else{
-						echo '<div class="message">Currently, there are no non-voters found in this page of the services list.</div>';
+
+						if (isset($searchval)) {
+							echo '<div class="message">No matches found on non-voters.</div>';
+						}
+						else{
+							echo '<div class="message">Currently, there are no non-voters found in this page of the services list.</div>';
+						}
 					}
 				?>
 			

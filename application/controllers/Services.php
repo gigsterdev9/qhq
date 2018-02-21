@@ -77,6 +77,41 @@ class Services extends CI_Controller {
 
 					$search_param = $this->input->get('search_param');
 					$s_key = $this->input->get('s_key'); 
+					
+					if (!empty($s_key)) {
+
+						//sort the search key and values
+						if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
+							$where_clause = "lname like '%$search_param%' or fname like '%$search_param%'";
+						}
+						elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
+							$where_clause = "address like '%$search_param%'";		
+						}
+						elseif (in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
+							$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or address like '%$search_param%'";
+						}
+						else{
+							$where_clause = '1';
+						}
+						
+						$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
+						//$data['nonvoters'] = $this->beneficiaries_model->search_beneficiaries($config["per_page"], $page, $search_param, $search_key);
+						$data['r_services'] = $this->services_model->search_r_services($config["per_page"], $page, $where_clause);
+						$data['n_services'] = $this->services_model->search_n_services($config["per_page"], $page, $where_clause);
+						
+						$r_count = (!empty($data['r_services'])) ? count($data['r_services']) : 0;
+						$n_count = (!empty($data['n_services'])) ? count($data['n_services']) : 0;
+
+							$config['total_rows'] = $r_count + $n_count;
+							$this->pagination->initialize($config);
+						$data['links'] = $this->pagination->create_links();
+						$data['searchval'] = $search_param;
+						$data['total_result_count'] = $r_count + $n_count;
+					}
+					else {
+						$data['nonvoters']['result_count'] = 0;
+						$data['links'] = '';
+					}
 
 				}
 				else
