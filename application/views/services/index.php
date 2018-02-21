@@ -166,7 +166,7 @@
 							echo '<div class="message">No matches found on registered voters.</div>';
 						}
 						else{
-							echo '<div class="message">Currently, there are no registered voters found in this page of the services list.</div>';
+							echo '<div class="message">&nbsp;</div>';
 						}
 
 					}
@@ -241,7 +241,7 @@
 							echo '<div class="message">No matches found on non-voters.</div>';
 						}
 						else{
-							echo '<div class="message">Currently, there are no non-voters found in this page of the services list.</div>';
+							echo '<div class="message">&nbsp;</div>';
 						}
 					}
 				?>

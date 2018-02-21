@@ -182,9 +182,11 @@ class Beneficiaries extends CI_Controller {
 				    show_404();
 				}
 				else{
+					
+					$data['ben_id'] = $id; //this is the display toggle for the button to convert rv to ben 
 
 					if (isset($ben['id_no_comelec'])) {
-						$data['ben_id'] = $id; //this is the display toggle for the button to convert rv to ben 
+						
 						$data['rvoter'] = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
 						$data['services'] = $this->services_model->get_r_services_by_comelec_id($ben['id_no_comelec']);
 						$data['scholarships'] = $this->scholarships_model->get_r_scholarships_by_id($ben['id_no_comelec']);

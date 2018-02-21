@@ -66,6 +66,11 @@
 				$filter = (is_array($filterval)) ? '<br />Filter parameters: '. ucfirst($filterval[0]).' / '.$filterval[1] .' '. $filterval[2] : '' ; 
 				echo $filter; 
 			}
+			if (isset($searchval)){
+				$search = '<br />Search parameters: '. ucfirst($searchval);
+				echo $search;
+			}
+
 		?>
 	</div> 
 	<div class="container-fluid">
@@ -93,7 +98,7 @@
 			<?php if ($total_result_count > 0) { ?>	
 			<div class="page-links"><?php echo $links; ?></div>
 			
-			<?php if (count($rvoters) > 0) { ?>
+			<?php if (count($rvoters) > 0 && !empty($rvoters)) { ?>
 				<div class="index-section-title"><h4>Registered Voters</h4></div>
 				<table class="table table-striped">
 					<thead>
@@ -104,11 +109,6 @@
 							<th width="10%">Barangay</th>
 							<th width="5%">District</th>
 							<th width="5%">Sex</th>
-							<!--
-							<th width="10%">Mobile Number</th>
-							<th width="10%">Email</th>
-							<th width="10%">Referee</th>
-							-->
 						</tr>
 					</thead>
 					<tbody>
@@ -144,11 +144,16 @@
 			<?php 
 				} 
 				else{
-					//echo '<div class="message">Currently, there are no registered voters found in this page of the Beneficiaries list.</div>';
-					echo '<div class="message">&nbsp;</div>';
+
+					if (isset($searchval)) {
+						echo '<div class="message">No matches found on registered voters.</div>';
+					}
+					else{
+						echo '<div class="message">&nbsp;</div>';
+					}
 				}
 
-				if (count($nonvoters) > 0) {
+				if (count($nonvoters) > 0 && !empty($nonvoters)) {
 			?>
 
 			<div class="index-section-title"><h4>Non Voters</h4></div>
@@ -200,8 +205,12 @@
 			<?php 
 				} 
 				else{
-					//echo '<div class="message">Currently, there are no non-voters found in this page of the Beneficiaries list.</div>';
-					echo '<div class="message">&nbsp;</div>';
+					if (isset($searchval)) {
+						echo '<div class="message">No matches found on non-voters.</div>';
+					}
+					else{
+						echo '<div class="message">&nbsp;</div>';
+					}
 				}
 			?>
 
