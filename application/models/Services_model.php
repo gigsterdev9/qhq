@@ -140,7 +140,7 @@ class services_model extends CI_Model {
 
 	}
 
-	public function get_services_by_id($ben_id = FALSE) { //retrieve all records related to one beneficiary id  //note: there is a closely and similarly named function 
+	public function get_services_by_id($ben_id = FALSE) { //retrieve ALL records related to one beneficiary id  //note: there is a closely and similarly named function 
 
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('services s');
@@ -150,11 +150,11 @@ class services_model extends CI_Model {
 		$this->db->order_by('r.lname', 'ASC');
 		$q = $this->db->get();
 				
-		$rs[] = $q->row_array();
-		
+		$rs = $q->result_array();
+
 		if (isset($rs)) {
 			foreach($rs as $r) {
-				//echo '<pre>'; print_r($n); echo '</pre>'; 
+				//echo '<pre>'; print_r($r); echo '</pre>'; 
 				if ($r != '') {
 					//get requestor details
 					$y = $this->beneficiaries_model->get_beneficiary_by_id($r['req_ben_id']);
@@ -193,7 +193,7 @@ class services_model extends CI_Model {
 
 	}
 
-	public function get_service_by_id($id = FALSE) { //retrieve service details by own service id //note: there is a closely and similarly named function 
+	public function get_service_by_id($id = FALSE) { //retrieve service details by its own service id //note: there is a closely and similarly named function 
 		if ($id === FALSE) {
 			return 0; 
 		}
