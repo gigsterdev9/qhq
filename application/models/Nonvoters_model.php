@@ -171,7 +171,7 @@ class nonvoters_model extends CI_Model {
 		
 	}
 
-	public function set_nonvoter() //new voter
+	public function set_nonvoter() //new entry
 	{
 		$this->load->helper('url');
 		
@@ -192,19 +192,24 @@ class nonvoters_model extends CI_Model {
 				'nv_status' => $this->input->post('status'),
 				'nv_remarks' => $this->input->post('remarks')
 		);
-		//insert new voter
+		//insert new entry
 		$this->db->insert('non_voters', $data);
-		
 		$nvid = $this->db->insert_id();
 		
+		//add to beneficiaries table
+		$data1 = array(
+					'nv_id' => $nvid
+					);
+		$this->db->insert('beneficiaries', $data1);
+
 		//add audit trail
 		$user = $this->ion_auth->user()->row();
-		$data1 = array(
+		$data2 = array(
 					'nv_id' => $nvid,
 					'user' => $user->username,
 					'activity' => 'created'
-		);
-		$this->db->insert('audit_trail', $data1);
+					);
+		$this->db->insert('audit_trail', $data2);
 		
 		return;
 	}
