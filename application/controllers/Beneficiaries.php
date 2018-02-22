@@ -43,8 +43,8 @@ class Beneficiaries extends CI_Controller {
 			$config['next_link'] = '&raquo;';
 			$config['reuse_query_string'] = TRUE; 
 			$config["num_links"] = 9;
-			
 
+			
 				if ($this->input->get('filter_by') != NULL) {
 					
 					$filter_by = $this->input->get('filter_by');
@@ -96,17 +96,39 @@ class Beneficiaries extends CI_Controller {
 					$search_param = $this->input->get('search_param');
 					$s_key = $this->input->get('s_key'); 
 
+					$params = explode(' ',$search_param);
+					
+
 					if (!empty($s_key)) {
+						//initialize var
+						$where_clause = '';
 
 						//sort the search key and values
 						if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
-							$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' and beneficiaries.trash = 0";
+							//$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' and beneficiaries.trash = 0";
+							foreach ($params as $p) {
+								$where_clause .= "lname like '$p%' or fname like '$p%' ";
+								if ($p != end($params)) $where_clause .= 'or ';
+							}
+							$where_clause .= 'and beneficiaries.trash = 0';
 						}
 						elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
 							$where_clause = "address like '%$search_param%' and beneficiaries.trash = 0";		
+							/*
+							foreach ($params as $p) {
+								$where_clause .= "address like '%$p%' ";
+								if ($p != end($params)) $where_clause .= 'or ';
+							}
+							$where_clause .= 'and beneficiaries.trash = 0';
+							*/
 						}
 						elseif (in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
-							$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or address like '%$search_param%' and  beneficiaries.trash = 0";
+							//$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or address like '%$search_param%' and  beneficiaries.trash = 0";
+							foreach ($params as $p) {
+								$where_clause .= "lname like '$p%' or fname like '$p%' or address like '%$p%' ";
+								if ($p != end($params)) $where_clause .= 'or ';
+							}
+							$where_clause .= 'and beneficiaries.trash = 0';
 						}
 						else{
 							$where_clause = '1';

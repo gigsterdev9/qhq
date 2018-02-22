@@ -96,35 +96,31 @@ class nonvoters_model extends CI_Model {
 		
 	}
 	
-	public function search_nonvoters($limit, $start, $search_param = FALSE, $s_key = FALSE)
-	{
-		if ($search_param === FALSE or $s_key === FALSE)
-		{
-			return 0;
-		}
+	public function search_nonvoters($limit, $start, $where_clause = false){
 		
-		if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
-			$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or mname like '%$search_param%' and trash = 0";
-		}
-		elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
-			$where_clause = "address like '%$search_param%' and trash = 0";		
-		}
-		elseif (in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
-			$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or address like '%$search_param%' and trash = 0";
-		}
-		else{
-			
-		}
-
+		//total possible results
 		$this->db->select('*');
 		$this->db->from('non_voters');
-		$this->db->where($where_clause);
+
+		if ($where_clause === false) {
+			$this->db->where('trash = 0');
+		}
+		else{
+			$this->db->where($where_clause);
+		}
 		$query = $this->db->get();
 		$result_count = $query->num_rows();
 		
+		//results bounded by limits
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('non_voters');
-		$this->db->where($where_clause);
+		
+		if ($where_clause === false) {
+			$this->db->where('trash = 0');
+		}
+		else{
+			$this->db->where($where_clause);
+		}
 		$this->db->limit($limit, $start);
 		$this->db->order_by('lname', 'ASC');
 		$query = $this->db->get();		
@@ -133,15 +129,7 @@ class nonvoters_model extends CI_Model {
 		$result_array['result_count'] = $result_count;
 
 		return $result_array;
-		/*
-		$this->db->select('*');
-		$this->db->from('non_voters');
-		$this->db->where("lname like '%$search_param%' or fname like '%$search_param%' and trash = 0");
-		$query = $this->db->get();		
-
-		return $query->result_array();
-		*/
-
+		
 	}
 	
 	

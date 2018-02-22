@@ -92,11 +92,46 @@ class Rvoters extends CI_Controller {
 				elseif ($this->input->get('search_param') != NULL) {
 					
 					$search_param = $this->input->get('search_param');
-					$search_key = $this->input->get('s_key'); 
+					$s_key = $this->input->get('s_key'); 
 
-					if (!empty($search_key)) {
+					$params = explode(' ',$search_param);
+
+					if (!empty($s_key)) {
+						
+						//initialize var
+						$where_clause = '';
+
+						//sort the search key and values
+						if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
+							foreach ($params as $p) {
+								$where_clause .= "lname like '$p%' or fname like '$p%' ";
+								if ($p != end($params)) $where_clause .= 'or ';
+							}
+							$where_clause .= 'and trash = 0';
+						}
+						elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
+							$where_clause = "address like '%$search_param%' and trash = 0";
+							/*
+							foreach ($params as $p) {
+								$where_clause .= "address like '%$p%' ";
+								if ($p != end($params)) $where_clause .= 'or ';
+							}
+							$where_clause .= 'and trash = 0';
+							*/
+						}
+						elseif (in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
+							foreach ($params as $p) {
+								$where_clause .= "lname like '$p%' or fname like '$p%' or address like '%$p%' ";
+								if ($p != end($params)) $where_clause .= 'or ';
+							}
+							$where_clause .= 'and trash = 0';
+						}
+						else{
+							$where_clause = '1';
+						}
+
 						$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-						$data['rvoters'] = $this->rvoters_model->search_rvoters($config["per_page"], $page, $search_param, $search_key);
+						$data['rvoters'] = $this->rvoters_model->search_rvoters($config["per_page"], $page, $where_clause);
 							$config['total_rows'] = $data['rvoters']['result_count'];
 							$this->pagination->initialize($config);
 						$data['links'] = $this->pagination->create_links();
