@@ -12,7 +12,7 @@ class scholarships_model extends CI_Model {
 	}
 	
 	/*
-	public function get_scholarships($limit = 0, $start = 0) { //list all scholarships for registered voters
+	public function get_scholarships($limit = 0, $start = 0) { //list all scholarships for registered voters -- this complex query sucked in performance
 		
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('scholarships s');
@@ -303,20 +303,105 @@ class scholarships_model extends CI_Model {
 
 	
 	
-	public function search_scholarships($search_param = FALSE)
-	{
-		if ($search_param === FALSE)
-		{
+	public function search_r_scholarships($limit, $start, $where_clause = FALSE) { 
+		if ($where_clause === FALSE) {
 			return 0;
 		}
 		
-		$this->db->select('*');
-		$this->db->from('scholarships');
-		$this->db->where("lname like '%$search_param%' or fname like '%$search_param%' and trash = 0");
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('rvoters r');
+		$this->db->join('beneficiaries b', 'r.id_no_comelec = b.id_no_comelec');
+		$this->db->where($where_clause);
+		$this->db->limit($limit, $start);
+		$this->db->order_by('lname', 'ASC');
 		$query = $this->db->get();		
-
-		return $query->result_array();
+		$result1 = $query->result_array();
 		
+		foreach ($result1 as $r) {
+			$ben_id = $r['ben_id'];
+			$this->db->select('*');
+			$this->db->from('scholarships s');
+			$this->db->join('schools', 's.school_id = schools.school_id');
+			$this->db->where("ben_id = '$ben_id'");
+			$this->db->limit(1);
+			$result2 = $this->db->get();
+			
+			if ($result2->num_rows() == 1) {
+				$rs[] = array_merge($r, $result2->row_array());
+			}
+		}
+
+		if ((isset($rs)) && (count($rs) > 0)) {
+			/*
+			foreach($rs as $r) {
+				//echo '<pre>'; print_r($r); echo '</pre>'; die();
+				if ($r != '') {
+	
+					$x = $this->beneficiaries_model->get_beneficiary_by_id($r['req_ben_id']);
+						$r['req_fname'] = $x['fname'];
+						$r['req_mname'] = $x['mname'];
+						$r['req_lname'] = $x['lname'];
+				}
+				$r_scholarships[] = $r;
+			}
+			return $r_scholarships; 
+			*/
+			return $rs;
+		}
+		else{
+			return 0;
+		}
+
+	}
+	
+	public function search_n_scholarships($limit, $start, $where_clause = FALSE) { 
+		if ($where_clause === FALSE) {
+			return 0;
+		}
+		
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('non_voters n');
+		$this->db->join('beneficiaries b', 'n.nv_id = b.nv_id');
+		$this->db->where($where_clause);
+		$this->db->limit($limit, $start);
+		$this->db->order_by('lname', 'ASC');
+		$query = $this->db->get();		
+		$result1 = $query->result_array();
+		
+		foreach ($result1 as $r) {
+			$ben_id = $r['ben_id'];
+			$this->db->select('*');
+			$this->db->from('scholarships s');
+			$this->db->join('schools', 's.school_id = schools.school_id');
+			$this->db->where("ben_id = '$ben_id'");
+			$this->db->limit(1);
+			$result2 = $this->db->get();
+			
+			if ($result2->num_rows() == 1) {
+				$ns[] = array_merge($r, $result2->row_array());
+			}
+		}
+
+		if ((isset($ns)) && (count($ns) > 0)) {
+			/*
+			foreach($ns as $n) {
+				
+				if ($n != '') {
+					
+					$x = $this->beneficiaries_model->get_beneficiary_by_id($n['req_ben_id']);
+						$n['req_fname'] = $x['fname'];
+						$n['req_mname'] = $x['mname'];
+						$n['req_lname'] = $x['lname'];
+				}
+				$n_scholarships[] = $n;
+			}
+			return $n_scholarships; 
+			*/
+			return $ns;
+		}
+		else{
+			return 0;
+		}
 	}
 	
 	

@@ -8,16 +8,22 @@
 	<p>&nbsp;</p>
 	<div class="container-fluid text-right">
 		<?php 
-			$attributes = array('class' => 'form-inline', 'role' => 'form');
+			$attributes = array('class' => 'form-inline', 'role' => 'form', 'method' => 'GET');
 			echo form_open('scholarships/', $attributes); 
 		?>
-			<div class="form-group">
+			<div class="form-group" id="search_bar">
 				<label class="control-label" for="title">Search</label> &nbsp; 
 				<input type="input" class="form-control" name="search_param" />
 				<input type="submit" class="form-control" value="&raquo;" />
+				<br />
+				<span id="search_in">
+				Search in: 
+					<input type="checkbox" name="s_key[]" value="s_name" checked /> Name
+					<input type="checkbox" name="s_key[]" value="s_address" />Address
+				</span> 
 			</div>
 		<?php echo form_close();?>
-		<a href="scholarships/advanced">Advanced Search &raquo;</a>
+		<!--<a href="services/advanced">Advanced Search &raquo;</a> -->
 	</div>
 	<div class="container-fluid">
 		<?php 
@@ -63,11 +69,15 @@
 	<h3>
 		<span class="glyphicon glyphicon-folder-open"></span>&nbsp; List of Scholars
 	</h3>
-	<div class="container-fluid message"><?php echo $record_count ?> records found.
+	<div class="container-fluid message"><?php echo $total_result_count ?> records found.
 		<?php 
 			if (isset($filterval)) {
 				$filter = (is_array($filterval)) ? '<br />Filter parameters: '. ucfirst($filterval[0]).' / '.$filterval[1] : '' ; 
 				echo $filter; 
+			}
+			if (isset($searchval)){
+				$search = '<br />Search parameters: '. ucfirst($searchval);
+				echo $search;
 			}
 		?>
 	</div>
@@ -84,7 +94,7 @@
 				$url = 'scholarships/all_to_excel';
 			}
 			
-			if ($record_count > 0) echo '<a href="'.$url.'" target="_blank">Export to Excel &raquo;</a>';	
+			if ($total_result_count > 0) echo '<a href="'.$url.'" target="_blank">Export to Excel &raquo;</a>';	
 		?>
 		</small>
 	</div>
@@ -92,10 +102,12 @@
 	<div class="panel panel-default">
 		<div class="table-responsive show-records">
 		
-			<?php if ($record_count > 0) { ?>	
+			<?php if ($total_result_count > 0) { ?>	
+
 			<div class="page-links"><?php echo $links; ?></div>
 			
-				<?php if (count($r_scholars) > 0 && $r_scholars != 0) { //echo '<pre>'; print_r($r_scholars); echo '</pre>'; die(); ?>
+				<?php if (count($r_scholars) > 0 && !empty($r_scholars)) { //echo '<pre>'; print_r($r_scholars); echo '</pre>'; die(); ?>
+
 					<div class="index-section-title"><h4>Registered Voters</h4></div>
 					<table class="table table-striped">
 					<thead>
@@ -141,10 +153,17 @@
 				<?php 
 					} 
 					else{
-						//echo '<div class="message">Currently, there are no registered voters found in this page of the Scholarships list.</div>';
+
+						if (isset($searchval)) {
+							echo '<div class="message">No matches found on registered voters.</div>';
+						}
+						else{
+							echo '<div class="message">&nbsp;</div>';
+						}
+
 					}
 
-					if (count($n_scholars && $n_scholars != 0) > 0) {
+					if (count($n_scholars) && !empty($n_scholars)) {
 				?>
 					
 					<div class="index-section-title"><h4>Non Voters</h4></div>
@@ -192,7 +211,13 @@
 				<?php 
 					}
 					else{
-						echo '<div class="message">Currently, there are no non-voters found in this page of the Scholarships list.</div>';
+						
+						if (isset($searchval)) {
+							echo '<div class="message">No matches found on non-voters.</div>';
+						}
+						else{
+							echo '<div class="message">&nbsp;</div>';
+						}
 					}
 				?>
 			

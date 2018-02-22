@@ -127,7 +127,7 @@
 					<tr>
 						<td>
 							<a href="<?php echo site_url('nonvoters/view/'.$rvoter['nv_id']); ?>">
-								<span class="glyphicon glyphicon-file"></span> <?php echo $rvoter['lname'].', '.$rvoter['fname']; ?>
+								<span class="glyphicon glyphicon-file"></span> <?php echo strtoupper($rvoter['lname'].', '.$rvoter['fname']) ?>
 							</a>
 						</td>
 						<td><?php echo $rvoter['dob']; ?></td>

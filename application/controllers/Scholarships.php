@@ -41,73 +41,106 @@ class Scholarships extends CI_Controller {
 
 			$data['schools'] = $this->scholarships_model->get_schools(); //display school names in filter dropdown
 
-				if ($this->input->post('filter_by') != NULL) {
+			if ($this->input->post('filter_by') != NULL) {
 
-					$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-					$filter_by = $this->input->post('filter_by');
-					switch ($filter_by) {
-						case 'brgy': 
-							$brgy = $this->input->post('filter_by_brgy');
-							$data['scholarships'] = $this->scholarships_model->filter_scholarships('barangay', $brgy, $config["per_page"], $page);
-							$data['record_count'] = $this->scholarships_model->filter_scholarships_num_rows('barangay', $brgy);
-							$data['filterval'] = array('barangay',$brgy); 
-							break;
-						case 'school': 
-							$school = $this->input->post('filter_by_school');
-							$data['scholarships'] = $this->scholarships_model->filter_scholarships('schools.school_id', $school, $config["per_page"], $page);
-							$data['record_count'] = $this->scholarships_model->filter_scholarships_num_rows('schools.school_id', $school);
-							$data['filterval'] = array('school ID',$school); 
-							break;
-						case 'district': 
-							$district = $this->input->post('filter_by_district');
-							$data['scholarships'] = $this->scholarships_model->filter_scholarships('district', $district, $config["per_page"], $page);
-							$data['record_count'] = $this->scholarships_model->filter_scholarships_num_rows('district', $district);
-							$data['filterval'] = array('district',$district); 
-							break;
-						case 'gender': 
-							$gender = $this->input->post('filter_by_gender');
-							$data['scholarships'] = $this->scholarships_model->filter_scholarships('sex', $gender, $config["per_page"], $page);
-							$data['record_count'] = $this->scholarships_model->filter_scholarships_num_rows('sex', $gender);
-							$data['filterval'] = array('gender',$gender); 
-							break;
-						default: 
-							break;
+				$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
+				$filter_by = $this->input->post('filter_by');
+				switch ($filter_by) {
+					case 'brgy': 
+						$brgy = $this->input->post('filter_by_brgy');
+						$data['scholarships'] = $this->scholarships_model->filter_scholarships('barangay', $brgy, $config["per_page"], $page);
+						$data['record_count'] = $this->scholarships_model->filter_scholarships_num_rows('barangay', $brgy);
+						$data['filterval'] = array('barangay',$brgy); 
+						break;
+					case 'school': 
+						$school = $this->input->post('filter_by_school');
+						$data['scholarships'] = $this->scholarships_model->filter_scholarships('schools.school_id', $school, $config["per_page"], $page);
+						$data['record_count'] = $this->scholarships_model->filter_scholarships_num_rows('schools.school_id', $school);
+						$data['filterval'] = array('school ID',$school); 
+						break;
+					case 'district': 
+						$district = $this->input->post('filter_by_district');
+						$data['scholarships'] = $this->scholarships_model->filter_scholarships('district', $district, $config["per_page"], $page);
+						$data['record_count'] = $this->scholarships_model->filter_scholarships_num_rows('district', $district);
+						$data['filterval'] = array('district',$district); 
+						break;
+					case 'gender': 
+						$gender = $this->input->post('filter_by_gender');
+						$data['scholarships'] = $this->scholarships_model->filter_scholarships('sex', $gender, $config["per_page"], $page);
+						$data['record_count'] = $this->scholarships_model->filter_scholarships_num_rows('sex', $gender);
+						$data['filterval'] = array('gender',$gender); 
+						break;
+					default: 
+						break;
+				}
+					
+				$config['total_rows'] = $data['record_count'];
+					$this->pagination->initialize($config);
+				$data['links'] = $this->pagination->create_links();
+					
+			}
+			elseif ($this->input->get('search_param') != NULL) { 
+					
+				$search_param = $this->input->get('search_param');
+				$s_key = $this->input->get('s_key'); 
 
+				if (!empty($s_key)) {
+
+				//sort the search key and values
+					if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
+						$where_clause = "lname like '%$search_param%' or fname like '%$search_param%'";
 					}
-					
-					$config['total_rows'] = $data['record_count'];
-						$this->pagination->initialize($config);
-					$data['links'] = $this->pagination->create_links();
-					
-				}
-				elseif ($this->input->post('search_param') != NULL)
-				{
-					//$data['scholarships'] = array(1, 2, 3);
-					$search_param = $this->input->post('search_param');
-					$data['scholarships'] = $this->scholarships_model->search_scholarships($search_param);
-					$data['searchval'] = $search_param;
-				}
-				else
-				{
-					//Display all
-					//implement pagination
+					elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
+						$where_clause = "address like '%$search_param%'";		
+					}
+					elseif (in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
+						$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or address like '%$search_param%'";
+					}
+					else{
+						$where_clause = '1';
+					}
+						
 					$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-					$data['n_scholars'] = $this->scholarships_model->get_n_scholarships($config["per_page"], $page);
-					$data['r_scholars'] = $this->scholarships_model->get_r_scholarships($config["per_page"], $page); 
-					$data['record_count'] = $this->scholarships_model->record_count();
-						$config['total_rows'] = $data['record_count'];
+					$data['r_scholars'] = $this->scholarships_model->search_r_scholarships($config["per_page"], $page, $where_clause);
+					$data['n_scholars'] = $this->scholarships_model->search_n_scholarships($config["per_page"], $page, $where_clause);
+						
+					$r_count = (!empty($data['r_scholars'])) ? count($data['r_scholars']) : 0;
+					$n_count = (!empty($data['n_scholars'])) ? count($data['n_scholars']) : 0;
+
+						$config['total_rows'] = $r_count + $n_count;
 						$this->pagination->initialize($config);
 					$data['links'] = $this->pagination->create_links();
+					$data['searchval'] = $search_param;
+					$data['total_result_count'] = $r_count + $n_count;
 				}
-                
-                $data['title'] = 'Scholarship Grantees';
-
-				$this->load->view('templates/header', $data);
-				$this->load->view('scholarships/index', $data);
-				$this->load->view('templates/footer');
+				else {
 				
-				$this->output->cache(1);
-				//$this->output->delete_cache();
+					$data['nonvoters']['result_count'] = 0;
+					$data['links'] = '';
+				}
+					
+			}
+			else{
+			
+				//Display all
+				//implement pagination
+				$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
+				$data['n_scholars'] = $this->scholarships_model->get_n_scholarships($config["per_page"], $page);
+				$data['r_scholars'] = $this->scholarships_model->get_r_scholarships($config["per_page"], $page); 
+				$data['total_result_count'] = $this->scholarships_model->record_count();
+					$config['total_rows'] = $data['total_result_count'];
+					$this->pagination->initialize($config);
+				$data['links'] = $this->pagination->create_links();
+			}
+                
+            $data['title'] = 'Scholarship Grantees';
+
+			$this->load->view('templates/header', $data);
+			$this->load->view('scholarships/index', $data);
+			$this->load->view('templates/footer');
+				
+			
+			$this->output->delete_cache();
 				
         }
 

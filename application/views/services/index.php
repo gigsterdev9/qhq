@@ -97,11 +97,11 @@
 		<div class="table-responsive show-records">
 		
 			<?php if ($total_result_count > 0) { ?>	
+
 			<div class="page-links"><?php echo $links; ?></div>
 			
-				<?php if (count($r_services) > 0 && !empty($r_services)) { 
-							//echo '<pre>'; print_r($r_services); echo '</pre>';
-					?>
+				<?php if (count($r_services) > 0 && !empty($r_services)) { //echo '<pre>'; print_r($r_services); echo '</pre>'; ?>
+				
 					<div class="index-section-title"><h4>Registered Voters</h4></div>
 					<table class="table table-striped">
 					<thead>
