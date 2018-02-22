@@ -93,8 +93,17 @@ class Rvoters extends CI_Controller {
 					
 					$search_param = $this->input->get('search_param');
 					$s_key = $this->input->get('s_key'); 
+					$s_fullname = FALSE;
 
-					$params = explode(' ',$search_param);
+					if (strpos($search_param, ',')) {
+						$params = explode(',', $search_param);
+						$s_lname = $params[0];
+						$s_fname = trim($params[1]);
+						$s_fullname = TRUE;
+					}
+					else{
+						$params = explode(' ',$search_param);
+					}
 
 					if (!empty($s_key)) {
 						
@@ -103,11 +112,16 @@ class Rvoters extends CI_Controller {
 
 						//sort the search key and values
 						if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
-							foreach ($params as $p) {
-								$where_clause .= "lname like '$p%' or fname like '$p%' ";
-								if ($p != end($params)) $where_clause .= 'or ';
+							if ($s_fullname == TRUE) {
+								$where_clause .= "lname like '$s_lname%' and fname like '%$s_fname%' ";
 							}
-							$where_clause .= 'and trash = 0';
+							else{
+								foreach ($params as $p) {
+									$where_clause .= "lname like '$p%' or fname like '$p%' ";
+									if ($p != end($params)) $where_clause .= 'or ';
+								}
+								$where_clause .= 'and trash = 0';
+							}
 						}
 						elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
 							$where_clause = "address like '%$search_param%' and trash = 0";
@@ -129,6 +143,7 @@ class Rvoters extends CI_Controller {
 						else{
 							$where_clause = '1';
 						}
+						//die($where_clause);
 
 						$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
 						$data['rvoters'] = $this->rvoters_model->search_rvoters($config["per_page"], $page, $where_clause);

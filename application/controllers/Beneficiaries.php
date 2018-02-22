@@ -95,9 +95,17 @@ class Beneficiaries extends CI_Controller {
 					
 					$search_param = $this->input->get('search_param');
 					$s_key = $this->input->get('s_key'); 
+					$s_fullname = FALSE;
 
-					$params = explode(' ',$search_param);
-					
+					if (strpos($search_param, ',')) {
+						$params = explode(',', $search_param);
+						$s_lname = $params[0];
+						$s_fname = trim($params[1]);
+						$s_fullname = TRUE;
+					}
+					else{
+						$params = explode(' ',$search_param);
+					}					
 
 					if (!empty($s_key)) {
 						//initialize var
@@ -106,11 +114,16 @@ class Beneficiaries extends CI_Controller {
 						//sort the search key and values
 						if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
 							//$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' and beneficiaries.trash = 0";
-							foreach ($params as $p) {
-								$where_clause .= "lname like '$p%' or fname like '$p%' ";
-								if ($p != end($params)) $where_clause .= 'or ';
+							if ($s_fullname == TRUE) {
+								$where_clause .= "lname like '$s_lname%' and fname like '%$s_fname%' ";
 							}
-							$where_clause .= 'and beneficiaries.trash = 0';
+							else{
+								foreach ($params as $p) {
+									$where_clause .= "lname like '$p%' or fname like '$p%' ";
+									if ($p != end($params)) $where_clause .= 'or ';
+								}
+								$where_clause .= 'and beneficiaries.trash = 0';
+							}
 						}
 						elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
 							$where_clause = "address like '%$search_param%' and beneficiaries.trash = 0";		

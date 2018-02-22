@@ -64,13 +64,12 @@
 		<?php 
 			if (isset($filterval)) {
 				$filter = (is_array($filterval)) ? '<br />Filter parameters: '. ucfirst($filterval[0]).' / '.$filterval[1] .' '. $filterval[2] : '' ; 
-				echo $filter; 
+				echo strtoupper($filter); 
 			}
 			if (isset($searchval)){
 				$search = '<br />Search parameters: '. ucfirst($searchval);
-				echo $search;
+				echo strtoupper($search);
 			}
-
 		?>
 	</div> 
 	<div class="container-fluid">
