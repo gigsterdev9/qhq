@@ -23,7 +23,7 @@ class Beneficiaries extends CI_Controller {
 				}
 
 				//debug
-				//$this->output->enable_profiler(TRUE);
+				$this->output->enable_profiler(TRUE);
 				
         }
 
@@ -48,48 +48,45 @@ class Beneficiaries extends CI_Controller {
 				if ($this->input->get('filter_by') != NULL) {
 					
 					$filter_by = $this->input->get('filter_by');
-					switch ($filter_by) 
-					{
+					switch ($filter_by) {
 						case 'brgy': 
 							$brgy = $this->input->get('filter_by_brgy');
+							$where_clause = "barangay = '$brgy'";
 							$data['filterval'] = array('barangay',$brgy,''); //the '' is to factor in the 3rd element introduced by the age filter
-							$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-							$data['nonvoters'] = $this->nonvoters_model->filter_rvoters($config["per_page"], $page, 'barangay',$brgy);
-								$config['total_rows'] = $data['nonvoters']['result_count'];
-								$this->pagination->initialize($config);
-							$data['links'] = $this->pagination->create_links();
 							break;
+
 						case 'district':
 							$district = $this->input->get('filter_by_district');
+							$where_clause = "district = '$district'";
 							$data['filterval'] = array('district',$district,''); //the '' is to factor in the 3rd element introduced by the age filter
-							$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-							$data['nonvoters'] = $this->nonvoters_model->filter_rvoters($config["per_page"], $page, 'district',$district);
-								$config['total_rows'] = $data['nonvoters']['result_count'];
-								$this->pagination->initialize($config);
-							$data['links'] = $this->pagination->create_links();
 							break;
+
 						case 'age':
 							$age_operand = $this->input->get('filter_by_age_operand');
 							$age_value = $this->input->get('filter_by_age_value');
+							$where_clause = "age $age_operand $age_value";
 
-							if ($age_operand == 'between' and stristr($age_value, 'and') == FALSE) {
-								$data['nonvoters']['result_count'] = 0;
-								$data['nonvoters']['result_count'] = 0;
-								$data['links'] = '';
-								break;
+							if ($age_operand === 'between' and (stristr($age_value, 'and') === FALSE)) {
+								//show_error('Invalid age value');
+								$where_clause = FALSE;
 							}
-
+							
 							$data['filterval'] = array('age',$age_operand, $age_value);
-							$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-							$data['nonvoters'] = $this->nonvoters_model->filter_rvoters($config["per_page"], $page, 'age',$age_value, $age_operand);
-								$config['total_rows'] = $data['nonvoters']['result_count'];
-								$this->pagination->initialize($config);
-							$data['links'] = $this->pagination->create_links();
 							break;
+
 						default: 
 							break;
 					}
+					$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
+
+					$data['rvoters'] = $this->beneficiaries_model->get_rv_beneficiaries($config["per_page"], $page, $where_clause);
+					$data['nonvoters'] = $this->beneficiaries_model->get_nv_beneficiaries($config["per_page"], $page, $where_clause);
+						$config['total_rows'] = count($data['rvoters']) + count($data['nonvoters']);
+						$this->pagination->initialize($config);
+					$data['links'] = $this->pagination->create_links();
+					$data['total_result_count'] = count($data['rvoters']) + count($data['nonvoters']);
 					
+
 				}
 				elseif ($this->input->get('search_param') != NULL) {
 					
