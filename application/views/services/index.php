@@ -36,7 +36,9 @@
 					<option value=""></option>
 					<option value="brgy">Barangay</option>
 					<option value="district">District</option>
-					<option value="gender">Gender</option>
+					<!--<option value="date_single">Single Date</option>
+					<option value="date_range">Date Range</option> -->
+					<!--<option value="gender">Gender</option>-->
 				</select>
 				<select name="filter_by_brgy" id="filter_by_brgy" class="form-control" style="display:none">
 					<option value="Concepcion Uno">Concepcion Uno</option>
@@ -51,10 +53,10 @@
 					<option value="1">1</option>
 					<option value="2">2</option>
 				</select>
-				<select name="filter_by_gender" id="filter_by_gender" class="form-control" style="display:none">
+				<!--<select name="filter_by_gender" id="filter_by_gender" class="form-control" style="display:none">
 					<option value="M">Male</option>
 					<option value="F">Female</option>
-				</select>
+				</select>-->
 				<input type="submit" class="form-control" value="&raquo;" />
 			</div>
 		<?php echo form_close();?>

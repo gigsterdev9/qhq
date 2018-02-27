@@ -23,7 +23,7 @@ class Beneficiaries extends CI_Controller {
 				}
 
 				//debug
-				$this->output->enable_profiler(TRUE);
+				//$this->output->enable_profiler(TRUE);
 				
         }
 

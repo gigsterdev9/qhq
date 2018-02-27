@@ -19,7 +19,8 @@ class Services extends CI_Controller {
 					redirect('auth/login');
 				}
 
-				//$this->output->enable_profiler(TRUE);	
+				//debug
+				$this->output->enable_profiler(TRUE);	
 				
         }
 
@@ -47,31 +48,34 @@ class Services extends CI_Controller {
 					switch ($filter_by) {
 						case 'brgy': 
 							$brgy = $this->input->post('filter_by_brgy');
-							$data['services'] = $this->services_model->filter_services('barangay', $brgy, $config["per_page"], $page);
-							$data['record_count'] = $this->services_model->filter_services_num_rows('barangay', $brgy);
+							$data['r_services'] = $this->services_model->filter_r_services('rvoters.barangay', $brgy, $config["per_page"], $page);
+							$data['n_services'] = $this->services_model->filter_n_services('non_voters.barangay', $brgy, $config["per_page"], $page);
 							$data['filterval'] = array('barangay',$brgy); 
 							break;
 						case 'district': 
 							$district = $this->input->post('filter_by_district');
-							$data['services'] = $this->services_model->filter_services('district', $district, $config["per_page"], $page);
-							$data['record_count'] = $this->services_model->filter_services_num_rows('district', $district);
+							$data['r_services'] = $this->services_model->filter_r_services('rvoters.district', $district, $config["per_page"], $page);
+							$data['n_services'] = $this->services_model->filter_n_services('non_voters.district', $district, $config["per_page"], $page);
 							$data['filterval'] = array('district',$district); 
 							break;
-						case 'gender': 
-							$gender = $this->input->post('filter_by_gender');
-							$data['services'] = $this->services_model->filter_services('sex', $gender, $config["per_page"], $page);
-							$data['record_count'] = $this->services_model->filter_services_num_rows('sex', $gender);
-							$data['filterval'] = array('gender',$gender); 
+						case 'date_single':
+							$date_single = $this->input->post('date_single');
+							break;
+						case 'date_range':
+							$date_range = $this->input->post('date_range');
 							break;
 						default: 
 							break;
 
 					}
-					
-					$config['total_rows'] = $data['record_count'];
+					$r_count = (!empty($data['r_services'])) ? count($data['r_services']) : 0;
+					$n_count = (!empty($data['n_services'])) ? count($data['n_services']) : 0;
+
+						$config['total_rows'] = $r_count + $n_count;
 						$this->pagination->initialize($config);
 					$data['links'] = $this->pagination->create_links();
-					
+					$data['total_result_count'] = $r_count + $n_count;
+
 				}
 				elseif ($this->input->get('search_param') != NULL) {
 

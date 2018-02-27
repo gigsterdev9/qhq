@@ -378,6 +378,7 @@ class services_model extends CI_Model {
 
 	}
 
+	/*
 	public function filter_beneficiaries($limit, $start, $filter_param1 = FALSE, $filter_param2 = FALSE, $filter_operand = FALSE) {
 		
 		if ($filter_param1 === FALSE)
@@ -435,6 +436,103 @@ class services_model extends CI_Model {
 
 		return $result_array;
 		
+	}
+	*/
+	public function filter_r_services($filter_param1 = FALSE, $filter_param2 = FALSE, $limit = 0, $start = 0) {
+		
+		if ($filter_param1 === FALSE) {
+			return 0;
+		}
+		
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(rvoters.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('services');
+		$this->db->join('beneficiaries', 'beneficiaries.ben_id = services.ben_id');
+		$this->db->join('rvoters', 'beneficiaries.id_no_comelec = rvoters.id_no_comelec');
+		$this->db->where("$filter_param1 = '$filter_param2' and beneficiaries.trash = 0");
+		$this->db->limit($limit, $start);
+		$query = $this->db->get();		
+		$result1 =  $query->result_array();
+		
+		foreach ($result1 as $r) {
+			$ben_id = $r['ben_id'];
+			$this->db->select('*');
+			$this->db->from('services');
+			$this->db->where("ben_id = '$ben_id'");
+			$this->db->limit(1);
+			$result2 = $this->db->get();
+			
+			if ($result2->num_rows() == 1) {
+				$rs[] = array_merge($r, $result2->row_array());
+			}
+		}
+
+		if (isset($rs)) {
+			
+			foreach($rs as $r) {
+				
+				if ($r != '') {
+	
+					$x = $this->beneficiaries_model->get_beneficiary_by_id($r['req_ben_id']);
+						$r['req_fname'] = $x['fname'];
+						$r['req_mname'] = $x['mname'];
+						$r['req_lname'] = $x['lname'];
+				}
+				$r_services[] = $r;
+			}
+			return $r_services; 
+		}
+		else{
+			return 0;
+		}
+		
+	}
+
+	public function filter_n_services($filter_param1 = FALSE, $filter_param2 = FALSE, $limit = 0, $start = 0) {
+		
+		if ($filter_param1 === FALSE) {
+			return 0;
+		}
+		
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(non_voters.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('services');
+		$this->db->join('beneficiaries', 'beneficiaries.ben_id = services.ben_id');
+		$this->db->join('non_voters', 'beneficiaries.nv_id = non_voters.nv_id');
+		$this->db->where("$filter_param1 = '$filter_param2' and beneficiaries.trash = 0");
+		$this->db->limit($limit, $start);
+		$query = $this->db->get();		
+		$result1 = $query->result_array();
+		
+		foreach ($result1 as $r) {
+			$ben_id = $r['ben_id'];
+			$this->db->select('*');
+			$this->db->from('services');
+			$this->db->where("ben_id = '$ben_id'");
+			$this->db->limit(1);
+			$result2 = $this->db->get();
+			
+			if ($result2->num_rows() == 1) {
+				$ns[] = array_merge($r, $result2->row_array());
+			}
+		}
+
+		if (isset($ns) > 0) {
+			
+			foreach($ns as $n) {
+				
+				if ($n != '') {
+					
+					$x = $this->beneficiaries_model->get_beneficiary_by_id($n['req_ben_id']);
+						$n['req_fname'] = $x['fname'];
+						$n['req_mname'] = $x['mname'];
+						$n['req_lname'] = $x['lname'];
+				}
+				$n_services[] = $n;
+			}
+			return $n_services; 
+		}
+		else{
+			return 0;
+		}
 	}
 	
 	public function search_r_services($limit, $start, $where_clause = FALSE) { 
