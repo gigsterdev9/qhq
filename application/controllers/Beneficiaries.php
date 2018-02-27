@@ -65,7 +65,7 @@ class Beneficiaries extends CI_Controller {
 							$age_operand = $this->input->get('filter_by_age_operand');
 							$age_value = $this->input->get('filter_by_age_value');
 							$where_clause = "age $age_operand $age_value";
-
+							
 							if ($age_operand === 'between' and (stristr($age_value, 'and') === FALSE)) {
 								//show_error('Invalid age value');
 								$where_clause = FALSE;

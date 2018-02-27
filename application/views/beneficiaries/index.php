@@ -30,7 +30,7 @@
 					<option value=""></option>
 					<option value="brgy">Barangay</option>
 					<option value="district">District</option>
-					<option value="age">Age</option>
+					<!--<option value="age">Age</option> -->
 				</select>
 				<select name="filter_by_brgy" id="filter_by_brgy" class="form-control" style="display:none">
 					<option value="Concepcion Uno">Concepcion Uno</option>
@@ -45,12 +45,15 @@
 					<option value="1">1</option>
 					<option value="2">2</option>
 				</select>
+				<!--
 				<select name="filter_by_age_operand" id="filter_by_age_operand" class="form-control" style="display:none">
-					<option value="above">Above</option>
-					<option value="below">Below</option>
+					<option value="=">Equals</option>
+					<option value=">">Above</option>
+					<option value="<">Below</option>
 					<option value="between">Between</option>
 				</select>
 				<input type="input" class="form-control" name="filter_by_age_value" id="filter_by_age_value" style="display:none" />
+				-->
 				<input type="submit" class="form-control" value="&raquo;" />
 			</div>
 		<?php echo form_close();?>

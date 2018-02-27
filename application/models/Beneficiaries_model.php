@@ -12,17 +12,17 @@ class beneficiaries_model extends CI_Model {
 
 	public function get_nv_beneficiaries($limit = 0, $start = 0, $where_clause = false) {
 		
-		$this->db->select("*");
-		$this->db->from('beneficiaries');
-		$this->db->join('non_voters', 'non_voters.nv_id = beneficiaries.nv_id');
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('beneficiaries b');
+		$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
 
 		if ($where_clause === false) {
-			$this->db->where('beneficiaries.trash = 0');
+			$this->db->where('b.trash = 0');
 		}
 		else{
 			$this->db->where($where_clause); 
 		}
-		$this->db->order_by('non_voters.lname', 'ASC');
+		$this->db->order_by('n.lname', 'ASC');
 		$this->db->limit($limit, $start);
 		$query = $this->db->get();
 
@@ -32,17 +32,17 @@ class beneficiaries_model extends CI_Model {
 
 	public function get_rv_beneficiaries($limit = 0, $start = 0, $where_clause = false) {
 		
-		$this->db->select("*");
-		$this->db->from('beneficiaries');
-		$this->db->join('rvoters', 'rvoters.id_no_comelec = beneficiaries.id_no_comelec');
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('beneficiaries b');
+		$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
 		
 		if ($where_clause === false) {
-			$this->db->where('beneficiaries.trash = 0'); 
+			$this->db->where('b.trash = 0'); 
 		}
 		else{
 			$this->db->where($where_clause); 
 		}
-		$this->db->order_by('rvoters.lname', 'ASC');
+		$this->db->order_by('r.lname', 'ASC');
 		$this->db->limit($limit, $start);
 		$query = $this->db->get();
 
