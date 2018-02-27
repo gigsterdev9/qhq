@@ -81,10 +81,14 @@ class Beneficiaries extends CI_Controller {
 
 					$data['rvoters'] = $this->beneficiaries_model->get_rv_beneficiaries($config["per_page"], $page, $where_clause);
 					$data['nonvoters'] = $this->beneficiaries_model->get_nv_beneficiaries($config["per_page"], $page, $where_clause);
-						$config['total_rows'] = count($data['rvoters']) + count($data['nonvoters']);
+
+					$r_count = (!empty($data['rvoters'])) ? count($data['rvoters']) : 0;
+					$n_count = (!empty($data['nonvoters'])) ? count($data['nonvoters']) : 0;
+
+						$config['total_rows'] = $r_count + $n_count;
 						$this->pagination->initialize($config);
 					$data['links'] = $this->pagination->create_links();
-					$data['total_result_count'] = count($data['rvoters']) + count($data['nonvoters']);
+					$data['total_result_count'] = $r_count + $n_count;
 					
 
 				}
