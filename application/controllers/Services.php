@@ -46,6 +46,12 @@ class Services extends CI_Controller {
 					$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
 					$filter_by = $this->input->post('filter_by');
 					switch ($filter_by) {
+						case 'type':
+							$type = $this->input->post('filter_by_type');
+							$data['r_services'] = $this->services_model->filter_r_services('services.service_type', $type, $config["per_page"], $page);
+							$data['n_services'] = $this->services_model->filter_n_services('services.service_type', $type, $config["per_page"], $page);
+							$data['filterval'] = array('service type',$type); 
+							break;
 						case 'brgy': 
 							$brgy = $this->input->post('filter_by_brgy');
 							$data['r_services'] = $this->services_model->filter_r_services('rvoters.barangay', $brgy, $config["per_page"], $page);
@@ -118,21 +124,21 @@ class Services extends CI_Controller {
 					}
 
 				}
-				else
-				{
+				else{
+
 					//Display registered first, non-voters next
 					//implement pagination
 					$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-					$n_s = $this->services_model->get_n_services($config["per_page"], $page);
-						foreach ($n_s as $s) {
-							if (is_array($s)) { //do not display 'result_count' 
-								$data['n_services'][] = $s;
-							}
-						}
 					$r_s = $this->services_model->get_r_services($config["per_page"], $page); 
 						foreach ($r_s as $s) {
 							if (is_array($s)) { //do not display 'result_count' 
 								$data['r_services'][] = $s;
+							}
+						}
+					$n_s = $this->services_model->get_n_services($config["per_page"], $page);
+						foreach ($n_s as $s) {
+							if (is_array($s)) { //do not display 'result_count' 
+								$data['n_services'][] = $s;
 							}
 						}
 					$data['total_result_count'] = count($data['n_services']) + count($data['r_services']);

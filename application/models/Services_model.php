@@ -13,9 +13,10 @@ class services_model extends CI_Model {
 	public function get_r_services($limit = 0, $start = 0) {
 		
 		$this->db->select('*');
-		$this->db->from('beneficiaries');
-		$this->db->where("id_no_comelec != '' and trash = 0");
+		$this->db->from('services');
+		$this->db->where("trash = 0");
 		$this->db->limit($limit, $start);
+		$this->db->order_by('req_date', 'DESC');
 		$query1 = $this->db->get();
 		$result1 = $query1->result_array();
 
@@ -23,120 +24,83 @@ class services_model extends CI_Model {
 			foreach ($result1 as $r1) {
 				
 				$ben_id = $r1['ben_id'];
+				$req_ben_id = $r1['req_ben_id'];
 				
-				$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
-				$this->db->from('services s');
-				$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
-				$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
-				$this->db->where("s.ben_id = '$ben_id'");
-				$this->db->order_by('r.lname', 'ASC');
-				$q = $this->db->get();
+				$ben = $this->beneficiaries_model->get_beneficiary_by_id($r1['ben_id']);
+				$req = $this->beneficiaries_model->get_beneficiary_by_id($r1['req_ben_id']);
 				
-				$rs[] = $q->row_array();
-			}
-
-			if (isset($rs)) {
-				foreach($rs as $r) {
-					//echo '<pre>'; print_r($r); echo '</pre>'; 
-					if ($r != '') {
-						
-						$x = $this->beneficiaries_model->get_beneficiary_by_id($r['req_ben_id']);
-							$r['req_fname'] = $x['fname'];
-							$r['req_mname'] = $x['mname'];
-							$r['req_lname'] = $x['lname'];
-						/*
-						if ($r['n_req_id'] == '' || $r['n_req_id'] == NULL) {
-							$x = $this->rvoters_model->get_rvoter_by_comelec_id($r['r_req_id']);
-							$r['req_fname'] = $x['fname'];
-							$r['req_lname'] = $x['lname'];
-							$r['req_id'] = $x['id'];
-						} 
-						elseif($r['r_req_id'] == '' || $r['n_req_id'] == NULL) {
-							$y = $this->nonvoters_model->get_nonvoter_by_id($r['n_req_id']);
-							$r['req_fname'] = $y['fname'];
-							$r['req_lname'] = $y['lname'];
-						}
-						else{
-							return 0;
-						}
-						*/
-					}
-					$r_services[] = $r;
+				if (isset($ben['id_no_comelec']) and ($ben['id_no_comelec'] != '')) {
+					$r1['id_no_comelec'] = $ben['id_no_comelec'];
+					$r1['fname'] = $ben['fname'];
+					$r1['lname'] = $ben['lname'];
+					$r1['mname'] = $ben['mname'];
+					$r1['req_fname'] = $req['fname'];
+					$r1['req_lname'] = $req['lname'];
+					$r1['req_mname'] = $req['mname'];
+					
+					$r_services[] = $r1;
+				}
+				else{
+					//do nothing
 				}
 
-				return $r_services; 
 			}
-			return 0;
+
 		}
 		else {
+
 			return 0;
+
 		}
+		
+		return $r_services;
 
 	}
 
 	public function get_n_services($limit = 0, $start = 0) {
 		
 		$this->db->select('*');
-		$this->db->from('beneficiaries');
-		$this->db->where("nv_id != '' and trash = 0");
-		//$this->db->limit($limit, $start); //we leave the limits to the r_services query as the row count for rvoters prevents this from displaying correctly
+		$this->db->from('services');
+		$this->db->where("trash = 0");
+		$this->db->limit($limit, $start);
+		$this->db->order_by('req_date', 'DESC');
 		$query1 = $this->db->get();
 		$result1 = $query1->result_array();
 
-		//echo '<pre>'; print_r($result1); echo '</pre>'; die();
 		if (is_array($result1)) {
 			foreach ($result1 as $r1) {
 				
 				$ben_id = $r1['ben_id'];
+				$req_ben_id = $r1['req_ben_id'];
 				
-				$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
-				$this->db->from('services s');
-				$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
-				$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
-				$this->db->where("s.ben_id = '$ben_id'");
-				$this->db->order_by('n.lname', 'ASC');
-				$q = $this->db->get();
+				$ben = $this->beneficiaries_model->get_beneficiary_by_id($r1['ben_id']);
+				$req = $this->beneficiaries_model->get_beneficiary_by_id($r1['req_ben_id']);
 				
-				$ns[] = $q->row_array(); 
+				if (isset($ben['nv_id']) and ($ben['nv_id'] != '')) {
+					$r1['nv_id'] = $ben['nv_id'];
+					$r1['fname'] = $ben['fname'];
+					$r1['lname'] = $ben['lname'];
+					$r1['mname'] = $ben['mname'];
+					$r1['req_fname'] = $req['fname'];
+					$r1['req_lname'] = $req['lname'];
+					$r1['req_mname'] = $req['mname'];
+					
+					$n_services[] = $r1;
+				}
+				else{
+					//do nothing
+				}
+
 			}
 
-			if (isset($ns)) {
-				
-				foreach($ns as $n) {
-					//echo '<pre>'; print_r($n); echo '</pre>'; 
-					if ($n != '') {
-						$x = $this->beneficiaries_model->get_beneficiary_by_id($n['req_ben_id']);
-							$n['req_fname'] = $x['fname'];
-							$n['req_mname'] = $x['mname'];
-							$n['req_lname'] = $x['lname'];
-						/*
-						if ($n['n_req_id'] == '' || $n['n_req_id'] == NULL) {
-							$x = $this->rvoters_model->get_rvoter_by_comelec_id($n['r_req_id']);
-							$n['req_fname'] = $x['fname'];
-							$n['req_lname'] = $x['lname'];
-							$n['req_id'] = $x['id'];
-						} 
-						elseif($n['r_req_id'] == '' || $n['n_req_id'] == NULL) {
-							$y = $this->nonvoters_model->get_nonvoter_by_id($n['n_req_id']);
-							$n['req_fname'] = $y['fname'];
-							$n['req_lname'] = $y['lname'];
-						}
-						else{
-							return 0;
-						}
-						*/
-					}
-					$n_services[] = $n;
-				}
-				
-				//return $ns; 
-				return $n_services; 
-			}
-			return 0;
 		}
 		else {
+
 			return 0;
+
 		}
+		
+		return $n_services;
 
 	}
 
@@ -448,11 +412,13 @@ class services_model extends CI_Model {
 		$this->db->from('services');
 		$this->db->join('beneficiaries', 'beneficiaries.ben_id = services.ben_id');
 		$this->db->join('rvoters', 'beneficiaries.id_no_comelec = rvoters.id_no_comelec');
-		$this->db->where("$filter_param1 = '$filter_param2' and beneficiaries.trash = 0");
+		//$this->db->where("$filter_param1 = '$filter_param2' and beneficiaries.trash = 0");
 		$this->db->limit($limit, $start);
 		$query = $this->db->get();		
 		$result1 =  $query->result_array();
 		
+		//echo $this->db->last_query(); die();
+
 		foreach ($result1 as $r) {
 			$ben_id = $r['ben_id'];
 			$this->db->select('*');

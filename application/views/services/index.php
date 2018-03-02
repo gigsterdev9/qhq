@@ -34,11 +34,19 @@
 				<label class="control-label" for="title">Filter by:</label> &nbsp; 
 				<select name="filter_by" id="filter_by" class="form-control">
 					<option value=""></option>
+					<option value="type">Type</option>
 					<option value="brgy">Barangay</option>
 					<option value="district">District</option>
 					<!--<option value="date_single">Single Date</option>
-					<option value="date_range">Date Range</option> -->
+					<option value="date_range">Date Range</option> -->	
 					<!--<option value="gender">Gender</option>-->
+				</select>
+				<select name="filter_by_type" id="filter_by_type" class="form-control" style="display:none">
+					<option value="burial">Burial</option>
+					<option value="endorsement">Endorsement</option>
+					<option value="financial">Financial</option>
+					<option value="legal">Legal</option>
+					<option value="medical">Medical</option>
 				</select>
 				<select name="filter_by_brgy" id="filter_by_brgy" class="form-control" style="display:none">
 					<option value="Concepcion Uno">Concepcion Uno</option>
@@ -108,6 +116,7 @@
 					<table class="table table-striped">
 					<thead>
 						<tr>
+							<th width="2%">&nbsp;</th>
 							<th width="10%">Request date</th>
 							<th width="20%">Recipient</th>
 							<th width="10%">Type</th>
@@ -115,7 +124,7 @@
 							<th width="20%">Requested by</th>
 							<th width="15%">Relationship</th>
 							<th width="10%">Status</th>
-							<th widht="5%">Action</th>
+							<!-- <th widht="5%">Action</th> -->
 						</tr>
 					</thead>
 					<tbody>
@@ -128,8 +137,11 @@
 						<tr>
 							<td>
 								<a href="<?php echo site_url('services/view/'.$service['service_id']); ?>">
-									<span class="glyphicon glyphicon-file"></span> <?php echo $service['req_date']; ?>
+									<span class="glyphicon glyphicon-file"></span>
 								</a>
+							</td>
+							<td>
+								<?php echo $service['req_date']; ?>
 							</td>
 							<td>
 								<a href="<?php echo site_url('beneficiaries/view/'.$service['ben_id']); ?>">
@@ -148,10 +160,12 @@
 							</td>
 							<td><?php echo $service['relationship']; ?></td>
 							<td><?php echo $service['s_status']; ?></td>
+							<!--
 							<td>
 								<a href="<?php echo base_url('services/edit/'.$service['service_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
 								<a href="<?php echo base_url('services/trash/'.$service['service_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
 							</td>
+							-->
 						</tr>
 						<?php 
 							} 
@@ -181,6 +195,7 @@
 					<table class="table table-striped">
 					<thead>
 						<tr>
+							<th width="2%">&nbsp;</th>
 							<th width="10%">Request date</th>
 							<th width="20%">Recipient</th>
 							<th width="10%">Type</th>
@@ -188,7 +203,7 @@
 							<th width="20%">Requested by</th>
 							<th width="15%">Relationship</th>
 							<th width="10%">Status</th>
-							<th widht="5%">Action</th>
+							<!--<th widht="5%">Action</th>-->
 						</tr>
 					</thead>
 					<tbody>
@@ -201,8 +216,11 @@
 						<tr>
 							<td>
 								<a href="<?php echo site_url('services/view/'.$service['service_id']); ?>">
-									<span class="glyphicon glyphicon-file"></span> <?php echo $service['req_date']; ?>
+									<span class="glyphicon glyphicon-file"></span> 
 								</a>
+							</td>
+							<td>
+								<?php echo $service['req_date']; ?>
 							</td>
 							<td>
 								<a href="<?php echo site_url('beneficiaries/view/'.$service['ben_id']); ?>">
@@ -223,10 +241,12 @@
 							</td>
 							<td><?php echo $service['relationship']; ?></td>
 							<td><?php echo $service['s_status']; ?></td>
+							<!--
 							<td>
 								<a href="<?php echo base_url('services/edit/'.$service['service_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
 								<a href="<?php echo base_url('services/trash/'.$service['service_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
 							</td>
+							-->
 						</tr>
 						<?php 
 							} 
@@ -262,19 +282,29 @@
 		var myval = $(this).val();
 		//alert(myval);
 		
-    	if (myval == 'brgy') {
+    	if (myval == 'type') {
+			$('#filter_by_type').show();
+			$('#filter_by_brgy').hide();
+    		$('#filter_by_school').hide();
+			$('#filter_by_district').hide();
+			$('#filter_by_gender').hide();
+		}
+		else if (myval == 'brgy') {
+			$('#filter_by_type').hide();
     		$('#filter_by_brgy').show();
     		$('#filter_by_school').hide();
 			$('#filter_by_district').hide();
 			$('#filter_by_gender').hide();
     	}
     	else if(myval == 'district'){
+			$('#filter_by_type').hide();
     		$('#filter_by_brgy').hide();
     		$('#filter_by_school').hide();
 			$('#filter_by_district').show();
 			$('#filter_by_gender').hide();
     	}
 		else if(myval == 'gender'){
+			$('#filter_by_type').hide();
     		$('#filter_by_brgy').hide();
     		$('#filter_by_school').hide();
 			$('#filter_by_district').hide();

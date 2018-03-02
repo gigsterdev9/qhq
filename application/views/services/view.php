@@ -35,6 +35,7 @@
 					<div class="col-sm-3 control-label">Requested by</div>
 					<div class="col-sm-9 control-value">
 						<?php 
+						$fullname = strtoupper($service['req_fname'].' '.$service['req_lname']);
 						if (empty($service['n_req_id'])) {
 							$req_link = base_url('rvoters/view/'.$service['req_id']);
 						}
@@ -42,7 +43,8 @@
 							$req_link = base_url('nonvoters/view/'.$service['n_req_id']);
 						}
 						echo '<a href="'.$req_link.'">';
-						echo $service['req_fname'].' '.$service['req_lname'].'</a>';
+						echo $fullname;
+						echo '</a>';
 						?>
 						&nbsp;
 					</div>
@@ -107,9 +109,10 @@
 						foreach ($services as $s): 
 						//echo '<pre>'; print_r($rvoter); echo '</pre>';
 						if ($service['service_id'] != $s['service_id']) { 
+							$fullname = strtoupper($s['req_fname'].' '.$s['req_lname']);
 					?>
 					<tr>
-						<td><a href="#"><span class="glyphicon glyphicon-file"></span></a></td>
+						<td><a href="<?php echo site_url('services/view/'.$s['service_id']); ?>"><span class="glyphicon glyphicon-file"></span></a></td>
 						<td><?php echo $s['req_date']; ?></td>
 						<td><?php echo $s['service_type']; ?></td>
 						<td><?php echo $s['amount']; ?></td>
@@ -122,7 +125,8 @@
 									$req_link = base_url('nonvoters/view/'.$s['nv_id']);
 								}
 								echo '<a href="'.$req_link.'">';
-								echo $s['req_fname'].' '.$s['req_lname']; //echo $s['r_req_id'] . $s['n_req_id'] ; 
+								//echo $s['req_fname'].' '.$s['req_lname']; //echo $s['r_req_id'] . $s['n_req_id'] ; 
+								echo $fullname;
 								echo '</a>';
 							?>
 						</td>
