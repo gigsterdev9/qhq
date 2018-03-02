@@ -16,6 +16,11 @@ h5, .panel-heading {font-size: 1.2em}
 
 #footer-div {padding-bottom: 20px}
 
+input[type="button"]:hover, input[type="submit"]:hover, button:hover, .btn:hover  {
+    background-color: #316FBA;
+    color: #FFFFFF;
+}
+
 /*Nav Bar*/ 
 .nav {font-size: 1.1em}
 
