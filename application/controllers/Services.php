@@ -48,8 +48,8 @@ class Services extends CI_Controller {
 					switch ($filter_by) {
 						case 'type':
 							$type = $this->input->post('filter_by_type');
-							$data['r_services'] = $this->services_model->filter_r_services('services.service_type', $type, $config["per_page"], $page);
-							$data['n_services'] = $this->services_model->filter_n_services('services.service_type', $type, $config["per_page"], $page);
+							$data['r_services'] = $this->services_model->get_r_services($config["per_page"], $page, "service_type = '$type'");
+							$data['n_services'] = $this->services_model->get_n_services($config["per_page"], $page, "service_type = '$type'");
 							$data['filterval'] = array('service type',$type); 
 							break;
 						case 'brgy': 
@@ -66,6 +66,8 @@ class Services extends CI_Controller {
 							break;
 						case 'date_single':
 							$date_single = $this->input->post('date_single');
+							$data['r_services'] = $this->services_model->get_r_services($config["per_page"], $page, "req_date = '$date_single'");
+							$data['n_services'] = $this->services_model->get_n_services($config["per_page"], $page, "req_date = '$date_single'");
 							break;
 						case 'date_range':
 							$date_range = $this->input->post('date_range');

@@ -10,11 +10,16 @@ class services_model extends CI_Model {
         return $this->db->count_all("services");
     }
 
-	public function get_r_services($limit = 0, $start = 0) {
+	public function get_r_services($limit = 0, $start = 0, $where_clause=FALSE) {
 		
 		$this->db->select('*');
 		$this->db->from('services');
-		$this->db->where("trash = 0");
+		if ($where_clause == FALSE) {
+			$this->db->where("trash = 0");
+		}
+		else{
+			$this->db->where("$where_clause and trash = 0");
+		}
 		$this->db->limit($limit, $start);
 		$this->db->order_by('req_date', 'DESC');
 		$query1 = $this->db->get();
@@ -45,6 +50,13 @@ class services_model extends CI_Model {
 				}
 
 			}
+			
+			if (!empty($r_services)) {
+				return $r_services;
+			}
+			else{
+				return 0;
+			}
 
 		}
 		else {
@@ -53,15 +65,18 @@ class services_model extends CI_Model {
 
 		}
 		
-		return $r_services;
-
 	}
 
-	public function get_n_services($limit = 0, $start = 0) {
+	public function get_n_services($limit = 0, $start = 0, $where_clause=FALSE) {
 		
 		$this->db->select('*');
 		$this->db->from('services');
-		$this->db->where("trash = 0");
+		if ($where_clause == FALSE) {
+			$this->db->where("trash = 0");
+		}
+		else{
+			$this->db->where("$where_clause and trash = 0");
+		}
 		$this->db->limit($limit, $start);
 		$this->db->order_by('req_date', 'DESC');
 		$query1 = $this->db->get();
@@ -90,17 +105,18 @@ class services_model extends CI_Model {
 				else{
 					//do nothing
 				}
-
 			}
 
+			if (!empty($n_services)) {
+				return $n_services;
+			}
+			else{
+				return 0;
+			}
 		}
 		else {
-
 			return 0;
-
 		}
-		
-		return $n_services;
 
 	}
 
@@ -342,66 +358,6 @@ class services_model extends CI_Model {
 
 	}
 
-	/*
-	public function filter_beneficiaries($limit, $start, $filter_param1 = FALSE, $filter_param2 = FALSE, $filter_operand = FALSE) {
-		
-		if ($filter_param1 === FALSE)
-		{
-			return 0;
-		}
-		
-		if ($filter_param1 == 'age') {
-			switch ($filter_operand) {
-				case 'above':
-					$conditions = "age > '$filter_param2'";
-					break;
-				case 'below':
-					$conditions = "age < '$filter_param2'";
-					break;
-				case 'between':
-					$conditions = "age between $filter_param2";
-					break;
-				default:
-					break;
-			}
-
-			$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
-			$this->db->from('beneficiaries');
-			$this->db->having("$conditions");
-			$this->db->where("trash = 0");
-			$query = $this->db->get();
-			$result_count = $query->num_rows();
-			
-			$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
-			$this->db->from('beneficiaries');
-			$this->db->having("$conditions");
-			$this->db->where("trash = 0");
-			$this->db->limit($limit, $start);
-			$this->db->order_by('age, lname', 'ASC');
-			$query = $this->db->get();		
-		}
-		else{
-			$this->db->select('*');
-			$this->db->from('beneficiaries');
-			$this->db->where("$filter_param1 = '$filter_param2' and trash = 0");
-			$query = $this->db->get();
-			$result_count = $query->num_rows();
-			
-			$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
-			$this->db->from('beneficiaries');
-			$this->db->where("$filter_param1 = '$filter_param2' and trash = 0");
-			$this->db->limit($limit, $start);
-			$this->db->order_by('lname', 'ASC');
-			$query = $this->db->get();		
-		}
-
-		$result_array = $query->result_array();
-		$result_array['result_count'] = $result_count;
-
-		return $result_array;
-		
-	}
-	*/
 	public function filter_r_services($filter_param1 = FALSE, $filter_param2 = FALSE, $limit = 0, $start = 0) {
 		
 		if ($filter_param1 === FALSE) {
