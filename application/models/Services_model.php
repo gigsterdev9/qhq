@@ -267,28 +267,11 @@ class services_model extends CI_Model {
 			foreach($rs as $r) {
 				//echo '<pre>'; print_r($r); echo '</pre>'; die();
 				if ($r != '') {
-					//$x = $this->beneficiaries_model->get_beneficiary_by_id($r['req_ben_id']);
-					//	$r['req_fname'] = $x['fname'];
-					//	$r['req_mname'] = $x['mname'];
-					//	$r['req_lname'] = $x['lname'];
-						
-					/*
-					if ($r['n_req_id'] == '' || $r['n_req_id'] == NULL) {
-						$x = $this->rvoters_model->get_rvoter_by_comelec_id($r['r_req_id']);
+					$x = $this->beneficiaries_model->get_beneficiary_by_id($r['req_ben_id']);
 						$r['req_fname'] = $x['fname'];
+						$r['req_mname'] = $x['mname'];
 						$r['req_lname'] = $x['lname'];
-						$r['req_id'] = $x['id'];
-					} 
-					elseif($r['r_req_id'] == '' || $r['r_req_id'] == NULL) {
-						$y = $this->nonvoters_model->get_nonvoter_by_id($r['n_req_id']);
-						$r['req_fname'] = $y['fname'];
-						$r['req_lname'] = $y['lname'];
-						$r['req_id'] = $y['nv_id'];
-					}
-					else{
-						return 0;
-					}
-					*/
+					
 				}
 				$r_services[] = $r;
 			}

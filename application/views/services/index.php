@@ -153,8 +153,10 @@
 							<td>
 								<?php 
 									$req_link = base_url('beneficiaries/view/'.$service['req_ben_id']);
+									$req_fullname = strtoupper($service['req_lname'].', '.$service['req_fname']);
 									echo '<a href="'.$req_link.'">';
-									echo $service['req_fname'].' '.$service['req_lname']; //echo $service['r_req_id'] . $service['n_req_id'] ; 
+									echo $req_fullname;
+									//echo $service['req_fname'].' '.$service['req_lname']; //echo $service['r_req_id'] . $service['n_req_id'] ; 
 									echo '</a>';
 								?>
 							</td>
@@ -234,8 +236,10 @@
 							<td>
 								<?php 
 									$req_link = base_url('beneficiaries/view/'.$service['req_ben_id']);
+									$req_fullname = strtoupper($service['req_lname'].', '.$service['req_fname']);
 									echo '<a href="'.$req_link.'">';
-									echo $service['req_fname'].' '.$service['req_lname']; //echo $service['r_req_id'] . $service['n_req_id'] ; 
+									echo $req_fullname;
+									//echo $service['req_fname'].' '.$service['req_lname']; //echo $service['r_req_id'] . $service['n_req_id'] ; 
 									echo '</a>';
 								?>
 							</td>

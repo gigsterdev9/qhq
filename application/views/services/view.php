@@ -85,7 +85,7 @@
 		
 		<div class="service-history-details text-left">
 			<h3>OTHER AVAILMENT RECORDS</h3>
-			<div class="text-right"><a href="<?php echo base_url(); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
+			<div class="text-right"><a href="<?php echo base_url('services/add_exist/'.$services[0]['ben_id']); ?>"><span class="glyphicon glyphicon-plus-sign"></span> New Entry </a></div>
 			<div class="table-responsive show-records" >
 			<?php 
 			if (count($services) > 1) { 	

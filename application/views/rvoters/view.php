@@ -146,7 +146,7 @@
 						if (is_array($rvoter)) { //do not display 'result_count' 
 					?>
 					<tr>
-						<td><a href="#"><span class="glyphicon glyphicon-file"></span></a></td>
+						<td><a href="<?php echo site_url('services/view/'.$service['service_id']); ?>"><span class="glyphicon glyphicon-file"></span></a></td>
 						<td><?php echo $service['req_date']; ?></td>
 						<td><?php echo $service['service_type']; ?></td>
 						<td><?php echo $service['amount']; ?></td>
@@ -154,9 +154,9 @@
 							<?php 
 								
 								$req_link = base_url('beneficiaries/view/'.$service['req_ben_id']);
+								$req_fullname = strtoupper($service['req_lname'].', '.$service['req_fname']);
 								echo '<a href="'.$req_link.'">';
-								//echo $service['req_fname'].' '.$service['req_lname']; //echo $service['r_req_id'] . $service['n_req_id'] ; 
-								echo 'fixme';
+								echo $req_fullname;
 								echo '</a>';
 							?>
 						</td>
