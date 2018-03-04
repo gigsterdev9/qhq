@@ -598,34 +598,31 @@ class services_model extends CI_Model {
 	}
 	
 	
-	//update individual voter
+	//update service details
 	public function update_service() {
 		//echo '<pre>'; print_r($_POST); echo '</pre>'; die();
 		$this->load->helper('url');
 		
-		$id = $this->input->post('id');
-				
+		$service_id = $this->input->post('service_id');
+		$ben_id = $this->input->post('ben_id');		
 		
 		$data = array(
-				'fname' => strtoupper($this->input->post('fname')),
-				'lname' => strtoupper($this->input->post('lname')),
-				'dob' => $this->input->post('dob'),
-				'address' => $this->input->post('address'),
-				'barangay' => $this->input->post('barangay'),
-				'district' => $this->input->post('district'),
-				'sex' => $this->input->post('sex'),
-				'precinct' => $this->input->post('precinct'),
-				'mobile_no' => $this->input->post('mobile_no'),
-				'email' => $this->input->post('email'),
-				'referee' => $this->input->post('referee'),
-				//'voters_id' => $this->input->post('voters_id'),
-				'status' => $this->input->post('status'),
-				'remarks' => $this->input->post('remarks'),
-				'trash' => $this->input->post('trash')
+				'req_date'=> $this->input->post('req_date'),
+				'ben_id' => $ben_id,
+				'req_ben_id' => $this->input->post('req_ben_id'),
+				'relationship' => $this->input->post('relationship'),
+				'service_type' => $this->input->post('service_type'),
+				'particulars' => $this->input->post('particulars'),
+				'amount' => $this->input->post('amount'),
+				's_status' => $this->input->post('s_status'),
+				'action_officer' => $this->input->post('action_officer'),
+				'recommendation' => $this->input->post('recommendation'),
+				's_remarks' => $this->input->post('s_remarks'),
+				//'trash' => $this->input->post('trash')
 		);
 		
-		$this->db->where('id', $id);
-		$this->db->update('beneficiaries', $data);
+		$this->db->where('service_id', $service_id);
+		$this->db->update('services', $data);
 		
 		//add audit trail
 		$altered = $this->input->post('altered'); //hidden field that tracks form edits; see form
@@ -633,7 +630,8 @@ class services_model extends CI_Model {
 		{
 			$user = $this->ion_auth->user()->row();
 			$data3 = array(
-						'beneficiary_id' => $id,
+						'ben_id' => $ben_id,
+						'service_id' => $service_id,
 						'user' => $user->username,
 						'activity' => 'modified',
 						'mod_details' => $altered

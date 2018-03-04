@@ -246,39 +246,41 @@ class Services extends CI_Controller {
 			$this->load->library('form_validation');
 
 			$data['title'] = 'Edit service';
-			$data['schools'] = $this->services_model->get_schools(); //display school names in filter dropdown
+
+			//get all possible requestors from within the beneficiaries table 
+			$rv_req = $this->beneficiaries_model->get_rv_beneficiaries();
+			$nv_req = $this->beneficiaries_model->get_nv_beneficiaries();
+
+			$ctr = 0;
+			foreach ($rv_req as $rv) {
+				$data['requestors'][$ctr]['fullname'] = $rv['fname'].' '.$rv['mname'].' '.$rv['lname'];
+				$data['requestors'][$ctr]['ben_id'] = $rv['ben_id'];
+				$ctr++;
+			}
+			foreach ($nv_req as $nv) {
+				$data['requestors'][$ctr]['fullname'] = $nv['fname'].' '.$nv['mname'].' '.$nv['lname'];
+				$data['requestors'][$ctr]['ben_id'] = $nv['ben_id'];
+				$ctr++;
+			}
+
+			$data['service'] = $this->services_model->get_service_by_id($service_id);
 			$data['service_id'] = $service_id;
-
-			$sch = $this->services_model->get_service_by_id($service_id);
-			if (empty($sch))
-			{
-					show_404();
-			}
-			else{
-				if ($sch['id_no_comelec'] != '') { //then entry must be a registered voter
-					$data['service'] = $this->services_model->get_r_service_by_id($service_id);
-				}
-				elseif ($sch['nv_id'] != ''){ //then entry must be a non voter
-					$data['service'] = $this->services_model->get_n_service_by_id($service_id);
-				}
-				else{
-					show_404();
-				}
-			}
-
-
-			//service data
-			$this->form_validation->set_rules('batch','Batch','required');
-			$this->form_validation->set_rules('school_id','School ID','required');
-			$this->form_validation->set_rules('course','Course','required');
-			$this->form_validation->set_rules('service_status','service Status','required');
+			
+			//validation
+			$this->form_validation->set_rules('req_date','Request Date','required');
+			$this->form_validation->set_rules('ben_id','Recipient','required');
+			$this->form_validation->set_rules('req_ben_id','Requester','required');
+			$this->form_validation->set_rules('relationship','Relationship','required');
+			$this->form_validation->set_rules('service_type','Service Type','required');
+			$this->form_validation->set_rules('particulars','Request particulars','required');
+			$this->form_validation->set_rules('s_status','Service Status','required');
 			
 			//upon submission of edit action
 			if ($this->input->post('action') == 1) {
 				
 				if ($this->form_validation->run() === FALSE) {
 					
-					$data['service'] = $this->services_model->get_service_by_id($service_id);
+					//$data['service'] = $this->services_model->get_service_by_id($service_id);
 					
 					$this->load->view('templates/header', $data);
 					$this->load->view('services/edit');
