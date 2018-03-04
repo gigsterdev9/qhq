@@ -189,7 +189,7 @@ class Services extends CI_Controller {
 			if (!$this->ion_auth->in_group('admin')) {
 				redirect('services');
 			}
-			
+
 			$this->load->helper('form');
 			$this->load->library('form_validation');
 
@@ -225,7 +225,7 @@ class Services extends CI_Controller {
 			}
 			else
 			{
-				echo '<pre>'; print_r($_POST); echo '</pre>'; 
+				//echo '<pre>'; print_r($_POST); echo '</pre>'; 
 				
 				//insert into services table
 				$this->services_model->set_service();

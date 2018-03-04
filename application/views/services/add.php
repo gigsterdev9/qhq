@@ -24,7 +24,7 @@
 		}
 	
 
-		if ( $this->input->POST('action') === null) {
+		if ( $this->input->POST('action') === NULL) {
 			//begin match find form
 			$attributes = array('class' => 'form-horizontal', 'role' => 'form', 'id' => 'form-match-find');
 			echo form_open('services/add', $attributes); 

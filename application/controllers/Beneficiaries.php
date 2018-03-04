@@ -310,11 +310,11 @@ class Beneficiaries extends CI_Controller {
 				foreach($rvoter_match as $rmatch) {
 					//$match_name = $rmatch['fname'] .' '.$rmatch['mname'].' '.$rmatch['lname'].' ('.$rmatch['dob'].')';
 					
-					echo '<div class="radio">';
-					echo '<label><input type="radio" name="optradio" id="optradio" value="id_no_comelec|'.$rmatch['id_no_comelec'].'"> ';
-							//'<a href="#" data-toggle="modal" data-target="#quick-view-'.$rmatch['id_no_comelec'].'">'.$match_name.'</a>';
-					echo 'COMELEC ID No. '.$rmatch['id_no_comelec'].' | Address: '.$rmatch['address'].' | Barangay'.$rmatch['barangay'].' | District :'.$rmatch['district'];
-					echo '</label></div>';
+					echo '<div class="radio"><label>';
+					//echo '<input type="radio" name="optradio" id="optradio" value="id_no_comelec|'.$rmatch['id_no_comelec'].'"> ';
+					echo '<a href="'.base_url('rvoters/view/'.$rmatch['id']).'">';
+					echo 'COMELEC ID No. '.$rmatch['id_no_comelec'].'  &nbsp; | &nbsp; Address: '.$rmatch['address'].'  &nbsp; | &nbsp; Barangay'.$rmatch['barangay'].'  &nbsp; | &nbsp; District :'.$rmatch['district'];
+					echo '</a></label></div>';
 				
 					$id_nos_comelec[] = $rmatch['id_no_comelec'];
 				}
@@ -327,11 +327,11 @@ class Beneficiaries extends CI_Controller {
 				foreach($nvoter_match as $nmatch) {
 					//$match_name = $nmatch['fname'] .' '.$nmatch['mname'].' '.$nmatch['lname'].' ('.$nmatch['dob'].')';
 					
-					echo '<div class="radio">';
-					echo '<label><input type="radio" name="optradio" id="optradio" value="nv_id|'.$nmatch['nv_id'].'">';
-							//'<a href="#" data-toggle="modal" data-target="#quick-view-'.$nmatch['nv_id'].'">'.$match_name.'</a>';
-					echo 'ID No. '.$nmatch['id_no'].' | Address: '.$nmatch['address'].' | Barangay'.$nmatch['barangay'].' | District :'.$nmatch['district'];
-					echo '</div>';
+					echo '<div class="radio"><label>';
+					//echo '<input type="radio" name="optradio" id="optradio" value="nv_id|'.$nmatch['nv_id'].'">';
+					echo '<a href="'.base_url('nonvoters/view/'.$nmatch['nv_id']).'">';
+					echo 'ID No. '.$nmatch['id_no'].'  &nbsp; | &nbsp; Address: '.$nmatch['address'].'  &nbsp; | &nbsp; Barangay'.$nmatch['barangay'].'  &nbsp; | &nbsp; District :'.$nmatch['district'];
+					echo '</a></label></div>';
 				
 					$nv_ids[] = $nmatch['nv_id'];
 
@@ -339,7 +339,7 @@ class Beneficiaries extends CI_Controller {
 				$show_last_radio = true;
 			}
 			
-			//Ben table matches
+			//Beneficiaries table matches
 			if (isset($id_nos_comelec) && is_array($id_nos_comelec)) {
 				foreach ($id_nos_comelec as $id_no_comelec) {
 					//echo $id_no_comelec;
@@ -371,34 +371,39 @@ class Beneficiaries extends CI_Controller {
 			
 			//echo '<pre>'; print_r($s_match); echo '</pre>';
 			if (isset($s_match) && $module == 'scholarships') {
-				echo '<br />Possible match in SCHOLARSHIPS.';
+				echo '<br />Possible match in SCHOLARSHIP.';
 				echo '<div class="radio">';
 				//echo '<a href="#" data-toggle="modal" data-target="#quick-view-'.$nmatch['nv_id'].'">'.$match_name.'</a>';
 				if ($s_match['nv_id'] != '') {
 					if ($s_match['id_no_comelec'] != '') { //comelec id trumps nv_id in the unlikely case that they co-exist in a record
-						echo '<label><input type="radio" name="optradio" id="optradio" value="id_no_comelec|'.$s_match['id_no_comelec'].'">';
-						echo '<a href="'.base_url('scholarships/view').'/'.$s_match['scholarship_id'].'">';
+						echo '<label>';
+						//echo '<input type="radio" name="optradio" id="optradio" value="id_no_comelec|'.$s_match['id_no_comelec'].'">';
+						//echo '<a href="'.base_url('scholarships/view').'/'.$s_match['scholarship_id'].'">';
+						echo '<a href="'.base_url('scholarships/view/'.$s_match['scholarship_id']).'">';
 						echo 'COMELEC ID No.'.$s_match['id_no_comelec'];
 					} 
 					else{
-						echo '<label><input type="radio" name="optradio" id="optradio" value="nv_id|'.$s_match['nv_id'].'">';
-						echo '<a href="'.base_url('scholarships/view').'/'.$s_match['scholarship_id'].'">';
+						echo '<label>';
+						//echo '<input type="radio" name="optradio" id="optradio" value="nv_id|'.$s_match['nv_id'].'">';
+						echo '<a href="'.base_url('scholarships/view/'.$s_match['scholarship_id']).'">';
 						echo 'ID No.'.$s_match['nv_id'];
 					}
 
 				}
 				else{
-					echo '<label><input type="radio" name="optradio" id="optradio" value="id_no_comelec|'.$s_match['id_no_comelec'].'">';
-					echo '<a href="'.base_url('scholarships/view').'/'.$s_match['scholarship_id'].'">';
+					echo '<label>';
+					//echo '<input type="radio" name="optradio" id="optradio" value="id_no_comelec|'.$s_match['id_no_comelec'].'">';
+					//echo '<a href="'.base_url('scholarships/view').'/'.$s_match['scholarship_id'].'">';
+					echo '<a href="'.base_url('scholarships/view/'.$s_match['scholarship_id']).'">';
 					echo 'COMELEC ID No.'.$s_match['id_no_comelec'];
 				}
-				echo ' | Address: '.$s_match['address'].' | Barangay'.$s_match['barangay'].' | District :'.$s_match['district'];
+				echo '  &nbsp; | &nbsp; Address: '.$s_match['address'].'  &nbsp; | &nbsp; Barangay'.$s_match['barangay'].'  &nbsp; | &nbsp; District :'.$s_match['district'];
 				echo '</a></div>';
 			}	
 
-			if (isset($show_last_radio)) {
+			if (isset($show_last_radio)) {	
 				echo '<br /><br />';
-				echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#with-match" id="btn-existing-ben" >Continue</button><br /><br />';
+				//echo '<button type="button" class="btn btn-sm" data-toggle="collapse" data-target="#with-match" id="btn-existing-ben" >Continue</button><br /><br />';
 				echo 'If none of the above is an actual match, you may proceed to ' .
 						'<a href="'.base_url('nonvoters/add').'?fname='.$fname.'&mname='.$mname.'&lname='.$lname.'&dob='.$dob.'">create a new beneficiary entry</a>. <br />';
 			}

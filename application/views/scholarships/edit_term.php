@@ -35,7 +35,7 @@
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="year_level">Year Level<span class="text-info">*</span></label>
 						<div class="col-sm-10">	
-							<select name="year_level select2-single" class="form-control">
+							<select name="year_level" class="form-control select2-single">
 								<option value="">Select</option>
 								<option value="1" <?php if (set_value('year_level', $s_term['year_level']) == 1) echo 'selected'; ?> >1</option>
 								<option value="2" <?php if (set_value('year_level', $s_term['year_level']) == 2) echo 'selected'; ?> >2</option>
