@@ -330,8 +330,8 @@ class scholarships_model extends CI_Model {
 		}
 		
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
-		$this->db->from('rvoters r');
-		$this->db->join('beneficiaries b', 'r.id_no_comelec = b.id_no_comelec');
+		$this->db->from('rvoters');
+		$this->db->join('beneficiaries', 'rvoters.id_no_comelec = beneficiaries.id_no_comelec');
 		$this->db->where($where_clause);
 		$this->db->limit($limit, $start);
 		$this->db->order_by('lname', 'ASC');
@@ -381,8 +381,8 @@ class scholarships_model extends CI_Model {
 		}
 		
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
-		$this->db->from('non_voters n');
-		$this->db->join('beneficiaries b', 'n.nv_id = b.nv_id');
+		$this->db->from('non_voters');
+		$this->db->join('beneficiaries', 'non_voters.nv_id = beneficiaries.nv_id');
 		$this->db->where($where_clause);
 		$this->db->limit($limit, $start);
 		$this->db->order_by('lname', 'ASC');

@@ -125,13 +125,6 @@ class Rvoters extends CI_Controller {
 						}
 						elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
 							$where_clause = "address like '%$search_param%' and trash = 0";
-							/*
-							foreach ($params as $p) {
-								$where_clause .= "address like '%$p%' ";
-								if ($p != end($params)) $where_clause .= 'or ';
-							}
-							$where_clause .= 'and trash = 0';
-							*/
 						}
 						elseif (in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
 							foreach ($params as $p) {
