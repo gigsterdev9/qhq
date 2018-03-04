@@ -122,44 +122,27 @@ class services_model extends CI_Model {
 
 	public function get_services_by_id($ben_id = FALSE) { //retrieve ALL records related to one beneficiary id  //note: there is a closely and similarly named function 
 
-		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
+		
+		$this->db->select("*");
 		$this->db->from('services s');
 		$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
-		$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
 		$this->db->where("s.ben_id = '$ben_id' and s.trash = '0'");
-		$this->db->order_by('r.lname', 'ASC');
+		$this->db->order_by('s.req_date', 'DESC');
 		$q = $this->db->get();
 				
 		$rs = $q->result_array();
 
+		//echo '<pre>'; print_r($rs); echo '</pre>'; 
 		if (isset($rs)) {
 			foreach($rs as $r) {
-				//echo '<pre>'; print_r($r); echo '</pre>'; 
+				
 				if ($r != '') {
 					//get requestor details
 					$y = $this->beneficiaries_model->get_beneficiary_by_id($r['req_ben_id']);
 						$r['req_fname'] = $y['fname'];
 						$r['req_mname'] = $y['mname'];
 						$r['req_lname'] = $y['lname'];
-						$r['req_id'] = $y['id'];
-					/*
-					if ($r['n_req_id'] == '' || $r['n_req_id'] == NULL) {
-						$x = $this->rvoters_model->get_rvoter_by_comelec_id($r['r_req_id']);
-						$r['req_fname'] = $x['fname'];
-						$r['req_lname'] = $x['lname'];
-						$r['req_id'] = $x['id'];
-					} 
-					elseif($r['r_req_id'] == '' || $r['n_req_id'] == NULL) {
-						$y = $this->nonvoters_model->get_nonvoter_by_id($r['n_req_id']);
-						$r['req_fname'] = $y['fname'];
-						$r['req_lname'] = $y['lname'];
-						$r['req_nvid'] = $y['nv_id'];
-
-					}
-					else{
-						return 0;
-					}
-					*/
+						//$r['req_id'] = $y['id'];
 				}
 				$r_services[] = $r;
 			}
@@ -194,55 +177,18 @@ class services_model extends CI_Model {
 		if (isset($s)) {
 			if ($s != '') {
 					
-					//echo '<pre>'; print_r($s); echo '</pre>';
 					//get beneficiary details
 					$x = $this->beneficiaries_model->get_beneficiary_by_id($s['ben_id']);
 					$s = array_merge($s, $x);
-
-					/*
-					if ($s['nv_id'] == '' || $s['nv_id'] == NULL) {
-						$x = $this->rvoters_model->get_rvoter_by_comelec_id($s['id_no_comelec']);
-						//$s['fname'] = $x['fname'];
-						//$s['lname'] = $x['lname'];
-						//$s['id'] = $x['id'];
-						$s = array_merge($s, $x);
-						
-					} 
-					elseif($s['id_no_comelec'] == '' || $s['id_no_comelec'] == NULL) {
-						$x = $this->nonvoters_model->get_nonvoter_by_id($s['nv_id']);
-						//$s['fname'] = $x['fname'];
-						//$s['lname'] = $x['lname'];
-						$s = array_merge($s, $x);
-					}
-					else{
-						return 0;
-					}
-					*/
-
+					
 					//get requestor details
 					$y = $this->beneficiaries_model->get_beneficiary_by_id($s['req_ben_id']);
 						$s['req_fname'] = $y['fname'];
 						$s['req_mname'] = $y['mname'];
 						$s['req_lname'] = $y['lname'];
-						$s['req_id'] = $y['id'];
-					/*
-					if ($s['n_req_id'] == '' || $s['n_req_id'] == NULL) {
-						$y = $this->rvoters_model->get_rvoter_by_comelec_id($s['r_req_id']);
-						$s['req_fname'] = $y['fname'];
-						$s['req_lname'] = $y['lname'];
-						$s['req_id'] = $y['id'];
-					} 
-					elseif($s['r_req_id'] == '' || $s['n_req_id'] == NULL) {
-						$y = $this->nonvoters_model->get_nonvoter_by_id($s['n_req_id']);
-						$s['req_fname'] = $y['fname'];
-						$s['req_lname'] = $y['lname'];
-					}
-					else{
-						return 0;
-					}
-					*/
+					
 			}
-			
+
 			return $s; 
 		}
 		else{

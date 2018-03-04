@@ -13,6 +13,7 @@ class Services extends CI_Controller {
                 $this->load->helper('form');
 				$this->load->library('ion_auth');
 				$this->load->library('pagination');
+				
                 
                 if (!$this->ion_auth->logged_in())
 				{
@@ -171,12 +172,11 @@ class Services extends CI_Controller {
 			//retrieve availment history data
 				$ben_id = $data['service']['ben_id'];
 			//retrieve all other  services availment for same beneficiary
-			$data['services'] = $this->services_model->get_services_by_id($ben_id);
+			$data['services'] = $this->services_model->get_services_by_id($ben_id); //echo 'BEN ID: '.$ben_id;
 			//retrieve audit trail
 			//$data['tracker'] = $this->rvoters_model->show_activities($id);
 			$data['tracker'] = 0;
 
-			
 			$this->load->view('templates/header', $data);
 			$this->load->view('services/view', $data);
 			$this->load->view('templates/footer');

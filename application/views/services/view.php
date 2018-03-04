@@ -36,12 +36,7 @@
 					<div class="col-sm-9 control-value">
 						<?php 
 						$fullname = strtoupper($service['req_fname'].' '.$service['req_lname']);
-						if (empty($service['n_req_id'])) {
-							$req_link = base_url('rvoters/view/'.$service['req_id']);
-						}
-						else { 
-							$req_link = base_url('nonvoters/view/'.$service['n_req_id']);
-						}
+						$req_link = base_url('beneficiaries/view/'.$service['req_ben_id']);
 						echo '<a href="'.$req_link.'">';
 						echo $fullname;
 						echo '</a>';
@@ -50,13 +45,13 @@
 					</div>
 
 					<div class="col-sm-3 control-label">Relationship</div>
-					<div class="col-sm-9 control-value"><?php echo $service['relationship']; ?>&nbsp;</div>
+					<div class="col-sm-9 control-value"><?php echo ucfirst($service['relationship']); ?>&nbsp;</div>
 
 					<div class="col-sm-3 control-label">Service Type</div>
-					<div class="col-sm-9 control-value"><?php echo $service['service_type']; ?>&nbsp;</div>
+					<div class="col-sm-9 control-value"><?php echo ucfirst($service['service_type']); ?>&nbsp;</div>
 					
-					<div class="col-sm-3 control-label">Amount</div>
-					<div class="col-sm-9 control-value"><?php echo $service['amount']; ?>&nbsp;</div>
+					<div class="col-sm-3 control-label">Amount (Php)</div>
+					<div class="col-sm-9 control-value"><?php echo number_format($service['amount'], 2); ?>&nbsp;</div>
 
 					<div class="col-sm-3 control-label">Particulars</div>
 					<div class="col-sm-9 control-value"><?php echo $service['particulars']; ?>&nbsp;</div>
@@ -65,7 +60,7 @@
 
 				<div class="col-sm-6">
 					<div class="col-sm-3 control-label">Request status</div>
-					<div class="col-sm-9 control-value"><?php echo $service['s_status']; ?>&nbsp;</div>
+					<div class="col-sm-9 control-value"><?php echo ucfirst($service['s_status']); ?>&nbsp;</div>
 
 					<div class="col-sm-3 control-label">Action officer</div>
 					<div class="col-sm-9 control-value"><?php echo $service['action_officer']; ?>&nbsp;</div>
@@ -100,7 +95,7 @@
 						<th width="2%">&nbsp;</th>
 						<th width="10%">Request date</th>
 						<th width="10%">Type</th>
-						<th width="10%">Amount</th>
+						<th width="10%">Amount (Php)</th>
 						<th width="15%">Requested by</th>
 						<th width="10%">Relationship</th>
 						<th width="10%">Status</th>
@@ -113,33 +108,28 @@
 						foreach ($services as $s): 
 						//echo '<pre>'; print_r($rvoter); echo '</pre>';
 						if ($service['service_id'] != $s['service_id']) { 
-							$fullname = strtoupper($s['req_fname'].' '.$s['req_lname']);
 					?>
 					<tr>
 						<td><a href="<?php echo site_url('services/view/'.$s['service_id']); ?>"><span class="glyphicon glyphicon-file"></span></a></td>
 						<td><?php echo $s['req_date']; ?></td>
-						<td><?php echo $s['service_type']; ?></td>
-						<td><?php echo $s['amount']; ?></td>
+						<td><?php echo ucfirst($s['service_type']); ?></td>
+						<td class="text-right"><?php echo number_format($s['amount'], 2); ?></td>
 						<td>
 							<?php 
-								if (empty($s['n_req_id'])) {
-									$req_link = base_url('rvoters/view/'.$s['req_id']);
-								}
-								else { 
-									$req_link = base_url('nonvoters/view/'.$s['nv_id']);
-								}
+								$fullname = strtoupper($s['req_fname'].' '.$s['req_lname']);
+								$req_link = base_url('beneficiaries/view/'.$s['req_ben_id']);
 								echo '<a href="'.$req_link.'">';
 								//echo $s['req_fname'].' '.$s['req_lname']; //echo $s['r_req_id'] . $s['n_req_id'] ; 
 								echo $fullname;
 								echo '</a>';
 							?>
 						</td>
-						<td><?php echo $s['relationship']; ?></td>
-						<td><?php echo $s['s_status']; ?></td>
+						<td><?php echo ucfirst($s['relationship']); ?></td>
+						<td><?php echo ucfirst($s['s_status']); ?></td>
 						<td><?php echo $s['s_remarks']; ?></td>
 						<td>
 							<a href="<?php echo base_url('services/edit/'.$s['service_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
-							<a href="<?php echo base_url('services/delete/'.$s['service_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
+							<a href="<?php echo base_url('services/delete/'.$s['service_id'].'/'.$service['ben_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
 						</td>
 					</tr>
 					<?php 
