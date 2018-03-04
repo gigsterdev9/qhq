@@ -238,9 +238,9 @@ class Beneficiaries extends CI_Controller {
 						$data['nonvoter'] = $this->nonvoters_model->get_nonvoter_by_id($ben['nv_id']);
 						$data['services'] = $this->services_model->get_n_services_by_nvid($ben['nv_id']);
 						$data['scholarships'] = $this->scholarships_model->get_n_scholarships_by_id($ben['nv_id']);
-						$data['tracker'] = $this->nonvoters_model->show_activities($id);
+						$data['tracker'] = $this->nonvoters_model->show_activities($ben['nv_id']);
 						
-						//echo '<pre>'; print_r($data['tracker']); echo '</pre>';
+						//echo '<pre>'; print_r($data); echo '</pre>';
 						$this->load->view('templates/header', $data);
 						$this->load->view('nonvoters/view', $data);
 						$this->load->view('templates/footer');		

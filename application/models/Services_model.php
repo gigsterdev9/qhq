@@ -312,27 +312,10 @@ class services_model extends CI_Model {
 				if ($n != '') {
 					
 					$x = $this->beneficiaries_model->get_beneficiary_by_id($n['req_ben_id']);
-							$n['req_fname'] = $x['fname'];
-							$n['req_mname'] = $x['mname'];
-							$n['req_lname'] = $x['lname'];
-					
-					/*
-					if ($n['n_req_id'] == '' || $n['n_req_id'] == NULL) {
-						$x = $this->rvoters_model->get_rvoter_by_comelec_id($n['r_req_id']);
 						$n['req_fname'] = $x['fname'];
+						$n['req_mname'] = $x['mname'];
 						$n['req_lname'] = $x['lname'];
-						$n['req_id'] = $x['id'];
-					} 
-					elseif($n['r_req_id'] == '' || $n['r_req_id'] == NULL) {
-						$y = $this->nonvoters_model->get_nonvoter_by_id($n['n_req_id']);
-						$n['req_fname'] = $y['fname'];
-						$n['req_lname'] = $y['lname'];
-						$n['req_id'] = $y['nv_id'];
-					}
-					else{
-						return 0;
-					}
-					*/
+					
 				}
 				$n_services[] = $n;
 			}
