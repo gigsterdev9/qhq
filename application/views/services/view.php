@@ -1,12 +1,12 @@
  <?php 
  //echo '<pre>'; print_r($service); echo '</pre>'; //die(); 
  $profile_id = ($service['id_no_comelec'] == '') ? $service['nv_id'] : $service['id_no_comelec'] ;
- $link_id = ($service['id_no_comelec'] == '') ? $service['nv_id'] : $service['id'] ;
- $module = ($service['id_no_comelec'] == '') ? 'nonvoters' : 'rvoters' ;
+ //$link_id = ($service['id_no_comelec'] == '') ? $service['nv_id'] : $service['id'] ;
+ //$module = ($service['id_no_comelec'] == '') ? 'nonvoters' : 'rvoters' ;
   ?>
  <div class="container">
 	<h2><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Service Availment Details</h2> 
-	<h3><a href="<?php echo site_url($module.'/view/'.$link_id); ?>">
+	<h3><a href="<?php echo site_url('beneficiaries/view/'.$service['ben_id']) //echo site_url($module.'/view/'.$link_id); ?>">
 			<span class="glyphicon glyphicon-file"></span> <?php echo $service['fname'].' '.$service['lname'].' ('.$profile_id.')'; ?> 
  		</a>
 		<?php if ($this->ion_auth->in_group('admin')) { ?>
@@ -78,6 +78,10 @@
 					<div class="col-sm-3 control-label" >Remarks</div>
 					<div class="col-sm-9 control-value" ><?php echo $service['s_remarks']; ?>&nbsp;</div>
 
+					<div class="col-sm-12 buffer">&nbsp;</div>
+
+					<div class="col-sm-12 buffer">[ <a href="<?php echo base_url('services/delete/'.$service['service_id'].'/'.$service['ben_id']); ?>">Delete</a> ]</div>
+
 				</div>
 				<?php //echo '<pre>'; print_r($scholar); echo '</pre>'; ?>
 			</div>
@@ -135,7 +139,7 @@
 						<td><?php echo $s['s_remarks']; ?></td>
 						<td>
 							<a href="<?php echo base_url('services/edit/'.$s['service_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
-							<a href="<?php echo base_url('services/trash/'.$s['service_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
+							<a href="<?php echo base_url('services/delete/'.$s['service_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
 						</td>
 					</tr>
 					<?php 

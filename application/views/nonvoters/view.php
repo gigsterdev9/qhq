@@ -130,7 +130,7 @@
 						<td><?php echo $service['s_remarks']; ?></td>
 						<td>
 							<a href="<?php echo base_url('services/edit/'.$service['service_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
-							<a href="<?php echo base_url('services/trash/'.$service['service_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
+							<a href="<?php echo base_url('services/delete/'.$service['service_id'].'/'.$service['ben_id']); ?>"><span class="glyphicon glyphicon-remove-circle"></span></a>
 						</td>
 					</tr>
 					<?php 

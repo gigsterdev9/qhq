@@ -227,7 +227,8 @@ class Beneficiaries extends CI_Controller {
 						$data['services'] = $this->services_model->get_r_services_by_comelec_id($ben['id_no_comelec']);
 						$data['scholarships'] = $this->scholarships_model->get_r_scholarships_by_id($ben['id_no_comelec']);
 						$data['tracker'] = $this->rvoters_model->show_activities($ben['id_no_comelec']);
-					
+						
+						//echo '<pre>'; print_r($data['tracker']); echo '</pre>';
 						$this->load->view('templates/header', $data);
 						$this->load->view('rvoters/view', $data);
 						$this->load->view('templates/footer');	
@@ -239,6 +240,7 @@ class Beneficiaries extends CI_Controller {
 						$data['scholarships'] = $this->scholarships_model->get_n_scholarships_by_id($ben['nv_id']);
 						$data['tracker'] = $this->nonvoters_model->show_activities($id);
 						
+						//echo '<pre>'; print_r($data['tracker']); echo '</pre>';
 						$this->load->view('templates/header', $data);
 						$this->load->view('nonvoters/view', $data);
 						$this->load->view('templates/footer');		

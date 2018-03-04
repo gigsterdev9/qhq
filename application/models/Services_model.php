@@ -126,7 +126,7 @@ class services_model extends CI_Model {
 		$this->db->from('services s');
 		$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
 		$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
-		$this->db->where("s.ben_id = '$ben_id'");
+		$this->db->where("s.ben_id = '$ben_id' and s.trash = '0'");
 		$this->db->order_by('r.lname', 'ASC');
 		$q = $this->db->get();
 				
@@ -163,8 +163,13 @@ class services_model extends CI_Model {
 				}
 				$r_services[] = $r;
 			}
+			if (!empty($r_services)) {
+				return $r_services; 
+			}
+			else{
 
-			return $r_services; 
+				return 0;
+			}
 		}
 		else{
 
@@ -181,7 +186,7 @@ class services_model extends CI_Model {
 		$this->db->select('*');
 		$this->db->from('services s');
 		$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
-		$this->db->where("service_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
+		$this->db->where("s.service_id = '$id' and s.trash = '0'"); //omit trash = 0 to be able to 'undo' trash one last time?
 		$query = $this->db->get();		
 
 		$s = $query->row_array();
@@ -253,7 +258,7 @@ class services_model extends CI_Model {
 		$this->db->from('services s');
 		$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
 		$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
-		$this->db->where("b.id_no_comelec = '$comelec_id'");
+		$this->db->where("b.id_no_comelec = '$comelec_id' and s.trash ='0'");
 		$q = $this->db->get();
 				
 		$rs = $q->result_array();
@@ -291,7 +296,7 @@ class services_model extends CI_Model {
 		$this->db->from('services s');
 		$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
 		$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
-		$this->db->where("b.nv_id = '$nv_id'");
+		$this->db->where("b.nv_id = '$nv_id' and s.trash = '0'");
 		$q = $this->db->get();
 				
 		$ns = $q->result_array();
@@ -638,6 +643,33 @@ class services_model extends CI_Model {
 			);
 			$this->db->insert('audit_trail', $data3);
 		}
+		
+		return;
+	}
+
+	public function trash_service($s_id = FALSE, $b_id = FALSE) {
+
+		if ($s_id === FALSE || $b_id === FALSE) {
+			return 0;
+		}
+
+		$data = array(
+				'trash' => 1
+			);
+		
+		$this->db->where('service_id', $s_id);
+		$this->db->update('services', $data);
+
+		//add audit trail
+		$user = $this->ion_auth->user()->row();
+		$data = array(
+					'service_id' => $s_id,
+					'ben_id' =>$b_id,
+					'user' => $user->username,
+					'activity' => 'modified',
+					'mod_details' => 'trashed service record with ID '.$s_id
+				);
+		$this->db->insert('audit_trail', $data);
 		
 		return;
 	}

@@ -165,8 +165,12 @@ class Services extends CI_Controller {
 
 			//retrieve service availment details
 			$data['service'] = $this->services_model->get_service_by_id($id);
+			if ($data['service'] == 0) {
+				show_404();
+			}
 			//retrieve availment history data
 				$ben_id = $data['service']['ben_id'];
+			//retrieve all other  services availment for same beneficiary
 			$data['services'] = $this->services_model->get_services_by_id($ben_id);
 			//retrieve audit trail
 			//$data['tracker'] = $this->rvoters_model->show_activities($id);
@@ -390,55 +394,12 @@ class Services extends CI_Controller {
 			
 		}
 
-		public function edit_term($s_id = FALSE, $t_id = FALSE) {
+		public function delete($service_id = FALSE, $ben_id = FALSE) {
 			if (!$this->ion_auth->in_group('admin')) {
 				redirect('services'); 
 			}
-			//echo $s_id.' - '.$t_id;
-
-			$this->load->helper('form');
-			$this->load->library('form_validation');
-
-			//$data['services'] = $this->services_model->get_services();
-			$data['title'] = 'Edit service term details';
-			$data['s_id'] = $s_id;
-			$data['t_id'] = $t_id;
-			$data['s_term'] = $this->services_model->get_single_term_details($t_id);
-
-			//term data
-			$this->form_validation->set_rules('year_level','Year Level','required');
-			$this->form_validation->set_rules('school_year','School Year','required');
-			$this->form_validation->set_rules('guardian_combined_income','Parent/Guardian Combined Income','required');
-
-			if ($this->form_validation->run() === FALSE) {
-				$this->load->view('templates/header', $data);
-				$this->load->view('services/edit_term');
-				$this->load->view('templates/footer');
-
-			}
-			else {
-				//echo '<pre>'; print_r($_POST); echo '</pre>'; 
-				
-				//insert into services table
-				$this->services_model->update_service_term();
-				$data['alert_success'] = 'Entry updated.';
-				$data['s_id'] = $this->input->post('service_id');
-				
-				$this->load->view('templates/header', $data);
-				$this->load->view('services/edit_term');
-				$this->load->view('templates/footer');
-			}
-			
-		}
-
-		public function rem_term($s_id = FALSE, $t_id = FALSE) {
-			if (!$this->ion_auth->in_group('admin')) {
-				redirect('services'); 
-			}
-
-			//echo $s_id.' - '.$t_id;
-			$this->services_model->trash_term($s_id, $t_id);
-			redirect('services/view/'.$s_id);
+			$this->services_model->trash_service($service_id, $ben_id);
+			redirect('beneficiaries/view/'.$ben_id);
 
 		}
 		
