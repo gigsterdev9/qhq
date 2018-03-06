@@ -8,6 +8,7 @@ class Scholarships extends CI_Controller {
 				$this->load->model('nonvoters_model');
 				$this->load->model('rvoters_model');
 				$this->load->model('beneficiaries_model');
+				$this->load->model('tracker_model');
                 $this->load->helper('url');
                 $this->load->helper('form');
 				$this->load->library('ion_auth');
@@ -205,7 +206,8 @@ class Scholarships extends CI_Controller {
 				}
 
 				$data['availments'] = $this->scholarships_model->get_term_details($s_id);
-                $data['tracker'] = $this->scholarships_model->show_activities($s_id);
+				//$data['tracker'] = $this->scholarships_model->show_activities($s_id);
+				$data['tracker'] = $this->tracker_model->get_activities($s_id, 'scholarships');
                 
                 //echo '<pre>'; print_r($data); echo '</pre>'; die();
                 

@@ -669,6 +669,7 @@ class scholarships_model extends CI_Model {
 		return;
 	}
 
+	/*
 	public function show_activities($s_id) {
 		$this->db->select('*');
 		$this->db->from('audit_trail');
@@ -688,5 +689,6 @@ class scholarships_model extends CI_Model {
 		
 		return $tracker;
 	}
+	*/
 	
 }

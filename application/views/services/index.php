@@ -120,7 +120,7 @@
 							<th width="10%">Request date</th>
 							<th width="20%">Recipient</th>
 							<th width="10%">Type</th>
-							<th width="10%">Amount</th>
+							<th width="10%">Amount (Php)</th>
 							<th width="20%">Requested by</th>
 							<th width="15%">Relationship</th>
 							<th width="10%">Status</th>
@@ -148,8 +148,8 @@
 									 <?php echo $fullname ?>
 								</a>
 							</td>
-							<td><?php echo $service['service_type']; ?></td>
-							<td><?php echo $service['amount']; ?></td>
+							<td><?php echo ucfirst($service['service_type']); ?></td>
+							<td class="text-right"><?php echo number_format($service['amount'], 2); ?></td>
 							<td>
 								<?php 
 									$req_link = base_url('beneficiaries/view/'.$service['req_ben_id']);
@@ -160,8 +160,8 @@
 									echo '</a>';
 								?>
 							</td>
-							<td><?php echo $service['relationship']; ?></td>
-							<td><?php echo $service['s_status']; ?></td>
+							<td><?php echo ucfirst($service['relationship']); ?></td>
+							<td><?php echo ucfirst($service['s_status']); ?></td>
 							<!--
 							<td>
 								<a href="<?php echo base_url('services/edit/'.$service['service_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
@@ -201,7 +201,7 @@
 							<th width="10%">Request date</th>
 							<th width="20%">Recipient</th>
 							<th width="10%">Type</th>
-							<th width="10%">Amount</th>
+							<th width="10%">Amount (Php)</th>
 							<th width="20%">Requested by</th>
 							<th width="15%">Relationship</th>
 							<th width="10%">Status</th>
@@ -230,9 +230,9 @@
 								</a>
 							</td>
 							<td>
-								<?php echo $service['service_type']; ?>
+								<?php echo ucfirst($service['service_type']); ?>
 							</td>
-							<td><?php echo $service['amount']; ?></td>
+							<td class="text-right"><?php echo number_format($service['amount'], 2); ?></td>
 							<td>
 								<?php 
 									$req_link = base_url('beneficiaries/view/'.$service['req_ben_id']);
@@ -243,8 +243,8 @@
 									echo '</a>';
 								?>
 							</td>
-							<td><?php echo $service['relationship']; ?></td>
-							<td><?php echo $service['s_status']; ?></td>
+							<td><?php echo ucfirst($service['relationship']); ?></td>
+							<td><?php echo ucfirst($service['s_status']); ?></td>
 							<!--
 							<td>
 								<a href="<?php echo base_url('services/edit/'.$service['service_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
@@ -278,7 +278,7 @@
 
 		</div>
 	</div>
-	
+	<div><small>[ <a href="<?php echo base_url('services/batch_import'); ?>">Batch Import</a></small> ]</div>
 	
 </div>
 <script>

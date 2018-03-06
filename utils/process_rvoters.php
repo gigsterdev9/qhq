@@ -67,7 +67,8 @@ if ($_FILES['csv']['size'] > 0) {
             $district = $data[7];
             $counter++;
             echo '<hr />';
-
+            
+            /*
             if ($code != 'CODE') {
                 $query = "INSERT INTO rvoters 
                             (code, id_no, id_no_comelec, fname, lname, dob, address, barangay, district, sex)
@@ -78,12 +79,13 @@ if ($_FILES['csv']['size'] > 0) {
                     printf("Entry successfully inserted.\n");
                 }
             }
+            */
             
         }
     } while ($data = fgetcsv($handle,1000,";",'"'));
     //
 
-   echo "Record upload completed."
+   echo "Record upload completed.";
 }
 else{
     echo "Empty or invalid file.";

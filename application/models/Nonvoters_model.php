@@ -250,6 +250,8 @@ class nonvoters_model extends CI_Model {
 		return;
 	}
 
+	/*
+	// latest: removed and consolidated with other tracker db methods in tracker_model
 	// this is the original tracker that is based on the nv_id 
 	// second option was to track based on the ben_id, but opted back to nv_id comes first before the ben_id
 	public function show_activities($nv_id) {
@@ -271,6 +273,6 @@ class nonvoters_model extends CI_Model {
 		
 		return $tracker;
 	}
-	
+	*/
 	
 }

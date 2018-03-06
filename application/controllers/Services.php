@@ -9,12 +9,12 @@ class Services extends CI_Controller {
 				$this->load->model('services_model');
 				$this->load->model('nonvoters_model');
 				$this->load->model('rvoters_model');
+				$this->load->model('tracker_model');
 				$this->load->helper('url');
                 $this->load->helper('form');
 				$this->load->library('ion_auth');
 				$this->load->library('pagination');
 				
-                
                 if (!$this->ion_auth->logged_in())
 				{
 					redirect('auth/login');
@@ -25,7 +25,7 @@ class Services extends CI_Controller {
 				
         }
 
-        public function index() {		
+		public function index() {		
         
         	//if ($_SERVER['REMOTE_ADDR'] <> '125.212.122.21') die('Undergoing maintenance.');
 			
@@ -175,7 +175,7 @@ class Services extends CI_Controller {
 			$data['services'] = $this->services_model->get_services_by_id($ben_id); //echo 'BEN ID: '.$ben_id;
 			//retrieve audit trail
 			//$data['tracker'] = $this->rvoters_model->show_activities($id);
-			$data['tracker'] = 0;
+			$data['tracker'] = $this->tracker_model->get_activities($id, 'services');
 
 			$this->load->view('templates/header', $data);
 			$this->load->view('services/view', $data);
@@ -401,6 +401,86 @@ class Services extends CI_Controller {
 			$this->services_model->trash_service($service_id, $ben_id);
 			redirect('beneficiaries/view/'.$ben_id);
 
+		}
+
+
+		public function do_upload() {
+
+			$config['upload_path']          = './tmp/';
+			$config['allowed_types']        = 'gif|jpg|png|csv';
+			$config['max_size']             = 100;
+			$config['max_width']            = 1024;
+			$config['max_height']           = 768;
+
+			$this->load->library('upload', $config);
+
+			if ( ! $this->upload->do_upload('userfile'))
+			{
+					$error = array('error' => $this->upload->display_errors());
+					echo '<pre>'; print_r($error); echo '</pre>';
+					//$this->load->view('services/batch_import', $error);
+			}
+			else
+			{
+					$data = array('upload_data' => $this->upload->data());
+					//$this->load->view('services/import_success', $data);
+					echo '<pre>'; print_r($data); echo '</pre>';
+			}
+		}
+
+		public function batch_import() {
+
+			$data['title'] = 'Services data import';
+
+			if ($this->input->post('action') == 'upload') {
+
+				//print_r($_FILES);
+				
+				$config['upload_path'] 		= './tmp/';
+				$config['allowed_types']    = 'csv';
+                $config['max_size']         = 10240;
+                
+				$this->load->library('upload', $config);
+				
+				if ( ! $this->upload->do_upload('userfile')) {
+						
+						//$error = array('error' => $this->upload->display_errors());
+						//echo '<pre>'; print_r($error); echo '</pre>';
+
+						$data['error'] = array('error' => $this->upload->display_errors());
+						$this->load->view('templates/header', $data);
+						$this->load->view('services/batch_import');
+						$this->load->view('templates/footer');		
+                }
+                else{
+						
+						$dd = array('upload_data' => $this->upload->data());
+						//echo '<pre>'; print_r($dd); echo '</pre>';
+
+						if ($dd['upload_data']['file_size'] > 0) {
+							
+							$userfile = $dd['upload_data']['full_path'];
+							//echo $userfile;
+							$this->load->library('CSVReader');
+							$result =   $this->csvreader->parse_file($userfile);//path to csv file
+							//echo '<pre>'; print_r($result); echo '</pre>';
+							$data['csvData'] =  $result;
+						}
+
+						$data['import_success'] = TRUE;
+						$this->load->view('templates/header', $data);
+						$this->load->view('services/batch_import');
+						$this->load->view('templates/footer');
+                }
+			
+			}
+			else{
+		
+				$this->load->view('templates/header', $data);
+				$this->load->view('services/batch_import');
+				$this->load->view('templates/footer');
+			}
+		
 		}
 		
 		public function all_to_excel() {

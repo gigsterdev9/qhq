@@ -603,6 +603,8 @@ class services_model extends CI_Model {
 		return;
 	}
 
+	/*
+	//removed and consolidated with other tracker db methods in tracker_model
 	public function show_activities($beneficiary_id) {
 		$this->db->select('*');
 		$this->db->from('audit_trail');
@@ -622,6 +624,6 @@ class services_model extends CI_Model {
 		
 		return $tracker;
 	}
-
+	*/
 	
 }

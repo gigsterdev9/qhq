@@ -10,6 +10,7 @@ class Beneficiaries extends CI_Controller {
 				$this->load->model('nonvoters_model');
 				$this->load->model('scholarships_model');
 				$this->load->model('services_model');
+				$this->load->model('tracker_model');
                 $this->load->helper('url');
                 $this->load->helper('form');
 				$this->load->library('ion_auth');
@@ -226,7 +227,8 @@ class Beneficiaries extends CI_Controller {
 						$data['rvoter'] = $this->rvoters_model->get_rvoter_by_comelec_id($ben['id_no_comelec']);
 						$data['services'] = $this->services_model->get_r_services_by_comelec_id($ben['id_no_comelec']);
 						$data['scholarships'] = $this->scholarships_model->get_r_scholarships_by_id($ben['id_no_comelec']);
-						$data['tracker'] = $this->rvoters_model->show_activities($ben['id_no_comelec']);
+						//$data['tracker'] = $this->rvoters_model->show_activities($ben['id_no_comelec']);
+						$data['tracker'] = $this->tracker_model->get_activities($ben['id_no_comelec'], 'rvoters');
 						
 						//echo '<pre>'; print_r($data['tracker']); echo '</pre>';
 						$this->load->view('templates/header', $data);
@@ -238,7 +240,8 @@ class Beneficiaries extends CI_Controller {
 						$data['nonvoter'] = $this->nonvoters_model->get_nonvoter_by_id($ben['nv_id']);
 						$data['services'] = $this->services_model->get_n_services_by_nvid($ben['nv_id']);
 						$data['scholarships'] = $this->scholarships_model->get_n_scholarships_by_id($ben['nv_id']);
-						$data['tracker'] = $this->nonvoters_model->show_activities($ben['nv_id']);
+						//$data['tracker'] = $this->nonvoters_model->show_activities($ben['nv_id']);
+						$data['tracker'] = $this->tracker_model->get_activities($ben['nv_id'], 'nvoters');
 						
 						//echo '<pre>'; print_r($data); echo '</pre>';
 						$this->load->view('templates/header', $data);

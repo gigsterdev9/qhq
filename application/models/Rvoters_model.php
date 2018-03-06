@@ -266,6 +266,8 @@ class rvoters_model extends CI_Model {
 		return;
 	}
 
+	/*
+	//removed and consolidated with other tracker db methods in tracker_model
 	public function show_activities($id_no_comelec) {
 		$this->db->select('*');
 		$this->db->from('audit_trail');
@@ -285,6 +287,6 @@ class rvoters_model extends CI_Model {
 		
 		return $tracker;
 	}
-
+	*/
 	
 }
