@@ -190,12 +190,11 @@ class Services extends CI_Controller {
 				redirect('services');
 			}
 
+			$data['title'] = 'New service';
+			/* 
 			$this->load->helper('form');
 			$this->load->library('form_validation');
 
-			$data['title'] = 'New service';
-
-			/* 
 			//get all possible requestors from within the beneficiaries table 
 			$rv_req = $this->beneficiaries_model->get_rv_beneficiaries();
 			$nv_req = $this->beneficiaries_model->get_nv_beneficiaries();

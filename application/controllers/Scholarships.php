@@ -225,12 +225,13 @@ class Scholarships extends CI_Controller {
 				redirect('scholarships');
 			}
 			
+			$data['title'] = 'New scholarship';
+			/*
 			$this->load->helper('form');
 			$this->load->library('form_validation');
 
 			$data['schools'] = $this->scholarships_model->get_schools(); //display school names in filter dropdown
-			$data['title'] = 'New scholarship';
-
+			
 			//primary scholarship data
 			$this->form_validation->set_rules('batch','Batch','required');
 			$this->form_validation->set_rules('school_id','School ID','required');
@@ -255,6 +256,11 @@ class Scholarships extends CI_Controller {
 				$this->load->view('scholarships/add');
 				$this->load->view('templates/footer');
 			}
+			*/
+
+			$this->load->view('templates/header', $data);
+			$this->load->view('scholarships/add');
+			$this->load->view('templates/footer');
 
 		}
 		

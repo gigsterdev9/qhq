@@ -96,7 +96,6 @@
 							</select>
 						</div>
 					</div>
-					<!-- add other school not in the list -->
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="course">Course<span class="text-info">*</span></label>
 						<div class="col-sm-10">	
@@ -155,9 +154,7 @@
 
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10">
-							<!-- audit trail temp values -->
 							<input type="hidden" id="altered" name="altered" value="" />
-							<!-- audit trail temp values -->
 							<input type="hidden" name="action" value="1" />
 							<button type="submit" class="btn btn-default">Submit</button>
 						</div>
