@@ -10,6 +10,7 @@ class Nonvoters extends CI_Controller {
 				$this->load->model('scholarships_model');
 				$this->load->model('beneficiaries_model');
 				$this->load->model('services_model');
+				$this->load->model('tracker_model');
                 $this->load->helper('url');
                 $this->load->helper('form');
 				$this->load->library('ion_auth');
@@ -198,8 +199,9 @@ class Nonvoters extends CI_Controller {
 				//retrieve services related data
 				$data['services'] = $this->services_model->get_n_services_by_nvid($nvid);
 				//retrieve audit trail
-				$data['tracker'] = $this->nonvoters_model->show_activities($id);
-                
+				//$data['tracker'] = $this->nonvoters_model->show_activities($id);
+				$data['tracker'] = $this->tracker_model->get_activities($nvid, 'nvoters');
+				
 				$this->load->view('templates/header', $data);
 				$this->load->view('nonvoters/view', $data);
 				$this->load->view('templates/footer');

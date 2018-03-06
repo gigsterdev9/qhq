@@ -195,6 +195,7 @@ class Services extends CI_Controller {
 
 			$data['title'] = 'New service';
 
+			/* 
 			//get all possible requestors from within the beneficiaries table 
 			$rv_req = $this->beneficiaries_model->get_rv_beneficiaries();
 			$nv_req = $this->beneficiaries_model->get_nv_beneficiaries();
@@ -212,10 +213,11 @@ class Services extends CI_Controller {
 			}
 
 			//primary service data
-			$this->form_validation->set_rules('batch','Batch','required');
-			$this->form_validation->set_rules('school_id','School ID','required');
-			$this->form_validation->set_rules('course','Course','required');
-			$this->form_validation->set_rules('service_status','service status','required');
+			$this->form_validation->set_rules('req_date','Request date','required');
+			$this->form_validation->set_rules('req_ben_id','Requestor','required');
+			$this->form_validation->set_rules('relationshiop','Relationship','required');
+			$this->form_validation->set_rules('s_type','Service Type','required');
+			$this->form_validation->set_rules('s_status','Service Status','required');
 			
 			if ($this->form_validation->run() === FALSE) {
 				$this->load->view('templates/header', $data);
@@ -235,6 +237,11 @@ class Services extends CI_Controller {
 				$this->load->view('services/add');
 				$this->load->view('templates/footer');
 			}
+			*/
+
+			$this->load->view('templates/header', $data);
+			$this->load->view('services/add');
+			$this->load->view('templates/footer');
 
 		}
 		
@@ -403,7 +410,7 @@ class Services extends CI_Controller {
 
 		}
 
-
+		/*
 		public function do_upload() {
 
 			$config['upload_path']          = './tmp/';
@@ -427,6 +434,7 @@ class Services extends CI_Controller {
 					echo '<pre>'; print_r($data); echo '</pre>';
 			}
 		}
+		*/
 
 		public function batch_import() {
 
@@ -463,8 +471,30 @@ class Services extends CI_Controller {
 							//echo $userfile;
 							$this->load->library('CSVReader');
 							$result =   $this->csvreader->parse_file($userfile);//path to csv file
-							//echo '<pre>'; print_r($result); echo '</pre>';
-							$data['csvData'] =  $result;
+							
+							//$data['csvData'] =  $result;
+
+							//initiate system lockdown
+							foreach ($result as $r) {
+								//check if record exists in rvoter
+								//check if record exists in nvoter
+
+								//if exist in either nvoter or rvoter, 
+									//check if already in ben table
+									//if exists in ben table 
+										//check if service details exists in service table
+
+									//if not exist in ben table 
+										//create new ben table entry
+										//create new service entry
+
+								//if not exist in nvoter or rvoter 
+									//create new nvoter entry
+									//create new ben table entry
+									//create new service entry
+
+							}
+							//release system lockdown
 						}
 
 						$data['import_success'] = TRUE;

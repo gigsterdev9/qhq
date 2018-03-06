@@ -9,6 +9,7 @@ class Rvoters extends CI_Controller {
 				$this->load->model('scholarships_model');
 				$this->load->model('beneficiaries_model');
 				$this->load->model('services_model');
+				$this->load->model('tracker_model');
                 $this->load->helper('url');
                 $this->load->helper('form');
 				$this->load->library('ion_auth');
@@ -198,8 +199,9 @@ class Rvoters extends CI_Controller {
 				$data['services'] = $this->services_model->get_r_services_by_comelec_id($id_no_comelec);
 				
 				//retrieve audit trail
-				$data['tracker'] = $this->rvoters_model->show_activities($id_no_comelec);
-                
+				//$data['tracker'] = $this->rvoters_model->show_activities($id_no_comelec);
+				$data['tracker'] = $this->tracker_model->get_activities($id_no_comelec, 'rvoters');
+				
 				$this->load->view('templates/header', $data);
 				$this->load->view('rvoters/view', $data);
 				$this->load->view('templates/footer');
