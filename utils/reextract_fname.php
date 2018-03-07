@@ -1,4 +1,7 @@
 <?php
+//march 7 issue: extracts fname but is not yet updating the lname minus the subtracted mname.
+//march 7 issue: assumes 1 word last names and does not consider multi-word last names
+//disabling sql call
 echo 'util desc: extract fname from lname if fname is null.<br />';
 echo 'begin &raquo;';
 
@@ -36,7 +39,7 @@ if ( $result_count > 0) {
             
             $pcs = explode(' ',$row['lname'], 2);
             $new_fname =  $pcs[1];
-            echo $new_fname;
+            echo $new_fname; // <---- issue right here
         
             //update barangay field
             if ($new_fname != '') {
@@ -44,7 +47,7 @@ if ( $result_count > 0) {
             }
             if ($query2 != '') {
                 echo '*';
-                $result2 = mysqli_query($dbcon, $query2) or die(mysqli_error($dbcon));
+                //$result2 = mysqli_query($dbcon, $query2) or die(mysqli_error($dbcon));
             }
             $counter++;
         }
