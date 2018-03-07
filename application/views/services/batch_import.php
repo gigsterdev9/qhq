@@ -42,8 +42,9 @@
 			echo form_close(); 
 			
 			if (isset($import_success) && ($import_success == TRUE)) {  
-				echo '<pre>'; print_r($csvData); echo '</pre>';
+				echo '<pre>'; print_r($flow); echo '</pre>';
 			}
+			
 			?>
 
 		</div>

@@ -470,28 +470,75 @@ class Services extends CI_Controller {
 							//echo $userfile;
 							$this->load->library('CSVReader');
 							$result =   $this->csvreader->parse_file($userfile);//path to csv file
-							
+							//$data['flow'] = $result;
 							//$data['csvData'] =  $result;
-
+							
 							//initiate system lockdown
+							$ctr = 0;
 							foreach ($result as $r) {
+								
+								//echo '<pre>'; print_r($r); echo '</pre>';
+								$fname = $r['FNAME'];
+								$mname = $r['MNAME'];
+								$lname = $r['LNAME'];
+								$dob = $r['DOB'];
+								
+								$data['flow'][$ctr]['fullname'] = $fname.' '.$mname.' '.$lname;
+								
 								//check if record exists in rvoter
+								$rvoter_match = $this->rvoters_model->find_rvoter_match($fname, $mname, $lname, $dob);
 								//check if record exists in nvoter
+								$nvoter_match = $this->nonvoters_model->find_nvoter_match($fname, $mname, $lname, $dob);
 
-								//if exist in either nvoter or rvoter, 
+								$rmatch = FALSE;
+								$nmatch = FALSE;
+
+								if (isset($rvoter_match) && $rvoter_match != NULL) {
+									$rmatch = TRUE;
+									$data['flow'][$ctr]['rmatch'] = TRUE;
+								}
+
+								if (isset($nvoter_match) && $nvoter_match != NULL) {
+									$nmatch = TRUE;
+									$data['flow'][$ctr]['nmatch'] = TRUE;
+								}
+
+
+								if ($rmatch == TRUE && $nmatch == TRUE) {
+									$data['flow'][$ctr]['match_condition'] = 'both are true';
+									//rvoter supersedes nvoter
+								}
+								elseif ($rmatch == TRUE && $nmatch == FALSE) {
+									$data['flow'][$ctr]['match_condition'] = 'rmatch is true';
+									//rvoter supersedes nvoter
+								}
+								elseif ($rmatch == FALSE && $nmatch == TRUE) {
+									$data['flow'][$ctr]['match_condition'] = 'nmatch is true';
+									//rvoter supersedes nvoter
+								}
+								elseif ($rmatch == FALSE && $nmatch == FALSE) {
+									$data['flow'][$ctr]['match_condition'] = 'both are false';
+									
+								}
+								else {
+									$data['flow'][$ctr]['match_condition'] = 'Invalid';
+								}
+								//if exist in either nvoter or rvoter, ()
 									//check if already in ben table
 									//if exists in ben table 
 										//check if service details exists in service table
 
 									//if not exist in ben table 
 										//create new ben table entry
-										//create new service entry
+										//create new service entry, 
+											//preset values for s_remarks .= 'batch upload', req_ben_id = ben_id, relationship = 'self'
 
-								//if not exist in nvoter or rvoter 
+								//if not exist in nvoter or rvoter (both are false)
 									//create new nvoter entry
 									//create new ben table entry
-									//create new service entry
-
+									//create new service entry, 
+										//preset values for s_remarks .= 'batch upload', req_ben_id = ben_id, relationship = 'self'
+								$ctr++;
 							}
 							//release system lockdown
 						}
