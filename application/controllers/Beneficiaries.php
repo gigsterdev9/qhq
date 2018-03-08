@@ -115,7 +115,7 @@ class Beneficiaries extends CI_Controller {
 
 						//sort the search key and values
 						if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
-							//$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' and beneficiaries.trash = 0";
+							//$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' and b.trash = 0";
 							if ($s_fullname == TRUE) {
 								$where_clause .= "lname like '$s_lname%' and fname like '%$s_fname%' ";
 							}
@@ -124,26 +124,26 @@ class Beneficiaries extends CI_Controller {
 									$where_clause .= "lname like '$p%' or fname like '$p%' ";
 									if ($p != end($params)) $where_clause .= 'or ';
 								}
-								$where_clause .= 'and beneficiaries.trash = 0';
+								$where_clause .= 'and b.trash = 0';
 							}
 						}
 						elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
-							$where_clause = "address like '%$search_param%' and beneficiaries.trash = 0";		
+							$where_clause = "address like '%$search_param%' and b.trash = 0";		
 							/*
 							foreach ($params as $p) {
 								$where_clause .= "address like '%$p%' ";
 								if ($p != end($params)) $where_clause .= 'or ';
 							}
-							$where_clause .= 'and beneficiaries.trash = 0';
+							$where_clause .= 'and b.trash = 0';
 							*/
 						}
 						elseif (in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
-							//$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or address like '%$search_param%' and  beneficiaries.trash = 0";
+							//$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or address like '%$search_param%' and  b.trash = 0";
 							foreach ($params as $p) {
 								$where_clause .= "lname like '$p%' or fname like '$p%' or address like '%$p%' ";
 								if ($p != end($params)) $where_clause .= 'or ';
 							}
-							$where_clause .= 'and beneficiaries.trash = 0';
+							$where_clause .= 'and b.trash = 0';
 						}
 						else{
 							$where_clause = '1';

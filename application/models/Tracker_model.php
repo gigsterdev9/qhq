@@ -5,12 +5,27 @@ class tracker_model extends CI_Model {
 	public function __construct() {
 		$this->load->database();
 	}
-        
+    
+    
     public function record_count() {
         return $this->db->count_all('audit_trail');
     }
 
-	
+    
+    public function log_event($activity, $mod_details) {
+
+        $user = $this->ion_auth->user()->row();
+		$data = array(
+					'user' => $user->username,
+					'activity' => $activity,
+					'mod_details' => $mod_details
+				);
+        $this->db->insert('audit_trail', $data);
+        
+        return;
+    }
+    
+
 	// this is the refactored tracker that consolidates all requests from the major tables into 1
 	public function get_activities($id, $module = 'beneficiaries') {
         //echo $module; echo $id;

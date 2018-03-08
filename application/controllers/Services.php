@@ -507,22 +507,32 @@ class Services extends CI_Controller {
 								if ($rmatch == TRUE && $nmatch == TRUE) {
 									$data['flow'][$ctr]['match_condition'] = 'both are true';
 									//rvoter supersedes nvoter
+									$ben_match = $this->beneficiaries_model->get_ben_by_comid($rmatch['id_no_comelec']);
+									print_r($ben_match); die();
 								}
 								elseif ($rmatch == TRUE && $nmatch == FALSE) {
 									$data['flow'][$ctr]['match_condition'] = 'rmatch is true';
 									//rvoter supersedes nvoter
+									$ben_match = $this->beneficiaries_model->get_ben_by_comid($rmatch['id_no_comelec']);
 								}
 								elseif ($rmatch == FALSE && $nmatch == TRUE) {
 									$data['flow'][$ctr]['match_condition'] = 'nmatch is true';
-									//rvoter supersedes nvoter
+									//nvoter supersedes nvoter
+									$ben_match = $this->beneficiaries_model->get_ben_by_nvid($nmatch['nv_id']);
 								}
 								elseif ($rmatch == FALSE && $nmatch == FALSE) {
 									$data['flow'][$ctr]['match_condition'] = 'both are false';
-									
+									//if not exist in nvoter or rvoter (both are false)
+									//create new nvoter entry
+									//create new ben table entry
+									//create new service entry, 
+										//preset values for s_remarks .= 'batch upload', req_ben_id = ben_id, relationship = 'self'
+
 								}
 								else {
 									$data['flow'][$ctr]['match_condition'] = 'Invalid';
 								}
+								
 								//if exist in either nvoter or rvoter, ()
 									//check if already in ben table
 									//if exists in ben table 
@@ -538,10 +548,13 @@ class Services extends CI_Controller {
 									//create new ben table entry
 									//create new service entry, 
 										//preset values for s_remarks .= 'batch upload', req_ben_id = ben_id, relationship = 'self'
+
 								$ctr++;
 							}
 							//release system lockdown
 						}
+
+						$this->tracker_model->log_event('completed','completed services data import. '.$ctr.' records processed');
 
 						$data['import_success'] = TRUE;
 						$this->load->view('templates/header', $data);
@@ -551,7 +564,9 @@ class Services extends CI_Controller {
 			
 			}
 			else{
-		
+				
+				$this->tracker_model->log_event('initiated','initiated services data import');
+
 				$this->load->view('templates/header', $data);
 				$this->load->view('services/batch_import');
 				$this->load->view('templates/footer');
