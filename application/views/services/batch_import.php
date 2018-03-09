@@ -19,11 +19,30 @@
 			<?php 
 			}
 
+			if (isset($notice)) {
+				?>
+					<div class="alert alert-warning">
+						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+						<?php 
+							echo 'Data issues encountered. ';
+							echo '('. count($notice) .')';
+							echo '<br />';
+							if (array($notice)) {
+								foreach ($notice as $n) {
+									echo $n.'<br />';
+								}
+							}
+						?> 
+						<!--<a href="<?php echo base_url('services') ?>">Return to Index.</a>-->
+					</div>
+				<?php 
+				}
+
 			if (isset($import_success) && ($import_success == TRUE)) { 
 			?>
 				<div class="alert alert-success">
 					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-					Data upload successful. <?php //echo '<pre>'; print_r($upload_details); echo '</pre>' ?> 
+					Process completed. <?php //echo '<pre>'; print_r($upload_details); echo '</pre>' ?> 
 					<a href="<?php echo base_url('services') ?>">Return to Index.</a>
 				</div>
 			<?php
@@ -41,10 +60,12 @@
 			<?php 
 			echo form_close(); 
 			
+			/*
 			if (isset($import_success) && ($import_success == TRUE)) {  
 				echo '<pre>'; print_r($flow); echo '</pre>';
 			}
-			
+			*/
+
 			?>
 
 		</div>

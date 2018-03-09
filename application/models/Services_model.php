@@ -497,24 +497,25 @@ class services_model extends CI_Model {
 
 	}
 	
-	public function set_service() //new service
-	{
+	public function set_service($data = NULL) { //new service
 		$this->load->helper('url');
 		
-		$data = array(
-				'req_date' => $this->input->post('req_date'),
-				'ben_id' => $this->input->post('ben_id'),
-				'req_ben_id' => $this->input->post('req_ben_id'),
-				'relationship' => $this->input->post('relationship'),
-				'service_type' => $this->input->post('service_type'),
-				'particulars' => $this->input->post('particulars'),
-				'amount' => $this->input->post('amount'),
-				's_status' => $this->input->post('s_status'),
-				'action_officer' => $this->input->post('action_officer'),
-				'recommendation' => $this->input->post('recommendation'),
-				's_remarks' => $this->input->post('s_remarks'),
-				'trash' => 0
-		);
+		if ($data == NULL) {
+			$data = array(
+					'req_date' => $this->input->post('req_date'),
+					'ben_id' => $this->input->post('ben_id'),
+					'req_ben_id' => $this->input->post('req_ben_id'),
+					'relationship' => $this->input->post('relationship'),
+					'service_type' => $this->input->post('service_type'),
+					'particulars' => $this->input->post('particulars'),
+					'amount' => $this->input->post('amount'),
+					's_status' => $this->input->post('s_status'),
+					'action_officer' => $this->input->post('action_officer'),
+					'recommendation' => $this->input->post('recommendation'),
+					's_remarks' => $this->input->post('s_remarks'),
+					'trash' => 0
+			);
+		}
 		//insert new voter
 		$this->db->insert('services', $data);
 		
@@ -531,6 +532,22 @@ class services_model extends CI_Model {
 		return;
 	}
 	
+	//check for dupes
+	public function dupe_check($req_date = NULL, $ben_id = NULL, $service_type = NULL, $particulars = NULL, $amount = NULL) {
+		
+		if ($req_date == NULL || $ben_id == NULL || $service_type == NULL) {
+			return 0;
+		}
+
+		$this->db->select("service_id");
+		$this->db->from('services');
+		$this->db->where("ben_id = '$ben_id' and req_date = '$req_date' and service_type = '$service_type' and particulars = '$particulars' and amount = '$amount' and trash = '0'");
+		$query = $this->db->get();
+		//echo $this->db->last_query();
+
+		return $query->row_array();
+
+	}
 	
 	//update service details
 	public function update_service() {

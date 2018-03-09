@@ -388,14 +388,36 @@ class Services extends CI_Controller {
 			}
 			else {
 				
-				//insert into services table
-				$this->services_model->set_service();
-				$data['alert_success'] = 'New entry created.';
-				$data['ben_id'] = $this->input->post('ben_id'); //for some reason $data['ben_id'] becomes null so need to reset the value
+				//check if service record already exists
+					//via similar_text and concat of date,servicetype and amount
+				$req_date =  $this->input->post('req_date');
+				$ben_id = $this->input->post('ben_id');	
+				$service_type = $this->input->post('service_type');
+				$particulars = $this->input->post('particulars');
+				$amount = $this->input->post('amount');
 
-				$this->load->view('templates/header', $data);
-				$this->load->view('services/add_exist');
-				$this->load->view('templates/footer');
+				$dupe = $this->services_model->dupe_check($req_date, $ben_id, $service_type, $particulars, $amount);
+
+				if (empty($dupe)) {
+				
+					//insert into services table
+					$this->services_model->set_service();
+					$data['alert_success'] = 'New entry created.';
+					$data['ben_id'] = $this->input->post('ben_id'); //for some reason $data['ben_id'] becomes null so need to reset the value
+
+					$this->load->view('templates/header', $data);
+					$this->load->view('services/add_exist');
+					$this->load->view('templates/footer');
+				}
+				else{
+
+					$data['errors'] = "Duplicate entry detected. If you are certain the entry you are about to create is not a duplicate, modifying the particulars will help.";
+
+					$this->load->view('templates/header', $data);
+					$this->load->view('services/add_exist');
+					$this->load->view('templates/footer');
+
+				}
 			}
 			
 		}
@@ -471,18 +493,46 @@ class Services extends CI_Controller {
 							$this->load->library('CSVReader');
 							$result =   $this->csvreader->parse_file($userfile);//path to csv file
 							//$data['flow'] = $result;
-							//$data['csvData'] =  $result;
+							$data['csvData'] =  $result;
 							
 							//initiate system lockdown
 							$ctr = 0;
 							foreach ($result as $r) {
 								
-								//echo '<pre>'; print_r($r); echo '</pre>';
+								$keys = array_keys($r);
+								$values = $r[$keys[0]];
+								$keys = explode(',', $keys[0]);
+								$values = explode(',', $values);	
+
+								for ($i = 0; $i < count($keys); $i++){
+									$keys[$i] = trim($keys[$i]);
+									$r[$keys[$i]] = $values[$i];
+								}
+								//echo '<pre>'; print_r($r); echo '</pre>'; die();
+								
 								$fname = $r['FNAME'];
 								$mname = $r['MNAME'];
 								$lname = $r['LNAME'];
 								$dob = $r['DOB'];
 								
+								$address = $r['ADDRESS'];
+								$barangay = $r['BARANGAY'];
+								$district = $r['DISTRICT'];
+								$sex = $r['SEX'];
+								$mobile_no = $r['MOBILE_NO'];
+								$email = $r['EMAIL'];
+
+								$req_date =  $r['REQUEST_DATE'];
+								$service_type = $r['SERVICE_TYPE'];
+								$particulars = $r['PARTICULARS'];
+								$amount = $r['AMOUNT'];
+								$service_status = $r['SERVICE_STATUS'];
+								$action_officer = $r['ACTION_OFFICER'];
+								$recommendation = $r['RECOMMENDATION'];
+								$remarks = $r['REMARKS'];
+								
+								
+
 								$data['flow'][$ctr]['fullname'] = $fname.' '.$mname.' '.$lname;
 								
 								//check if record exists in rvoter
@@ -493,62 +543,263 @@ class Services extends CI_Controller {
 								$rmatch = FALSE;
 								$nmatch = FALSE;
 
-								if (isset($rvoter_match) && $rvoter_match != NULL) {
+								if (isset($rvoter_match) && !empty($rvoter_match)) {
 									$rmatch = TRUE;
+									$id_no_comelec = $rvoter_match[0]['id_no_comelec'];
+									
 									$data['flow'][$ctr]['rmatch'] = TRUE;
-								}
+									$data['flow'][$ctr]['id_no_comelec'] = $id_no_comelec;
 
-								if (isset($nvoter_match) && $nvoter_match != NULL) {
+								}
+								if (isset($nvoter_match) && !empty($nvoter_match)) {
 									$nmatch = TRUE;
+									$nv_id = $nvoter_match[0]['nv_id'];
+									
 									$data['flow'][$ctr]['nmatch'] = TRUE;
+									$data['flow'][$ctr]['nv_id'] = $nv_id;
+
 								}
 
-
+								//true in both rvoter and nvoter
 								if ($rmatch == TRUE && $nmatch == TRUE) {
 									$data['flow'][$ctr]['match_condition'] = 'both are true';
 									//rvoter supersedes nvoter
-									$ben_match = $this->beneficiaries_model->get_ben_by_comid($rmatch['id_no_comelec']);
-									print_r($ben_match); die();
+									$ben_match = $this->beneficiaries_model->get_ben_by_comid($id_no_comelec);
+
+									if (!empty($ben_match)) {
+										
+										//check if service record already exists
+										$ben_id = $ben_match['ben_id'];
+										$dupe = $this->services_model->dupe_check($req_date, $ben_id, $service_type, $particulars, $amount);
+
+										if (empty($dupe)) {
+										
+											$service_data = array(
+													'req_date' => $req_date,
+													'ben_id' => $ben_id,
+													'req_ben_id' => $ben_id, //defaulting to self
+													'relationship' => 'self',
+													'service_type' => $service_type,
+													'particulars' => $particulars,
+													'amount' => $amount,
+													's_status' => $service_status,
+													'action_officer' => $action_officer,
+													'recommendation' => $recommendation,
+													's_remarks' => $remarks.' (batch upload)',
+													'trash' => 0
+											);
+											$this->services_model->set_service($service_data);
+										}
+										else{
+
+											$data['notice'][] = 'Entry exists for:  ('.$id_no_comelec.') '.$fname.' '.$mname.' '.$lname.' / '.$req_date.' '.$service_type.' '.$particulars.' '.$amount;
+
+										}
+										
+									}
+									else{
+										//create new ben via id_no_comelec
+										$this->beneficiaries_model->set_beneficiary($id_no_comelec, 'rv');
+										//create new service with new ben id
+										$new_ben_id = $this->beneficiaries_model->get_ben_by_comid($id_no_comelec);
+										$service_data = array(
+											'req_date' => $req_date,
+											'ben_id' => $new_ben_id,
+											'req_ben_id' => $new_ben_id, //defaulting to self
+											'relationship' => 'self',
+											'service_type' => $service_type,
+											'particulars' => $particulars,
+											'amount' => $amount,
+											's_status' => $service_status,
+											'action_officer' => $action_officer,
+											'recommendation' => $recommendation,
+											's_remarks' => $remarks.' (batch upload)',
+											'trash' => 0
+										);
+										$this->services_model->set_service($service_data);
+
+									}
 								}
+								//true for rvoter
 								elseif ($rmatch == TRUE && $nmatch == FALSE) {
+									
 									$data['flow'][$ctr]['match_condition'] = 'rmatch is true';
-									//rvoter supersedes nvoter
-									$ben_match = $this->beneficiaries_model->get_ben_by_comid($rmatch['id_no_comelec']);
+									
+									$ben_match = $this->beneficiaries_model->get_ben_by_comid($id_no_comelec);
+									
+									if (!empty($ben_match)) {
+										
+										//check if service record already exists
+										$ben_id = $ben_match['ben_id'];
+										$dupe = $this->services_model->dupe_check($req_date, $ben_id, $service_type, $particulars, $amount);
+
+										if (empty($dupe)) {
+										
+											$service_data = array(
+													'req_date' => $req_date,
+													'ben_id' => $ben_id,
+													'req_ben_id' => $ben_id, //defaulting to self
+													'relationship' => 'self',
+													'service_type' => $service_type,
+													'particulars' => $particulars,
+													'amount' => $amount,
+													's_status' => $service_status,
+													'action_officer' => $action_officer,
+													'recommendation' => $recommendation,
+													's_remarks' => $remarks.' (batch upload)',
+													'trash' => 0
+											);
+											$this->services_model->set_service($service_data);
+										}
+										else{
+											
+											$data['notice'][] = 'Entry exists for:  ('.$id_no_comelec.') '.$fname.' '.$mname.' '.$lname.' / '.$req_date.' '.$service_type.' '.$particulars.' '.$amount;
+
+										}
+
+									}
+									else{
+										
+										//create new ben via id_no_comelec
+										$this->beneficiaries_model->set_beneficiary($id_no_comelec, 'rv');
+										//create new service with new ben id
+										$new_ben_id = $this->beneficiaries_model->get_ben_by_comid($id_no_comelec);
+										$service_data = array(
+											'req_date' => $req_date,
+											'ben_id' => $new_ben_id,
+											'req_ben_id' => $new_ben_id, //defaulting to self
+											'relationship' => 'self',
+											'service_type' => $service_type,
+											'particulars' => $particulars,
+											'amount' => $amount,
+											's_status' => $service_status,
+											'action_officer' => $action_officer,
+											'recommendation' => $recommendation,
+											's_remarks' => $remarks.' (batch upload)',
+											'trash' => 0
+										);
+										$this->services_model->set_service($service_data);
+
+									}
+
 								}
+								//true for nvoter
 								elseif ($rmatch == FALSE && $nmatch == TRUE) {
+									
 									$data['flow'][$ctr]['match_condition'] = 'nmatch is true';
-									//nvoter supersedes nvoter
-									$ben_match = $this->beneficiaries_model->get_ben_by_nvid($nmatch['nv_id']);
+									
+									$ben_match = $this->beneficiaries_model->get_ben_by_nvid($nv_id);
+
+									if (!empty($ben_match)) {
+										
+										//check if service record already exists
+										$ben_id = $ben_match['ben_id'];
+										$dupe = $this->services_model->dupe_check($req_date, $ben_id, $service_type, $particulars, $amount);
+
+										if (empty($dupe)) {
+										
+											$service_data = array(
+													'req_date' => $req_date,
+													'ben_id' => $ben_id,
+													'req_ben_id' => $ben_id, //defaulting to self
+													'relationship' => 'self',
+													'service_type' => $service_type,
+													'particulars' => $particulars,
+													'amount' => $amount,
+													's_status' => $service_status,
+													'action_officer' => $action_officer,
+													'recommendation' => $recommendation,
+													's_remarks' => $remarks.' (batch upload)',
+													'trash' => 0
+											);
+											$this->services_model->set_service($service_data);
+										}
+										else{
+											
+											$data['notice'][] = 'Entry exists for:  '.$fname.' '.$mname.' '.$lname.' / '.$req_date.' '.$service_type.' '.$particulars.' '.$amount;
+
+										}
+
+									}
+									else{
+										
+										//create new ben via nv_id
+										$this->beneficiaries_model->set_beneficiary($nv_id, 'nv');
+										//create new service with new ben id
+										$new_ben_id = $this->beneficiaries_model->get_ben_by_nvid($nv_id);
+										$service_data = array(
+											'req_date' => $req_date,
+											'ben_id' => $new_ben_id,
+											'req_ben_id' => $new_ben_id, //defaulting to self
+											'relationship' => 'self',
+											'service_type' => $service_type,
+											'particulars' => $particulars,
+											'amount' => $amount,
+											's_status' => $service_status,
+											'action_officer' => $action_officer,
+											'recommendation' => $recommendation,
+											's_remarks' => $remarks.' (batch upload)',
+											'trash' => 0
+										);
+										$this->services_model->set_service($service_data);
+									}
 								}
 								elseif ($rmatch == FALSE && $nmatch == FALSE) {
+								//if not exist in nvoter or rvoter (both are false)
 									$data['flow'][$ctr]['match_condition'] = 'both are false';
-									//if not exist in nvoter or rvoter (both are false)
-									//create new nvoter entry
-									//create new ben table entry
+																	
+									//create new nvoter entry, this creates new ben entry as well
+										//default status to active, referee to null
+									$data = array(
+										'code' => NULL,
+										'id_no' => NULL,
+										'fname' => $fname,
+										'mname' => $mname,
+										'lname' => $lname,
+										'dob' => $dob,
+										'address' => $address,
+										'barangay' => $barangay,
+										'district' => $district,
+										'sex' => $sex,
+										'mobile_no' => $mobile_no,
+										'email' => $email,
+										'referee' => NULL,
+										'nv_status' => 1,
+										'nv_remarks' => $remarks.' (batch upload)',
+										'trash' => 0
+										);	
+									$this->nonvoters_model->set_nonvoter($data);
+									
+									//retrieve new ben id
+									$nvoter_match = $this->nonvoters_model->find_nvoter_match($fname, $mname, $lname, $dob);
+									$nv_id = $nvoter_match[0]['nv_id'];
+									$ben_details = $this->beneficiaries_model->get_ben_by_nvid($nv_id);
+									$new_ben_id = $ben_details['ben_id'];
+									
 									//create new service entry, 
-										//preset values for s_remarks .= 'batch upload', req_ben_id = ben_id, relationship = 'self'
+									//preset values for s_remarks .= 'batch upload', req_ben_id = ben_id, relationship = 'self'
+									$service_data = array(
+										'req_date' => $req_date,
+										'ben_id' => $new_ben_id,
+										'req_ben_id' => $new_ben_id, //defaulting to self
+										'relationship' => 'self',
+										'service_type' => $service_type,
+										'particulars' => $particulars,
+										'amount' => $amount,
+										's_status' => $service_status,
+										'action_officer' => $action_officer,
+										'recommendation' => $recommendation,
+										's_remarks' => $remarks.' (batch upload)',
+										'trash' => 0
+									);
+									$this->services_model->set_service($service_data);
+									
 
 								}
 								else {
 									$data['flow'][$ctr]['match_condition'] = 'Invalid';
 								}
 								
-								//if exist in either nvoter or rvoter, ()
-									//check if already in ben table
-									//if exists in ben table 
-										//check if service details exists in service table
-
-									//if not exist in ben table 
-										//create new ben table entry
-										//create new service entry, 
-											//preset values for s_remarks .= 'batch upload', req_ben_id = ben_id, relationship = 'self'
-
-								//if not exist in nvoter or rvoter (both are false)
-									//create new nvoter entry
-									//create new ben table entry
-									//create new service entry, 
-										//preset values for s_remarks .= 'batch upload', req_ben_id = ben_id, relationship = 'self'
-
 								$ctr++;
 							}
 							//release system lockdown
@@ -557,8 +808,10 @@ class Services extends CI_Controller {
 						$this->tracker_model->log_event('completed','completed services data import. '.$ctr.' records processed');
 
 						$data['import_success'] = TRUE;
+						//echo '<pre>'; print_r($data); echo '</pre>'; die();
+
 						$this->load->view('templates/header', $data);
-						$this->load->view('services/batch_import');
+						$this->load->view('services/batch_import', $data);
 						$this->load->view('templates/footer');
                 }
 			
@@ -568,7 +821,7 @@ class Services extends CI_Controller {
 				$this->tracker_model->log_event('initiated','initiated services data import');
 
 				$this->load->view('templates/header', $data);
-				$this->load->view('services/batch_import');
+				$this->load->view('services/batch_import', $data);
 				$this->load->view('templates/footer');
 			}
 		

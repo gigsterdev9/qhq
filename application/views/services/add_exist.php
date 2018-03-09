@@ -5,11 +5,11 @@
 <div class="panel panel-default">
 	<div class="panel-body">
 		<p class="small"><span class="text-info">*</span> Indicates a required field</p>
-		<?php 
-		echo '<div class="text-warning">';
-		echo validation_errors();
-		echo '</div>'; 
-
+		<div class="text-warning message">
+			<?php echo validation_errors(); ?>
+			<?php if (isset($errors)) echo 'Error: '.nl2br($errors); ?>
+		</div>
+		<?php
 		if (isset($alert_success)) 
 		{ 
 		?>

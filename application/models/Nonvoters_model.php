@@ -159,32 +159,35 @@ class nonvoters_model extends CI_Model {
 		
 	}
 
-	public function set_nonvoter() //new entry
+	public function set_nonvoter($data = NULL) //new entry
 	{
 		$this->load->helper('url');
 		
-		$data = array(
-				'code' => strtoupper($this->input->post('code')),
-				'id_no' => strtoupper($this->input->post('id_no')),
-				'fname' => $this->input->post('fname'),
-				'mname' => $this->input->post('mname'),
-				'lname' => $this->input->post('lname'),
-				'dob' => $this->input->post('dob'),
-				'address' => $this->input->post('address'),
-				'barangay' => $this->input->post('barangay'),
-				'district' => $this->input->post('district'),
-				'sex' => $this->input->post('sex'),
-				'mobile_no' => $this->input->post('mobile_no'),
-				'email' => $this->input->post('email'),
-				'referee' => $this->input->post('referee'),
-				'nv_status' => $this->input->post('status'),
-				'nv_remarks' => $this->input->post('remarks')
-		);
+		if ($data == NULL) {
+			$data = array(
+					'code' => strtoupper($this->input->post('code')),
+					'id_no' => strtoupper($this->input->post('id_no')),
+					'fname' => $this->input->post('fname'),
+					'mname' => $this->input->post('mname'),
+					'lname' => $this->input->post('lname'),
+					'dob' => $this->input->post('dob'),
+					'address' => $this->input->post('address'),
+					'barangay' => $this->input->post('barangay'),
+					'district' => $this->input->post('district'),
+					'sex' => $this->input->post('sex'),
+					'mobile_no' => $this->input->post('mobile_no'),
+					'email' => $this->input->post('email'),
+					'referee' => $this->input->post('referee'),
+					'nv_status' => $this->input->post('status'),
+					'nv_remarks' => $this->input->post('remarks'),
+					'trash' => 0
+			);
+		}
 		//insert new entry
 		$this->db->insert('non_voters', $data);
 		$nvid = $this->db->insert_id();
 		
-		//add to beneficiaries table
+		//automatically add to beneficiaries table
 		$data1 = array(
 					'nv_id' => $nvid
 					);

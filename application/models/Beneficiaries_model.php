@@ -193,6 +193,7 @@ class beneficiaries_model extends CI_Model {
 		$this->db->where("beneficiaries.id_no_comelec = '$id'");
 		$query = $this->db->get();
 
+		//echo $this->db->last_query(); die();
 		return $query->row_array(); //id_no_comelec has unique attrib
 	}
 
@@ -210,33 +211,53 @@ class beneficiaries_model extends CI_Model {
 		return $query->result_array();
 	}
 	
-	public function set_beneficiary() //new beneficiary
-	{
+	//new beneficiary;
+	public function set_beneficiary($id = null, $id_type = null) {// $id_type should either be nv or rv
+	
 		$this->load->helper('url');
 
 		//echo '<pre>'; print_r($this->input->post()); echo '</pre>'; die();
 
-		if ($this->input->post('optradio') != null) {
-			$new_id = explode('|', $this->input->post('optradio'));
-			switch ($new_id[0]) {
-				case 'id_no_comelec':
-					$id_no_comelec = $new_id[1];
-					$nv_id = '';
-					break;
-				case 'nv_id':
-					$id_no_comelec = '';
-					$nv_id = $new_id[1];
-					break;
-				default:
-					//nothing
-					break;
+		if ($id == NULL) {
+
+			if ($this->input->post('optradio') != null) {
+				$new_id = explode('|', $this->input->post('optradio'));
+				switch ($new_id[0]) {
+					case 'id_no_comelec':
+						$id_no_comelec = $new_id[1];
+						$nv_id = '';
+						break;
+					case 'nv_id':
+						$id_no_comelec = '';
+						$nv_id = $new_id[1];
+						break;
+					default:
+						//nothing
+						break;
+				}
+			}
+			else{
+			
+				$id_no_comelec = $this->input->post('id_no_comelec');
+				$nv_id = $this->input->post('nv_id');
+			
 			}
 		}
 		else{
-			$id_no_comelec = $this->input->post('id_no_comelec');
-			$nv_id = $this->input->post('nv_id');
+			
+			if ($id_type == 'rv') {
+				$id_no_comelec = $id;
+				$nv_id = NULL;
+			}
+			elseif ($id_type == 'nv') {
+				$id_no_comelec = NULL;
+				$nv_id = $id;
+			}
+			else{
+				return 0;
+			}
 		}
-		
+
 		$trash = ( $this->input->post('trash') !== null )  ? $this->input->post('trash') : 0 ;
 		
 		$data = array(
