@@ -750,7 +750,7 @@ class Services extends CI_Controller {
 																	
 									//create new nvoter entry, this creates new ben entry as well
 										//default status to active, referee to null
-									$data = array(
+									$data1 = array(
 										'code' => NULL,
 										'id_no' => NULL,
 										'fname' => $fname,
@@ -768,7 +768,7 @@ class Services extends CI_Controller {
 										'nv_remarks' => $remarks.' (batch upload)',
 										'trash' => 0
 										);	
-									$this->nonvoters_model->set_nonvoter($data);
+									$this->nonvoters_model->set_nonvoter($data1);
 									
 									//retrieve new ben id
 									$nvoter_match = $this->nonvoters_model->find_nvoter_match($fname, $mname, $lname, $dob);
