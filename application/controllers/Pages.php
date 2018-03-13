@@ -56,6 +56,11 @@ class Pages extends CI_Controller {
 				$data['r_services'] = $this->services_model->get_r_services($data['total_services'], 0);
 				$data['n_services'] = $this->services_model->get_n_services($data['total_services'], 0);
 
+				//get all scholarships
+				$data['total_scholarships'] = $this->scholarships_model->record_count();
+				$data['r_scholarships'] = $this->scholarships_model->get_r_scholarships($data['total_scholarships'], 0);
+				$data['n_scholarships'] = $this->scholarships_model->get_n_scholarships($data['total_scholarships'], 0);
+
 				//distribution by service type
 				$data['burials'] = $this->services_model->get_by_servtype('burial');
 				$data['endorsements'] = $this->services_model->get_by_servtype('endorsements');

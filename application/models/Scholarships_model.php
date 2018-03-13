@@ -8,29 +8,17 @@ class scholarships_model extends CI_Model {
 	}
 	
 	public function record_count() { //count all scholarship records
-        return $this->db->count_all("scholarships");
+	   
+		//return $this->db->count_all("scholarships");
+		$this->db->select('*');
+		$this->db->from('scholarships');
+		$this->db->where("trash = 0");
+        return $this->db->count_all_results();
 	}
 	
-	/*
-	public function get_scholarships($limit = 0, $start = 0) { //list all scholarships for registered voters -- this complex query sucked in performance
-		
-		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
-		$this->db->from('scholarships s');
-		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
-		$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
-		$this->db->join('schools', 's.school_id = schools.school_id');
-		$this->db->where('n.trash = 0');
-		$this->db->order_by('n.lname', 'ASC');
-		$this->db->limit($limit, $start);
-		$query = $this->db->get();
-
-		return $query->result_array();
-
-	}
-	*/
-
 	public function get_n_scholarships($limit = 0, $start = 0) { //list all scholarships for non voters
 		
+		/*
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('scholarships s');
 		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
@@ -40,30 +28,60 @@ class scholarships_model extends CI_Model {
 		$this->db->order_by('n.lname', 'ASC');
 		$this->db->limit($limit, $start);
 		$query = $this->db->get();
+		$result = $query->result_array();
 
-		return $query->result_array();
+		return $result;
+		*/
+
+		$this->db->select('*');
+		$this->db->from('beneficiaries');
+		$this->db->where("nv_id != '' and trash = '0'");
+		$this->db->limit($limit, $start);
+		$query1 = $this->db->get();
+		$result1 = $query1->result_array();
+
+		//echo '<pre>'; print_r($result1); echo '</pre>'; die();
+		if (is_array($result1)) {
+			foreach ($result1 as $r1) {
+				
+				$ben_id = $r1['ben_id'];
+				
+				$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
+				$this->db->from('scholarships s');
+				$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
+				$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
+				$this->db->join('schools sc', 'sc.school_id = s.school_id');
+				$this->db->where("s.ben_id = '$ben_id'");
+				$this->db->order_by('n.lname', 'ASC');
+				$q = $this->db->get();
+				$result = $q->row_array();
+				
+				if (is_array($result)) {
+					$n_scholarships[] = $result;
+				}
+			}
+			
+			if (isset($n_scholarships)) {
+				//echo '<pre>'; print_r($n_scholarships); echo '</pre>'; die();
+				return $n_scholarships; 
+			}
+			else{
+				return 0;
+			}
+
+		}
+		else {
+			return 0;
+		}
+
 
 	}
 
 	public function get_r_scholarships($limit = 0, $start = 0) { //list all scholarships for registered voters
 		
-		/*
-		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(r.dob, '%Y-%m-%d'))/365)) as age");
-		$this->db->from('scholarships s');
-		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
-		$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
-		$this->db->join('schools', 's.school_id = schools.school_id');
-		$this->db->where('r.trash = 0');
-		$this->db->order_by('r.lname', 'ASC');
-		$this->db->limit($limit, $start);
-		$query = $this->db->get();
-
-		return $query->result_array();
-		*/
-
 		$this->db->select('*');
 		$this->db->from('beneficiaries');
-		$this->db->where("id_no_comelec != '' and trash = 0");
+		$this->db->where("id_no_comelec != '' and trash = '0'");
 		$this->db->limit($limit, $start);
 		$query1 = $this->db->get();
 		$result1 = $query1->result_array();
@@ -81,14 +99,21 @@ class scholarships_model extends CI_Model {
 				$this->db->where("s.ben_id = '$ben_id'");
 				$this->db->order_by('r.lname', 'ASC');
 				$q = $this->db->get();
+				$result = $q->row_array();
 				
-				$r_scholarships[] = $q->row_array();
+				if (is_array($result)) {
+					$r_scholarships[] = $result;
+				}
 			}
 
 			if (isset($r_scholarships)) {
+				//echo '<pre>'; print_r($r_scholarships); echo '</pre>'; die();
 				return $r_scholarships; 
 			}
-			return 0;
+			else{
+				return 0;
+			}
+
 		}
 		else {
 			return 0;
@@ -302,27 +327,6 @@ class scholarships_model extends CI_Model {
 		return $query->result_array();
 		
 	}
-
-	/*
-	public function filter_scholarships_num_rows($filter_param1 = FALSE, $filter_param2 = FALSE) {
-		if ($filter_param1 === FALSE)
-		{
-			return 0;
-		}
-		
-		$this->db->select('*');
-		$this->db->from('scholarships');
-		$this->db->join('beneficiaries', 'beneficiaries.ben_id = scholarships.ben_id');
-		$this->db->join('non_voters', 'beneficiaries.nv_id = non_voters.nv_id');
-		$this->db->join('schools', 'scholarships.school_id = schools.school_id');
-		$this->db->where("$filter_param1 = '$filter_param2' and beneficiaries.trash = 0");
-		$query = $this->db->get();		
-		
-		return $query->num_rows();
-		
-	}
-	*/
-	
 	
 	public function search_r_scholarships($limit, $start, $where_clause = FALSE) { 
 		if ($where_clause === FALSE) {
@@ -353,23 +357,11 @@ class scholarships_model extends CI_Model {
 		}
 
 		if ((isset($rs)) && (count($rs) > 0)) {
-			/*
-			foreach($rs as $r) {
-				//echo '<pre>'; print_r($r); echo '</pre>'; die();
-				if ($r != '') {
-	
-					$x = $this->beneficiaries_model->get_beneficiary_by_id($r['req_ben_id']);
-						$r['req_fname'] = $x['fname'];
-						$r['req_mname'] = $x['mname'];
-						$r['req_lname'] = $x['lname'];
-				}
-				$r_scholarships[] = $r;
-			}
-			return $r_scholarships; 
-			*/
+			
 			return $rs;
 		}
 		else{
+			
 			return 0;
 		}
 

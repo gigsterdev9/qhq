@@ -67,8 +67,8 @@ class Scholarships extends CI_Controller {
 						break;
 					case 'gender': 
 						$gender = $this->input->post('filter_by_gender');
-						$data['r_scholars'] = $this->scholarships_model->filter_r_scholarships('gender', $gender, $config["per_page"], $page);
-						$data['n_scholars'] = $this->scholarships_model->filter_n_scholarships('gender', $gender, $config["per_page"], $page);
+						$data['r_scholars'] = $this->scholarships_model->filter_r_scholarships('sex', $gender, $config["per_page"], $page);
+						$data['n_scholars'] = $this->scholarships_model->filter_n_scholarships('sex', $gender, $config["per_page"], $page);
 						$data['filterval'] = array('gender',$gender); 
 						break;
 					default: 
@@ -102,12 +102,12 @@ class Scholarships extends CI_Controller {
 
 				if (!empty($s_key)) {
 
-					//initialize var
+					//initialize 
 					$where_clause = '';
 
 					//sort the search key and values
 					if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
-						//$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' and beneficiaries.trash = 0";
+						
 						if ($s_fullname == TRUE) {
 							$where_clause .= "lname like '$s_lname%' and fname like '%$s_fname%' ";
 						}
@@ -121,16 +121,10 @@ class Scholarships extends CI_Controller {
 					}
 					elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
 						$where_clause = "address like '%$search_param%' and beneficiaries.trash = 0";		
-						/*
-						foreach ($params as $p) {
-							$where_clause .= "address like '%$p%' ";
-							if ($p != end($params)) $where_clause .= 'or ';
-						}
-						$where_clause .= 'and beneficiaries.trash = 0';
-						*/
+						
 					}
 					elseif (in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
-						//$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or address like '%$search_param%' and  beneficiaries.trash = 0";
+						
 						foreach ($params as $p) {
 							$where_clause .= "lname like '$p%' or fname like '$p%' or address like '%$p%' ";
 							if ($p != end($params)) $where_clause .= 'or ';

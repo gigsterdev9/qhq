@@ -112,14 +112,14 @@
 					<table class="table table-striped">
 					<thead>
 						<tr>
-							<th width="20%">Full Name</th>
-							<th width="10%">Birthdate</th>
-							<th width="5%">Age</th>
+							<th width="25%">Full Name</th>
+							<th width="7%">Birthdate</th>
+							<th width="2%">Age</th>
 							<th width="20%">School</th>
-							<th width="5%">District</th>
-							<th width="5%">Sex</th>
+							<th width="2%">District</th>
+							<th width="2%">Sex</th>
 							<th width="10%">Mobile Number</th>
-							<th width="10%">Email</th>
+							<th width="22%">Email</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -170,14 +170,14 @@
 					<table class="table table-striped">
 					<thead>
 						<tr>
-							<th width="20%">Full Name</th>
-							<th width="10%">Birthdate</th>
-							<th width="5%">Age</th>
+							<th width="25%">Full Name</th>
+							<th width="7%">Birthdate</th>
+							<th width="2%">Age</th>
 							<th width="20%">School</th>
-							<th width="5%">District</th>
-							<th width="5%">Sex</th>
+							<th width="2%">District</th>
+							<th width="2%">Sex</th>
 							<th width="10%">Mobile Number</th>
-							<th width="10%">Email</th>
+							<th width="22%">Email</th>
 						</tr>
 					</thead>
 					<tbody>

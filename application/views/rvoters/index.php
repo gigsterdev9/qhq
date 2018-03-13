@@ -125,11 +125,6 @@
 						<th width="15%">Barangay</th>
 						<th width="2%">District</th>
 						<th width="2%">Sex</th>
-						<!--
-						<th width="10%">Mobile Number</th>
-						<th width="10%">Email</th>
-						<th width="10%">Referee</th>
-						-->
 					</tr>
 				</thead>
 				<tbody>
@@ -150,11 +145,6 @@
 						<td><?php echo $rvoter['barangay']; ?></td>
 						<td align="center"><?php echo $rvoter['district']; ?></td>
 						<td align="center"><?php echo $rvoter['sex']; ?></td>
-						<!--
-						<td><?php echo $rvoter['mobile_no']; ?></td>
-						<td><?php echo $rvoter['email']; ?></td>
-						<td><?php echo $rvoter['referee']; ?></td>
-						-->
 					</tr>
 					<?php 
 						}
