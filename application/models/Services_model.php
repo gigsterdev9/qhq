@@ -7,7 +7,11 @@ class services_model extends CI_Model {
 	}
 		
 	public function record_count() {
-        return $this->db->count_all("services");
+		
+		$this->db->select('*');
+		$this->db->from('services');
+		$this->db->where("trash = 0");
+        return $this->db->count_all_results();
     }
 
 	public function get_r_services($limit = 0, $start = 0, $where_clause=FALSE) {
@@ -618,6 +622,23 @@ class services_model extends CI_Model {
 		$this->db->insert('audit_trail', $data);
 		
 		return;
+	}
+
+	//use in dashboard charts
+	public function get_by_servtype($type = false) {
+
+		$this->db->select('*');
+		$this->db->from('services');
+		if ($type == false) {
+			$this->db->where('1');
+		}
+		else{
+			$this->db->where("service_type = '$type'");
+		}
+		$query = $this->db->get();
+
+		return $query->result_array(); 
+
 	}
 
 	/*

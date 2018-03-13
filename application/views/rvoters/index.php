@@ -79,7 +79,7 @@
 	<h3>
 		<span class="glyphicon glyphicon-folder-open"></span>&nbsp; Registered Voters
 	</h3>
-	<div class="container-fluid message"><?php echo $rvoters['result_count'] ?> records found. 
+	<div class="container-fluid message"><?php echo number_format($rvoters['result_count']) ?> records found. 
 		<?php 
 			if (isset($filterval)) {
 				$filter = (is_array($filterval)) ? '<br />Filter parameters: '. ucfirst($filterval[0]).' / '.$filterval[1] .' '. $filterval[2] : '' ; 
@@ -119,12 +119,12 @@
 				<thead>
 					<tr>
 						<th width="30%">Full Name</th>
-						<th width="10%">Birthdate</th>
-						<th width="10%">Age</th>
-						<th width="30%">Address</th>
-						<th width="10%">Barangay</th>
-						<th width="5%">District</th>
-						<th width="5%">Sex</th>
+						<th width="7%">Birthdate</th>
+						<th width="2%">Age</th>
+						<th width="40%">Address</th>
+						<th width="15%">Barangay</th>
+						<th width="2%">District</th>
+						<th width="2%">Sex</th>
 						<!--
 						<th width="10%">Mobile Number</th>
 						<th width="10%">Email</th>
@@ -148,8 +148,8 @@
 						<td><?php echo $rvoter['age']; ?></td>
 						<td><?php echo $rvoter['address']; ?></td>
 						<td><?php echo $rvoter['barangay']; ?></td>
-						<td><?php echo $rvoter['district']; ?></td>
-						<td><?php echo $rvoter['sex']; ?></td>
+						<td align="center"><?php echo $rvoter['district']; ?></td>
+						<td align="center"><?php echo $rvoter['sex']; ?></td>
 						<!--
 						<td><?php echo $rvoter['mobile_no']; ?></td>
 						<td><?php echo $rvoter['email']; ?></td>

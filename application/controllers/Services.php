@@ -133,18 +133,25 @@ class Services extends CI_Controller {
 					//implement pagination
 					$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
 					$r_s = $this->services_model->get_r_services($config["per_page"], $page); 
+					if (is_array($r_s)) {
 						foreach ($r_s as $s) {
 							if (is_array($s)) { //do not display 'result_count' 
 								$data['r_services'][] = $s;
 							}
 						}
+					}
 					$n_s = $this->services_model->get_n_services($config["per_page"], $page);
+					if (is_array($n_s)) {
 						foreach ($n_s as $s) {
 							if (is_array($s)) { //do not display 'result_count' 
 								$data['n_services'][] = $s;
 							}
 						}
-					$data['total_result_count'] = count($data['n_services']) + count($data['r_services']);
+					}
+					$count_r_services = (isset($data['r_services'])) ? count($data['r_services']) : 0 ;
+					$count_n_services = (isset($data['n_services'])) ? count($data['n_services']) : 0 ;
+
+					$data['total_result_count'] = $count_r_services + $count_n_services;
 						$config['total_rows'] = $data['total_result_count'];
 						$this->pagination->initialize($config);
 					$data['links'] = $this->pagination->create_links();
@@ -569,7 +576,7 @@ class Services extends CI_Controller {
 									if (!empty($ben_match)) {
 										
 										//check if service record already exists
-										$ben_id = $ben_match['ben_id'];
+										$ben_id = $ben_match['ben_id']; 
 										$dupe = $this->services_model->dupe_check($req_date, $ben_id, $service_type, $particulars, $amount);
 
 										if (empty($dupe)) {
@@ -602,6 +609,7 @@ class Services extends CI_Controller {
 										$this->beneficiaries_model->set_beneficiary($id_no_comelec, 'rv');
 										//create new service with new ben id
 										$new_ben_id = $this->beneficiaries_model->get_ben_by_comid($id_no_comelec);
+										
 										$service_data = array(
 											'req_date' => $req_date,
 											'ben_id' => $new_ben_id,
@@ -750,12 +758,12 @@ class Services extends CI_Controller {
 																	
 									//create new nvoter entry, this creates new ben entry as well
 										//default status to active, referee to null
-									$data1 = array(
+									$nv_data = array(
 										'code' => NULL,
 										'id_no' => NULL,
-										'fname' => $fname,
-										'mname' => $mname,
-										'lname' => $lname,
+										'fname' => strtoupper($fname),
+										'mname' => strtoupper($mname),
+										'lname' => strtoupper($lname),
 										'dob' => $dob,
 										'address' => $address,
 										'barangay' => $barangay,
@@ -768,7 +776,7 @@ class Services extends CI_Controller {
 										'nv_remarks' => $remarks.' (batch upload)',
 										'trash' => 0
 										);	
-									$this->nonvoters_model->set_nonvoter($data1);
+									$this->nonvoters_model->set_nonvoter($nv_data);
 									
 									//retrieve new ben id
 									$nvoter_match = $this->nonvoters_model->find_nvoter_match($fname, $mname, $lname, $dob);
@@ -798,6 +806,7 @@ class Services extends CI_Controller {
 								}
 								else {
 									$data['flow'][$ctr]['match_condition'] = 'Invalid';
+
 								}
 								
 								$ctr++;
