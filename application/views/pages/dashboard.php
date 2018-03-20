@@ -141,6 +141,7 @@
 					Total Services Rendered: <?php echo $total_services ?> <br />
 					&nbsp; &nbsp; Services to Registered Voters: <?php echo count($r_services) - 1 ?> <br />
 					&nbsp; &nbsp; Services to Non-Voters: <?php echo count($n_services) - 1 ?> <br />
+					&nbsp; &nbsp; Total amount released: <?php echo number_format($total_services_amount,2).' (Php)' ?> <br />
 					<br />
 					Total Scholarship Grants: <?php echo $total_scholarships ?> <br />
 					&nbsp; &nbsp; Grants to Registered Voters: <?php echo count($r_scholarships) ?> <br />

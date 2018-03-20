@@ -642,6 +642,25 @@ class services_model extends CI_Model {
 
 	}
 
+	public function total_services_amount($year = null) {
+
+		$this->db->select('sum(amount) as total');
+		$this->db->from('services');
+		if ($year == false) {
+			$this->db->where('trash = 0');
+		}
+		else{
+			$this->db->where("year(req_date) = '$year'");
+		}
+		$query = $this->db->get();
+		//$last_query = $this->db->last_query();
+		//die($last_query);
+
+		return $query->row_array(); 
+
+	}
+
+
 	/*
 	//removed and consolidated with other tracker db methods in tracker_model
 	public function show_activities($beneficiary_id) {

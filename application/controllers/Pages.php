@@ -38,8 +38,7 @@ class Pages extends CI_Controller {
         public function view($page = 'dashboard') {
 
         	if ( ! file_exists(APPPATH.'/views/pages/'.$page.'.php')) {
-		            // Whoops, we don't have a page for that!
-		            show_404();
+				show_404();
 		    }
 			
 			$this->load->helper('email');
@@ -55,6 +54,8 @@ class Pages extends CI_Controller {
 				$data['total_services'] = $this->services_model->record_count();
 				$data['r_services'] = $this->services_model->get_r_services($data['total_services'], 0);
 				$data['n_services'] = $this->services_model->get_n_services($data['total_services'], 0);
+					$services_amount = $this->services_model->total_services_amount();
+				$data['total_services_amount'] = $services_amount['total'];
 
 				//get all scholarships
 				$data['total_scholarships'] = $this->scholarships_model->record_count();
@@ -68,6 +69,8 @@ class Pages extends CI_Controller {
 				$data['legals'] = $this->services_model->get_by_servtype('legal');
 				$data['medicals'] = $this->services_model->get_by_servtype('medical');
 				$data['referrals'] = $this->services_model->get_by_servtype('referral');
+
+				
 
 				//distribution by beneficiary type
 				$data['r_ben'] = $this->beneficiaries_model->get_rv_beneficiaries($data['total_ben'], 0, false);
