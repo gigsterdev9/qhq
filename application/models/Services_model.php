@@ -382,6 +382,7 @@ class services_model extends CI_Model {
 		if ($where_clause === FALSE) {
 			return 0;
 		}
+		//die($where_clause);
 		
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('rvoters r');

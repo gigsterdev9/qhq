@@ -90,22 +90,50 @@ class Services extends CI_Controller {
 
 					$search_param = $this->input->get('search_param');
 					$s_key = $this->input->get('s_key'); 
-					
+					$s_fullname = FALSE;
+
+					if (strpos($search_param, ',')) {
+						$params = explode(',', $search_param);
+						$s_lname = $params[0];
+						$s_fname = trim($params[1]);
+						$s_fullname = TRUE;
+					}
+					else{
+						$params = explode(' ',$search_param);
+					}
+
 					if (!empty($s_key)) {
+
+						//initialize var
+						$where_clause = '';
 
 						//sort the search key and values
 						if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
-							$where_clause = "lname like '%$search_param%' or fname like '%$search_param%'";
+							if ($s_fullname == TRUE) {
+								$where_clause .= "lname like '$s_lname%' and fname like '%$s_fname%' ";
+							}
+							else{
+								foreach ($params as $p) {
+									$where_clause .= "lname like '$p%' or fname like '$p%' ";
+									if ($p != end($params)) $where_clause .= 'or ';
+								}
+								$where_clause .= 'and b.trash = 0';
+							}
 						}
 						elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
-							$where_clause = "address like '%$search_param%'";		
+							$where_clause = "address like '%$search_param%' and b.trash = 0";
 						}
 						elseif (in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
-							$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or address like '%$search_param%'";
+							foreach ($params as $p) {
+								$where_clause .= "lname like '$p%' or fname like '$p%' or address like '%$p%' ";
+								if ($p != end($params)) $where_clause .= 'or ';
+							}
+							$where_clause .= 'and b.trash = 0';
 						}
 						else{
 							$where_clause = '1';
 						}
+						//die($where_clause);
 						
 						$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
 						//$data['nonvoters'] = $this->beneficiaries_model->search_beneficiaries($config["per_page"], $page, $search_param, $search_key);

@@ -41,6 +41,7 @@ class scholarships_model extends CI_Model {
 		$result1 = $query1->result_array();
 
 		//echo '<pre>'; print_r($result1); echo '</pre>'; die();
+		//echo count($result1); die();
 		if (is_array($result1)) {
 			foreach ($result1 as $r1) {
 				
@@ -60,9 +61,16 @@ class scholarships_model extends CI_Model {
 					$n_scholarships[] = $result;
 				}
 			}
-			
+			//echo count($n_scholarships); die();
 			if (isset($n_scholarships)) {
-				//echo '<pre>'; print_r($n_scholarships); echo '</pre>'; die();
+				/*
+				$ctr = 1;
+				foreach ($n_scholarships as $n) {
+					if ($ctr != $n['ben_id']) echo '*';
+					echo $ctr .") \t". $n['ben_id'] ."\t". $n['scholarship_id'] ."\t". $n['nv_id'] ."<br />";
+					$ctr++;
+				}
+				*/
 				return $n_scholarships; 
 			}
 			else{
