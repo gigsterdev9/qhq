@@ -1,4 +1,4 @@
-body, input, select {font-family: arial, sans-serif; padding-top: 60px; font-size: 12px }
+body, input, select {font-family: Muli, sans-serif; padding-top: 60px; font-size: 12px }
 /*h1, h2 {margin-top: 70px}*/
 h1 {font-size: 2em}
 h2 {font-size: 1.8em}
@@ -41,8 +41,6 @@ input[type="button"]:hover, input[type="submit"]:hover, button:hover, .btn:hover
 /*Dashboard*/
 .descriptive-text, .descriptive-text p, .descriptive-text ul, .descriptive-text li {font-size: .95em}
 .descriptive-text, .descriptive-text ul {margin: 0; padding-bottom: 5px}
-#grant_output {border-top: 1px solid #dddddd}
-#grant_output p {font-family: verdana; font-size: 12px}  
 
 /*Pagination Links*/
 .page-links { padding: 10px 5px 5px 10px; text-align: center }

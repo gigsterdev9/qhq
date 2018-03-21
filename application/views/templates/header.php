@@ -51,7 +51,8 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 		
-		
+		<link href="https://fonts.googleapis.com/css?family=Muli:300,400,600,700" rel="stylesheet">
+  		
 	</head>
 
 	<body>
