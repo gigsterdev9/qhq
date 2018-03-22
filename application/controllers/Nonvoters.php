@@ -265,15 +265,20 @@ class Nonvoters extends CI_Controller {
 			$data['title'] = 'Edit details';
 			$data['id'] = $id;
 
-			//validation rules
-			$this->form_validation->set_rules('fname', 'First Name', 'required');
-			$this->form_validation->set_rules('lname', 'Last Name', 'required');
-			$this->form_validation->set_rules('dob', 'Birthdate', 'required');
-			$this->form_validation->set_rules('address', 'Address', 'required');
-			$this->form_validation->set_rules('barangay', 'Barangay', 'required');
-			$this->form_validation->set_rules('district', 'District', 'required');
-			$this->form_validation->set_rules('sex', 'Sex', 'required');
-			$this->form_validation->set_rules('email', 'Email', 'valid_email');
+			//validation rules, only if entry is not for 'trashing'
+			if ($this->input->post('trash') == 0) {
+				$this->form_validation->set_rules('fname', 'First Name', 'required');
+				$this->form_validation->set_rules('lname', 'Last Name', 'required');
+				$this->form_validation->set_rules('dob', 'Birthdate', 'required');
+				$this->form_validation->set_rules('address', 'Address', 'required');
+				$this->form_validation->set_rules('barangay', 'Barangay', 'required');
+				$this->form_validation->set_rules('district', 'District', 'required');
+				$this->form_validation->set_rules('sex', 'Sex', 'required');
+				$this->form_validation->set_rules('email', 'Email', 'valid_email');
+			}
+			else{
+				$this->form_validation->set_rules('trash', 'trash', 'required');
+			}
 
 			//upon submission of edit action
 			if ($this->input->post('action') == 1) {
@@ -294,7 +299,7 @@ class Nonvoters extends CI_Controller {
 					$data['nonvoter'] = $this->nonvoters_model->get_nonvoter_by_id($this->input->post('id'));
 					
 					if ( $this->input->post('trash') == 1) {
-						$data['alert_trash'] = 'Marked for deletion. This is your last chance to undo by unchecking the "Delete this entry" box below and clicking submit.<br />';
+						$data['alert_trash'] = 'Marked for deletion.'; //This is your last chance to undo by unchecking the "Delete this entry" box below and clicking submit.<br />';
 					}
 					else {
 						$data['alert_success'] = 'Entry updated.';

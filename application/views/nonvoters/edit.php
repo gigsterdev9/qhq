@@ -151,6 +151,12 @@
 						<div class="col-sm-10">
 							<textarea name="remarks" class="form-control" rows="5"><?php echo set_value('remarks', $nonvoter['nv_remarks']); ?></textarea>
 						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-2" for="delete">Delete</label>
+						<div class="col-sm-10">
+							<input type="checkbox" id="trash" name="trash" value="1" <?php if (set_value('trash', $nonvoter['trash']) == '1') echo 'checked' ?> />
+						</div>
 					</div>		
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10">
@@ -208,5 +214,23 @@ $(function () {
         //e.preventDefault(e);
         
     });
+
+	$('#trash').on('change', function () {
+		$.confirm({
+			title: 'Confirm Delete',
+			content: 'Are you sure?',
+			buttons: {
+				confirm: function () {
+					//nothing
+				},
+				cancel: function () {
+					$('#trash').prop('checked', true); // Checks it
+					$('#trash').prop('checked', false); // Unchecks it
+				}
+			}
+
+		});
+	});
+
 });		
 </script>
