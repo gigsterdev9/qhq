@@ -142,6 +142,7 @@
 								<option value="">Select</option>
 								<option value="1" <?php if (set_value('status', $nonvoter['nv_status']) == '1') echo 'selected' ?> >Active</option>
 								<option value="0" <?php if (set_value('status', $nonvoter['nv_status']) == '0') echo 'selected' ?> >Inactive</option>
+								<option value="2" <?php if (set_value('status', $nonvoter['nv_status']) == '2') echo 'selected' ?> >Deceased</option>
 							</select>
 						</div>
 					</div>

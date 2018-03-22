@@ -74,6 +74,18 @@
 					<div class="col-sm-3 control-label">Email</div>
 					<div class="col-sm-9 control-value"><?php echo $nonvoter['email']; ?>&nbsp;</div>
 
+					<div class="col-sm-3 control-label">Status</div>
+					<div class="col-sm-9 control-value">
+						<?php 
+						switch ($nonvoter['nv_status']) {
+							case '0' : echo 'Inactive'; break;
+							case '1' : echo 'Active'; break;
+							case '2' : echo 'Deceased'; break;
+						} 
+						?>
+						&nbsp;
+					</div>
+
 					<div class="col-sm-3 control-label">Remarks</div>
 					<div class="col-sm-9 control-value"><?php echo $nonvoter['nv_remarks']; ?>&nbsp;</div>
 

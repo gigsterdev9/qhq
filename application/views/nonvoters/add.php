@@ -122,6 +122,7 @@
 							<option value="">Select</option>
 							<option value="1" <?php if (set_value('status', '1') == '1') echo 'selected' ?> >Active</option>
 							<option value="0" <?php if (set_value('status') == '0') echo 'selected' ?> >Inactive</option>
+							<option value="2" <?php if (set_value('status') == '2') echo 'selected' ?> >Deceased</option>
 						</select>
 					</div>
 				</div>
