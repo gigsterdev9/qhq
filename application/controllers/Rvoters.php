@@ -298,8 +298,8 @@ class Rvoters extends CI_Controller {
 					//retrieve updated data
 					$data['rvoter'] = $this->rvoters_model->get_rvoter_by_id($this->input->post('id'));
 					
-					if ( $this->input->post('trash') == 1) {
-						$data['alert_trash'] = 'Marked for deletion. This is your last chance to undo by unchecking the "Delete this entry" box below and clicking submit.<br />';
+					if ( $this->input->post('trash') == '1') {
+						$data['alert_trash'] = 'Marked for deletion.'; //This is your last chance to undo by unchecking the "Delete" checkbox below and clicking submit.<br />';
 					}
 					else {
 						$data['alert_success'] = 'Voter entry updated.';

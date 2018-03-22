@@ -197,7 +197,6 @@ class rvoters_model extends CI_Model {
 				'mobile_no' => $this->input->post('mobile_no'),
 				'email' => $this->input->post('email'),
 				'referee' => $this->input->post('referee'),
-				//'voters_id' => $this->input->post('voters_id'),
 				'status' => $this->input->post('status'),
 				'remarks' => $this->input->post('remarks')
 		);
@@ -236,11 +235,13 @@ class rvoters_model extends CI_Model {
 				'barangay' => $this->input->post('barangay'),
 				'district' => $this->input->post('district'),
 				'sex' => $this->input->post('sex'),
+				'code' => $this->input->post('code'),
+				'id_no' => $this->input->post('id_no'),
+				'id_no_comelec' => $this->input->post('id_no_comelec'),
 				'precinct' => $this->input->post('precinct'),
 				'mobile_no' => $this->input->post('mobile_no'),
 				'email' => $this->input->post('email'),
 				'referee' => $this->input->post('referee'),
-				//'voters_id' => $this->input->post('voters_id'),
 				'status' => $this->input->post('status'),
 				'remarks' => $this->input->post('remarks'),
 				'trash' => $this->input->post('trash')

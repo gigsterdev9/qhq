@@ -52,6 +52,11 @@
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 		
 		<link href="https://fonts.googleapis.com/css?family=Muli:300,400,600,700" rel="stylesheet">
+
+		<!--JQuery Confirm -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+
   		
 	</head>
 
