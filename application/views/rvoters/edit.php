@@ -153,6 +153,7 @@
 								<option value="">Select</option>
 								<option value="1" <?php if (set_value('status', $rvoter['status']) == '1') echo 'selected' ?> >Active</option>
 								<option value="0" <?php if (set_value('status', $rvoter['status']) == '0') echo 'selected' ?> >Inactive</option>
+								<option value="2" <?php if (set_value('status', $rvoter['status']) == '2') echo 'selected' ?> >Deceased</option>
 							</select>
 						</div>
 					</div>

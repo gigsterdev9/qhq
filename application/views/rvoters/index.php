@@ -119,7 +119,7 @@
 				<thead>
 					<tr>
 						<th width="30%">Full Name</th>
-						<th width="7%">Birthdate</th>
+						<th width="9%">Birthdate</th>
 						<th width="2%">Age</th>
 						<th width="40%">Address</th>
 						<th width="15%">Barangay</th>

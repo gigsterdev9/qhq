@@ -35,7 +35,7 @@
 		?>
 			<div class="form-group">
 				<label class="control-label" for="title">Filter by:</label> &nbsp; 
-				<select name="filter_by" id="filter_by" class="form-control">
+				<select name="filter_by" id="filter_by" class="form-control	">
 					<option value=""></option>
 					<option value="brgy">Barangay</option>
 					<option value="district">District</option>
@@ -109,12 +109,12 @@
 				<thead>
 					<tr>
 						<th width="30%">Full Name</th>
-						<th width="10%">Birthdate</th>
-						<th width="10%">Age</th>
-						<th width="30%">Address</th>
-						<th width="10%">Barangay</th>
-						<th width="5%">District</th>
-						<th width="5%">Sex</th>
+						<th width="9%">Birthdate</th>
+						<th width="2%">Age</th>
+						<th width="40%">Address</th>
+						<th width="15%">Barangay</th>
+						<th width="2%">District</th>
+						<th width="2%">Sex</th>
 						<!--
 						<th width="10%">Mobile Number</th>
 						<th width="10%">Email</th>
