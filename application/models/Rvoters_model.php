@@ -8,7 +8,8 @@ class rvoters_model extends CI_Model {
 	}
         
     public function record_count() {
-        return $this->db->count_all("rvoters");
+		$this->db->where('trash = 0');
+        return $this->db->count_all_results('rvoters');
     }
 
 	public function get_rvoters($limit = 0, $start = 0) {
@@ -26,8 +27,7 @@ class rvoters_model extends CI_Model {
 
 	public function get_rvoter_by_id($id = FALSE)
 	{
-		if ($id === FALSE)
-		{
+		if ($id === FALSE) {
 			return 0;
 		}
 		
@@ -39,16 +39,20 @@ class rvoters_model extends CI_Model {
 		return $query->row_array();
 	}
 	
-	public function get_rvoter_by_comelec_id($id = FALSE)
-	{
-		if ($id === FALSE)
-		{
+	public function get_rvoter_by_comelec_id($id = FALSE, $include_trashed = TRUE) {
+		
+		if ($id === FALSE) {
 			return 0;
 		}
 		
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('rvoters');
-		$this->db->where("id_no_comelec = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
+		if ($include_trashed === TRUE) {
+			$this->db->where("id_no_comelec = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
+		}
+		else{
+			$this->db->where("id_no_comelec = '$id' and trash = 0"); 
+		}
 		$query = $this->db->get();		
 
 		return $query->row_array();

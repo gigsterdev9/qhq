@@ -382,6 +382,7 @@ class services_model extends CI_Model {
 		if ($where_clause === FALSE) {
 			return 0;
 		}
+		$where_clause .= ' and (r.trash = 0 and b.trash = 0) ';
 		//die($where_clause);
 		
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
@@ -431,7 +432,8 @@ class services_model extends CI_Model {
 		if ($where_clause === FALSE) {
 			return 0;
 		}
-		
+		$where_clause .= ' and (n.trash = 0 and b.trash = 0) ';
+
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('non_voters n');
 		$this->db->join('beneficiaries b', 'n.nv_id = b.nv_id');

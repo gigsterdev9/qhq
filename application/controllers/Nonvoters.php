@@ -115,14 +115,15 @@ class Nonvoters extends CI_Controller {
 						//sort the search key and values
 						if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
 							if ($s_fullname == TRUE) {
-								$where_clause .= "lname like '$s_lname%' and fname like '%$s_fname%' ";
+								$where_clause .= "lname like '$s_lname%' and fname like '%$s_fname%' and trash = 0";
 							}
 							else{
+								$where_clause .= '( ';
 								foreach ($params as $p) {
 									$where_clause .= "lname like '$p%' or fname like '$p%' ";
-									if ($p != end($params)) $where_clause .= 'or ';
+									if ($p != end($params)) $where_clause .= ' or ';
 								}
-								$where_clause .= 'and trash = 0';
+								$where_clause .= ') and trash = 0';
 							}
 						}
 						elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
@@ -136,16 +137,18 @@ class Nonvoters extends CI_Controller {
 							*/
 						}
 						elseif (in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
+							$where_clause .= '( ';
 							foreach ($params as $p) {
 								$where_clause .= "lname like '$p%' or fname like '$p%' or address like '%$p%' ";
 								if ($p != end($params)) $where_clause .= 'or ';
 							}
-							$where_clause .= 'and trash = 0';
+							$where_clause .= ') and trash = 0';
 						}
 						else{
 							$where_clause = '1';
 						}
-						
+						//die($where_clause);
+
 						$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
 						$data['nonvoters'] = $this->nonvoters_model->search_nonvoters($config["per_page"], $page, $where_clause);
 							$config['total_rows'] = $data['nonvoters']['result_count'];

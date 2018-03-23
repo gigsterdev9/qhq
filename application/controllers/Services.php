@@ -109,29 +109,36 @@ class Services extends CI_Controller {
 
 						//sort the search key and values
 						if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
+							
 							if ($s_fullname == TRUE) {
 								$where_clause .= "lname like '$s_lname%' and fname like '%$s_fname%' ";
 							}
 							else{
+								$where_clause .= '(';
 								foreach ($params as $p) {
 									$where_clause .= "lname like '$p%' or fname like '$p%' ";
 									if ($p != end($params)) $where_clause .= 'or ';
 								}
-								$where_clause .= 'and b.trash = 0';
+								$where_clause .= ')';
 							}
 						}
 						elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
-							$where_clause = "address like '%$search_param%' and b.trash = 0";
+							
+							$where_clause = "address like '%$search_param%'";		
+
 						}
 						elseif (in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
+							
+							$where_clause .= '(';
 							foreach ($params as $p) {
 								$where_clause .= "lname like '$p%' or fname like '$p%' or address like '%$p%' ";
 								if ($p != end($params)) $where_clause .= 'or ';
 							}
-							$where_clause .= 'and b.trash = 0';
+							$where_clause .= ')';
+							
 						}
 						else{
-							$where_clause = '1';
+							//do nothing
 						}
 						//die($where_clause);
 						

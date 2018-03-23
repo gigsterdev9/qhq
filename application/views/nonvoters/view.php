@@ -1,6 +1,6 @@
 <div class="container">
 	<h2><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Non-Voter Details</h2>
-	<h3><span class="glyphicon glyphicon-file"></span> <?php echo strtoupper($nonvoter['fname'].' '.$nonvoter['lname'].' ('.$nonvoter['id_no'].')'); ?> 
+	<h3><?php echo ($nonvoter['trash'] == '1') ? '<i class="fa fa-recycle"></i> ' : '<span class="glyphicon glyphicon-file"></span> ' ?><?php echo strtoupper($nonvoter['fname'].' '.$nonvoter['lname'].' ('.$nonvoter['id_no'].')'); ?> 
 	<?php if ($this->ion_auth->in_group('admin'))
 	{
 	?>

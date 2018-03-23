@@ -115,39 +115,38 @@ class Beneficiaries extends CI_Controller {
 
 						//sort the search key and values
 						if (in_array('s_name', $s_key) && !in_array('s_address', $s_key)) {
-							//$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' and b.trash = 0";
+							
 							if ($s_fullname == TRUE) {
 								$where_clause .= "lname like '$s_lname%' and fname like '%$s_fname%' ";
 							}
 							else{
+								$where_clause .= '(';
 								foreach ($params as $p) {
 									$where_clause .= "lname like '$p%' or fname like '$p%' ";
 									if ($p != end($params)) $where_clause .= 'or ';
 								}
-								$where_clause .= 'and b.trash = 0';
+								$where_clause .= ')';
 							}
 						}
 						elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
-							$where_clause = "address like '%$search_param%' and b.trash = 0";		
-							/*
-							foreach ($params as $p) {
-								$where_clause .= "address like '%$p%' ";
-								if ($p != end($params)) $where_clause .= 'or ';
-							}
-							$where_clause .= 'and b.trash = 0';
-							*/
+							
+							$where_clause = "address like '%$search_param%'";		
+
 						}
 						elseif (in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
-							//$where_clause = "lname like '%$search_param%' or fname like '%$search_param%' or address like '%$search_param%' and  b.trash = 0";
+							
+							$where_clause .= '(';
 							foreach ($params as $p) {
 								$where_clause .= "lname like '$p%' or fname like '$p%' or address like '%$p%' ";
 								if ($p != end($params)) $where_clause .= 'or ';
 							}
-							$where_clause .= 'and b.trash = 0';
+							$where_clause .= ')';
+							
 						}
 						else{
-							$where_clause = '1';
+							//do nothing
 						}
+						//die($where_clause);
 
 						$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
 						//$data['nonvoters'] = $this->beneficiaries_model->search_beneficiaries($config["per_page"], $page, $search_param, $search_key);

@@ -1,6 +1,6 @@
 <div class="container">
 	<h2><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Registered Voter Details</h2>
-	<h3><span class="glyphicon glyphicon-file"></span> <?php echo strtoupper($rvoter['fname'].' '.$rvoter['lname'].' ('.$rvoter['id_no'].')'); ?> 
+	<h3><?php echo ($rvoter['trash'] == '1') ? '<i class="fa fa-recycle"></i> ' : '<span class="glyphicon glyphicon-file"></span> ' ?><?php echo strtoupper($rvoter['fname'].' '.$rvoter['lname'].' ('.$rvoter['id_no'].')'); ?> 
 	<?php if ($this->ion_auth->in_group('admin'))
 	{
 	?>

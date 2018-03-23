@@ -7,7 +7,8 @@ class nonvoters_model extends CI_Model {
 	}
         
     public function record_count() {
-        return $this->db->count_all("non_voters");
+		$this->db->where('trash = 0');
+        return $this->db->count_all_results('non_voters');
     }
 
 	public function get_nonvoters($limit = 0, $start = 0) {
@@ -23,15 +24,19 @@ class nonvoters_model extends CI_Model {
 
 	}
 
-	public function get_nonvoter_by_id($id = FALSE) {
-		if ($id === FALSE)
-		{
+	public function get_nonvoter_by_id($id = FALSE, $include_trashed = TRUE) {
+		if ($id === FALSE) {
 			return 0;
 		}
 		
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('non_voters');
-		$this->db->where("nv_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
+		if ($include_trashed === TRUE) {
+			$this->db->where("nv_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
+		}
+		else{
+			$this->db->where("nv_id = '$id' and trash = 0"); 
+		}
 		$query = $this->db->get();		
 
 		return $query->row_array();

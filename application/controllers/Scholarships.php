@@ -102,7 +102,7 @@ class Scholarships extends CI_Controller {
 
 				if (!empty($s_key)) {
 
-					//initialize 
+					//initialize var
 					$where_clause = '';
 
 					//sort the search key and values
@@ -112,28 +112,33 @@ class Scholarships extends CI_Controller {
 							$where_clause .= "lname like '$s_lname%' and fname like '%$s_fname%' ";
 						}
 						else{
+							$where_clause .= '(';
 							foreach ($params as $p) {
 								$where_clause .= "lname like '$p%' or fname like '$p%' ";
 								if ($p != end($params)) $where_clause .= 'or ';
 							}
-							$where_clause .= 'and beneficiaries.trash = 0';
+							$where_clause .= ')';
 						}
 					}
 					elseif (!in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
-						$where_clause = "address like '%$search_param%' and beneficiaries.trash = 0";		
 						
+						$where_clause = "address like '%$search_param%'";		
+
 					}
 					elseif (in_array('s_name', $s_key) && in_array('s_address', $s_key)) {
 						
+						$where_clause .= '(';
 						foreach ($params as $p) {
 							$where_clause .= "lname like '$p%' or fname like '$p%' or address like '%$p%' ";
 							if ($p != end($params)) $where_clause .= 'or ';
 						}
-						$where_clause .= 'and beneficiaries.trash = 0';
+						$where_clause .= ')';
+						
 					}
 					else{
-						$where_clause = '1';
+						//do nothing
 					}
+					//die($where_clause);
 					
 					$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
 					$data['r_scholars'] = $this->scholarships_model->search_r_scholarships($config["per_page"], $page, $where_clause);
@@ -181,13 +186,13 @@ class Scholarships extends CI_Controller {
 
         public function view($s_id = NULL) {
 
-                $sch = $this->scholarships_model->get_scholarship_by_id($s_id);
-                if (empty($sch))
+				$sch = $this->scholarships_model->get_scholarship_by_id($s_id);
+				if (empty($sch))
 				{
 				        show_404();
 				}
 				else{
-					//echo '<pre>'; print_r($sch); echo '</pre>'; die();
+					
 					if ($sch['id_no_comelec'] != '') { //then entry must be a registered voter
 						$data['scholar'] = $this->scholarships_model->get_r_scholarship_by_id($s_id);
 					}
@@ -197,7 +202,14 @@ class Scholarships extends CI_Controller {
 					else{
 						show_404();
 					}
+				
 				}
+
+				if (empty($data['scholar'])) {
+					//auto update trash value for ben 
+					show_404();
+				}
+				
 
 				$data['availments'] = $this->scholarships_model->get_term_details($s_id);
 				//$data['tracker'] = $this->scholarships_model->show_activities($s_id);

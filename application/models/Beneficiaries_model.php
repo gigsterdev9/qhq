@@ -7,28 +7,10 @@ class beneficiaries_model extends CI_Model {
 	}
         
     public function record_count() {
+		$this->db->where('trash = 0');
         return $this->db->count_all("beneficiaries");
     }
 
-	public function get_nv_beneficiaries($limit = 0, $start = 0, $where_clause = false) {
-		
-		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
-		$this->db->from('beneficiaries b');
-		$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
-
-		if ($where_clause === false) {
-			$this->db->where('b.trash = 0');
-		}
-		else{
-			$this->db->where($where_clause); 
-		}
-		$this->db->order_by('n.lname', 'ASC');
-		$this->db->limit($limit, $start);
-		$query = $this->db->get();
-
-		return $query->result_array();
-
-	}
 
 	public function get_rv_beneficiaries($limit = 0, $start = 0, $where_clause = false) {
 		
@@ -37,9 +19,11 @@ class beneficiaries_model extends CI_Model {
 		$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
 		
 		if ($where_clause === false) {
-			$this->db->where('b.trash = 0'); 
+			$this->db->where('b.trash = 0 and r.trash = 0'); 
 		}
 		else{
+			$where_clause .= " and (b.trash = 0 and r.trash = 0)";
+			//die($where_clause);
 			$this->db->where($where_clause); 
 		}
 		$this->db->order_by('r.lname', 'ASC');
@@ -50,6 +34,28 @@ class beneficiaries_model extends CI_Model {
 
 	}
 
+
+	public function get_nv_beneficiaries($limit = 0, $start = 0, $where_clause = false) {
+		
+		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
+		$this->db->from('beneficiaries b');
+		$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
+
+		if ($where_clause === false) {
+			$this->db->where('b.trash = 0 and n.trash = 0');
+		}
+		else{
+			$where_clause .= " and (b.trash = 0 and n.trash = 0)";
+			//die($where_clause);
+			$this->db->where($where_clause); 
+		}
+		$this->db->order_by('n.lname', 'ASC');
+		$this->db->limit($limit, $start);
+		$query = $this->db->get();
+
+		return $query->result_array();
+
+	}
 
 	public function get_beneficiary_by_id($id = FALSE) { //get by ben id
 		if ($id === FALSE) {
@@ -63,10 +69,10 @@ class beneficiaries_model extends CI_Model {
 		$r =  $query->row_array();
 
 		if (!empty($r['id_no_comelec']))  { //if not empty, then a registered voter
-			$ben = $this->rvoters_model->get_rvoter_by_comelec_id($r['id_no_comelec']);
+			$ben = $this->rvoters_model->get_rvoter_by_comelec_id($r['id_no_comelec'], false);
 		}
 		else{
-			$ben = $this->nonvoters_model->get_nonvoter_by_id($r['nv_id']);
+			$ben = $this->nonvoters_model->get_nonvoter_by_id($r['nv_id'], false);
 		}
 
 		return $ben;

@@ -52,7 +52,7 @@ class scholarships_model extends CI_Model {
 				$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
 				$this->db->join('non_voters n', 'n.nv_id = b.nv_id');
 				$this->db->join('schools sc', 'sc.school_id = s.school_id');
-				$this->db->where("s.ben_id = '$ben_id'");
+				$this->db->where("s.ben_id = '$ben_id' and n.trash = 0");
 				$this->db->order_by('n.lname', 'ASC');
 				$q = $this->db->get();
 				$result = $q->row_array();
@@ -104,7 +104,7 @@ class scholarships_model extends CI_Model {
 				$this->db->join('beneficiaries b', 'b.ben_id = s.ben_id');
 				$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
 				$this->db->join('schools sc', 'sc.school_id = s.school_id');
-				$this->db->where("s.ben_id = '$ben_id'");
+				$this->db->where("s.ben_id = '$ben_id' and r.trash = 0 ");
 				$this->db->order_by('r.lname', 'ASC');
 				$q = $this->db->get();
 				$result = $q->row_array();
@@ -152,7 +152,7 @@ class scholarships_model extends CI_Model {
 		$this->db->join('beneficiaries b', 's.ben_id = b.ben_id');
 		$this->db->join('rvoters r', 'r.id_no_comelec = b.id_no_comelec');
 		$this->db->join('schools', 's.school_id = schools.school_id');
-		$this->db->where("s.scholarship_id = '$id'"); //omit trash = 0 to be able to 'undo' trash one last time
+		$this->db->where("s.scholarship_id = '$id' and r.trash = 0"); //omit trash = 0 to be able to 'undo' trash one last time
 		$query = $this->db->get();
 
 		//echo $this->db->last_query();
@@ -340,6 +340,7 @@ class scholarships_model extends CI_Model {
 		if ($where_clause === FALSE) {
 			return 0;
 		}
+		$where_clause .= ' and (rvoters.trash = 0 and beneficiaries.trash = 0) ';
 		
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('rvoters');
@@ -379,7 +380,9 @@ class scholarships_model extends CI_Model {
 		if ($where_clause === FALSE) {
 			return 0;
 		}
-		
+		$where_clause .= ' and (non_voters.trash = 0 and beneficiaries.trash = 0) ';
+		//die($where_clause);
+
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('non_voters');
 		$this->db->join('beneficiaries', 'non_voters.nv_id = beneficiaries.nv_id');

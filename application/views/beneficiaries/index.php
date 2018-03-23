@@ -105,8 +105,8 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th width="30%">Full Name</th>
-							<th width="10%">Birthdate</th>
+							<th width="21%">Full Name</th>
+							<th width="9%">Birthdate</th>
 							<th width="30%">Address</th>
 							<th width="10%">Barangay</th>
 							<th width="5%">District</th>
@@ -162,8 +162,8 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th width="30%">Full Name</th>
-						<th width="10%">Birthdate</th>
+						<th width="21%">Full Name</th>
+						<th width="9%">Birthdate</th>
 						<th width="30%">Address</th>
 						<th width="10%">Barangay</th>
 						<th width="5%">District</th>
