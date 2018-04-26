@@ -44,7 +44,7 @@
 						&nbsp;
 					</div>
 
-					<div class="col-sm-3 control-label">Relationship</div>
+                    <div class="col-sm-3 control-label">Relationship</div>
 					<div class="col-sm-9 control-value"><?php echo ucfirst($service['relationship']); ?>&nbsp;</div>
 
 					<div class="col-sm-3 control-label">Service Type</div>
@@ -55,6 +55,10 @@
 
 					<div class="col-sm-3 control-label">Particulars</div>
 					<div class="col-sm-9 control-value"><?php echo $service['particulars']; ?>&nbsp;</div>
+
+                    <div class="col-sm-3 control-label">Institution</div>
+					<div class="col-sm-9 control-value"><?php echo ucfirst($service['institution']); ?>&nbsp;</div>
+
 
 				</div>
 
@@ -97,7 +101,7 @@
 						<th width="10%">Type</th>
 						<th width="10%">Amount (Php)</th>
 						<th width="15%">Requested by</th>
-						<th width="10%">Relationship</th>
+						<th width="10%">Institution</th>
 						<th width="10%">Status</th>
 						<th width="28%">Remarks</th>
 						<th widht="5%">Action</th>
@@ -124,7 +128,7 @@
 								echo '</a>';
 							?>
 						</td>
-						<td><?php echo ucfirst($s['relationship']); ?></td>
+						<td><?php echo ucfirst($s['institution']); ?></td>
 						<td><?php echo ucfirst($s['s_status']); ?></td>
 						<td><?php echo $s['s_remarks']; ?></td>
 						<td>

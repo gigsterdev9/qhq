@@ -324,8 +324,8 @@ class Services extends CI_Controller {
 			$this->form_validation->set_rules('req_ben_id','Requester','required');
 			$this->form_validation->set_rules('relationship','Relationship','required');
 			$this->form_validation->set_rules('service_type','Service Type','required');
-			$this->form_validation->set_rules('particulars','Request particulars','required');
-			$this->form_validation->set_rules('s_status','Service Status','required');
+            $this->form_validation->set_rules('particulars','Request particulars','required');
+            $this->form_validation->set_rules('s_status','Service Status','required');
 			
 			//upon submission of edit action
 			if ($this->input->post('action') == 1) {
@@ -419,8 +419,8 @@ class Services extends CI_Controller {
 			$this->form_validation->set_rules('ben_id','Recipient ID','required');
 			$this->form_validation->set_rules('req_ben_id','Requestor','required');
 			$this->form_validation->set_rules('service_type','Type','required');
-			$this->form_validation->set_rules('particulars','Particulars','required');
-			$this->form_validation->set_rules('s_status','Request status','required');
+            $this->form_validation->set_rules('particulars','Particulars','required');
+            $this->form_validation->set_rules('s_status','Request status','required');
 
 			if ($this->form_validation->run() === FALSE) {
 				$this->load->view('templates/header', $data);

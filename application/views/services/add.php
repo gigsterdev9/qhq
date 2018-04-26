@@ -142,6 +142,12 @@
 							<input type="text" class="form-control" name="particulars" value="<?php echo set_value('particulars'); ?>" />
 						</div>
 					</div>
+                    <div class="form-group">
+						<label class="control-label col-sm-2" for="institution">Institution</label>
+						<div class="col-sm-10">	
+							<input type="text" class="form-control" name="institution" value="<?php echo set_value('institution'); ?>" />
+						</div>
+					</div>
 					<div class="form-group">
 						<label class="control-label col-sm-2" for="amount">Amount (in Php)</label>
 						<div class="col-sm-10">	

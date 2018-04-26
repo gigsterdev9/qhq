@@ -122,7 +122,7 @@
 							<th width="10%">Type</th>
 							<th width="10%">Amount (Php)</th>
 							<th width="20%">Requested by</th>
-							<th width="15%">Relationship</th>
+							<th width="15%">Institution</th>
 							<th width="10%">Status</th>
 							<!-- <th widht="5%">Action</th> -->
 						</tr>
@@ -160,7 +160,7 @@
 									echo '</a>';
 								?>
 							</td>
-							<td><?php echo ucfirst($service['relationship']); ?></td>
+							<td><?php echo ucfirst($service['institution']); ?></td>
 							<td><?php echo ucfirst($service['s_status']); ?></td>
 							<!--
 							<td>
@@ -203,7 +203,7 @@
 							<th width="10%">Type</th>
 							<th width="10%">Amount (Php)</th>
 							<th width="20%">Requested by</th>
-							<th width="15%">Relationship</th>
+							<th width="15%">Institution</th>
 							<th width="10%">Status</th>
 							<!--<th widht="5%">Action</th>-->
 						</tr>
@@ -243,7 +243,7 @@
 									echo '</a>';
 								?>
 							</td>
-							<td><?php echo ucfirst($service['relationship']); ?></td>
+							<td><?php echo ucfirst($service['institution']); ?></td>
 							<td><?php echo ucfirst($service['s_status']); ?></td>
 							<!--
 							<td>
