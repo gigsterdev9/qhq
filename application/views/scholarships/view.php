@@ -23,51 +23,11 @@
 				}
 				?>
 				<div class="col-sm-6" >
-					<div class="col-sm-3 control-label">First Name</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['fname']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label">Middle Name</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['mname']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label">Last Name</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['lname']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label">Birthdate</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['dob']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label">Address</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['address']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label">Barangay</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['barangay']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label">District</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['district']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label">Sex</div>
-					<div class="col-sm-9 control-value">
-						<?php 
-						switch ($scholar['sex']) {
-							case 'M': echo 'Male'; break;
-							case 'F': echo 'Female'; break;
-							default:
-						}
-						?>&nbsp;
-					</div>
+					<div class="col-sm-3 control-label">Complete Name</div>
+					<div class="col-sm-9 control-value"><?php echo $scholar['lname'].', '.$scholar['fname'].' '.$scholar['mname']; ?>&nbsp;</div>
 
 					<div class="col-sm-12 buffer">&nbsp;</div>
-
-					<div class="col-sm-3 control-label">Mobile No.</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['mobile_no']; ?>&nbsp;</div>
-
-					<div class="col-sm-3 control-label">Email</div>
-					<div class="col-sm-9 control-value"><?php echo $scholar['email']; ?>&nbsp;</div>
-
 					
-
-				</div>
-
-				<div class="col-sm-6">
 					<div class="col-sm-3 control-label" >Batch</div>
 					<div class="col-sm-9 control-value" ><?php echo $scholar['batch']; ?>&nbsp;</div>
 
@@ -94,13 +54,34 @@
 					<div class="col-sm-3 control-label ">Parental Support</div>
 					<div class="col-sm-9 control-value"><?php echo $scholar['parent_support_status']; ?>&nbsp;</div>
 
+				</div>
+
+				<div class="col-sm-6">
+					
+					<div class="col-sm-3 control-label ">Rank Points</div>
+					<div class="col-sm-9 control-value"><?php //echo $scholar['rank_points']; ?>&nbsp;</div>
+
+					<div class="col-sm-3 control-label ">Grade Points</div>
+					<div class="col-sm-9 control-value"><?php //echo $scholar['grade_points']; ?>&nbsp;</div>
+
+					<div class="col-sm-3 control-label ">Income Points</div>
+					<div class="col-sm-9 control-value"><?php //echo $scholar['income_points']; ?>&nbsp;</div>
+
+					<div class="col-sm-3 control-label ">GWA 1</div>
+					<div class="col-sm-9 control-value"><?php //echo $scholar['gwa_1']; ?>&nbsp;</div>
+
+					<div class="col-sm-3 control-label ">GWA 2</div>
+					<div class="col-sm-9 control-value"><?php //echo $scholar['gwa_2']; ?>&nbsp;</div>
+
+					<div class="col-sm-3 control-label ">Guardian Income</div>
+					<div class="col-sm-9 control-value"><?php //echo $scholar['guardian_combined_income']; ?>&nbsp;</div>
+
 					<div class="col-sm-12 buffer">&nbsp;</div>
 
 					<div class="col-sm-3 control-label">Remarks</div>
 					<div class="col-sm-9 control-value"><?php echo $scholar['scholarship_remarks']; ?>&nbsp;</div>
 
 				</div>
-				<?php //echo '<pre>'; print_r($scholar); echo '</pre>'; ?>
 			</div>
 		</div>
 		
@@ -115,13 +96,18 @@
 						<th width="2%">&nbsp;</th>
 						<th width="15%">Award No.</th>
 						<th width="10%">School Year</th>
-						<th width="5%">Year Level</th>
+						<th width="10%">Year Level</th>
+						<th width="10%">Check Amount</th>
+						<th width="10%">Check Status</th>
+						<th width="15%">Check Release Date</th>
+						<!--
 						<th width="5%">GWA 1</th>
 						<th width="5%">GWA 2</th>
 						<th width="10%">Parent/Guardian Income *</th>
 						<th width="5%">Grade Points</th>
 						<th width="5%">Income Points</th>
 						<th width="5%">Rank Points</th>
+						-->
 						<th>Remarks</th>
 						<th width="5%">Action</th>
 					</tr>
@@ -137,12 +123,17 @@
 							<td><?php echo $availment['award_no']; ?></td>
 							<td><?php echo $availment['school_year']; ?></td>
 							<td><?php echo $availment['year_level']; ?></td>
+							<!--
 							<td><?php echo $availment['gwa_1']; ?></td>
 							<td><?php echo $availment['gwa_2']; ?></td>
 							<td><?php echo $availment['guardian_combined_income']; ?></td>
 							<td><?php echo $availment['grade_points']; ?></td>
 							<td><?php echo $availment['income_points']; ?></td>
 							<td><?php echo $availment['rank_points']; ?></td>
+							-->
+							<td><?php echo $availment['notes']; ?></td>
+							<td><?php echo $availment['notes']; ?></td>
+							<td><?php echo $availment['notes']; ?></td>
 							<td><?php echo $availment['notes']; ?></td>
 							<td>
 								<a href="<?php echo base_url('scholarships/edit_term/'.$scholar['scholarship_id'].'/'.$availment['term_id']); ?>"><span class="glyphicon glyphicon-edit"></span></a> &nbsp; 
@@ -155,8 +146,7 @@
 					?>
 				</tbody>
 			</table>
-			<i>* Combined income. 1.00 signifies indigent.</i>
-
+			
 				<?php 
 					/*
 					if (is_array($proponent_projects)) 

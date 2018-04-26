@@ -212,11 +212,11 @@
 				<thead>
 					<tr>
 						<th width="2%">&nbsp;</th>
-						<th width="10%">Batch</th>
-						<th width="20%">School</th>
-						<th width="10%"></th>
-						<th width="10%">Institution</th>
-						<th width="10%">Release Date</th>
+						<th width="8%">Batch</th>
+						<th width="22%">School</th>
+						<th width="18%">Course</th>
+						<th width="18%">Major</th>
+						<th width="10%">Status</th>
 						<th>Remarks</th>
 					</tr>
 				</thead>

@@ -566,7 +566,8 @@ class Services extends CI_Controller {
 
 								$req_date =  $r['REQUEST_DATE'];
 								$service_type = $r['SERVICE_TYPE'];
-								$particulars = $r['PARTICULARS'];
+                                $particulars = $r['PARTICULARS'];
+                                $institution = $r['INSTITUTION'];
 								$amount = $r['AMOUNT'];
 								$service_status = $r['SERVICE_STATUS'];
 								$action_officer = $r['ACTION_OFFICER'];
@@ -622,7 +623,8 @@ class Services extends CI_Controller {
 													'req_ben_id' => $ben_id, //defaulting to self
 													'relationship' => 'self',
 													'service_type' => $service_type,
-													'particulars' => $particulars,
+                                                    'particulars' => $particulars,
+                                                    'institution' => $institution,
 													'amount' => $amount,
 													's_status' => $service_status,
 													'action_officer' => $action_officer,
@@ -651,7 +653,8 @@ class Services extends CI_Controller {
 											'req_ben_id' => $new_ben_id, //defaulting to self
 											'relationship' => 'self',
 											'service_type' => $service_type,
-											'particulars' => $particulars,
+                                            'particulars' => $particulars,
+                                            'institution' => $institution,
 											'amount' => $amount,
 											's_status' => $service_status,
 											'action_officer' => $action_officer,
@@ -684,7 +687,8 @@ class Services extends CI_Controller {
 													'req_ben_id' => $ben_id, //defaulting to self
 													'relationship' => 'self',
 													'service_type' => $service_type,
-													'particulars' => $particulars,
+                                                    'particulars' => $particulars,
+                                                    'institution' => $institution,
 													'amount' => $amount,
 													's_status' => $service_status,
 													'action_officer' => $action_officer,
@@ -713,7 +717,8 @@ class Services extends CI_Controller {
 											'req_ben_id' => $new_ben_id, //defaulting to self
 											'relationship' => 'self',
 											'service_type' => $service_type,
-											'particulars' => $particulars,
+                                            'particulars' => $particulars,
+                                            'institution' => $institution,
 											'amount' => $amount,
 											's_status' => $service_status,
 											'action_officer' => $action_officer,
@@ -747,7 +752,8 @@ class Services extends CI_Controller {
 													'req_ben_id' => $ben_id, //defaulting to self
 													'relationship' => 'self',
 													'service_type' => $service_type,
-													'particulars' => $particulars,
+                                                    'particulars' => $particulars,
+                                                    'institution' => $institution,
 													'amount' => $amount,
 													's_status' => $service_status,
 													'action_officer' => $action_officer,
@@ -776,7 +782,8 @@ class Services extends CI_Controller {
 											'req_ben_id' => $new_ben_id, //defaulting to self
 											'relationship' => 'self',
 											'service_type' => $service_type,
-											'particulars' => $particulars,
+                                            'particulars' => $particulars,
+                                            'institution' => $institution,
 											'amount' => $amount,
 											's_status' => $service_status,
 											'action_officer' => $action_officer,
@@ -827,7 +834,8 @@ class Services extends CI_Controller {
 										'req_ben_id' => $new_ben_id, //defaulting to self
 										'relationship' => 'self',
 										'service_type' => $service_type,
-										'particulars' => $particulars,
+                                        'particulars' => $particulars,
+                                        'institution' => $institution,
 										'amount' => $amount,
 										's_status' => $service_status,
 										'action_officer' => $action_officer,
