@@ -330,9 +330,10 @@ class Rvoters extends CI_Controller {
 		public function all_to_excel() {
         //export all data to Excel file
         
-        	$this->load->library('export');
-			$sql = $this->rvoters_model->get_grants();
-			$this->export->to_excel($sql, 'allgrants'); 
+            $this->load->library('export');
+            $max_count = $this->rvoters_model->record_count();
+			$sql = $this->rvoters_model->get_rvoters($max_count, 0);
+			$this->export->to_excel($sql, 'all_rvoters'); 
 			
         }
         
@@ -343,7 +344,7 @@ class Rvoters extends CI_Controller {
         	//echo '<pre>'; print_r($filter); echo '</pre>';
         	$field = key($filter);
         	$value = $filter[key($filter)];
-        	$sql = $this->rvoters_model->filter_grants($field, $value);
+        	$sql = $this->rvoters_model->filter_rvoters($field, $value);
 			//echo '<pre>'; print_r($sql); echo '</pre>';
 			$filename = 'filtered_'.$field.'_'.$value.'_'.date('Y-m-d-Hi');
 			echo $filename;
@@ -357,7 +358,7 @@ class Rvoters extends CI_Controller {
         	
         	$search = $this->uri->segment(3);
 			//echo $search;
-        	$sql = $this->rvoters_model->search_grants($search);
+        	$sql = $this->rvoters_model->search_rvoters($search);
 			$filename = 'results_'.$search.'_'.date('Y-m-d-Hi');
 			//echo $filename;
 			$this->export->to_excel($sql, $filename); 

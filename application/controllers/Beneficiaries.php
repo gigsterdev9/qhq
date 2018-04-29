@@ -421,8 +421,9 @@ class Beneficiaries extends CI_Controller {
         //export all data to Excel file
         
         	$this->load->library('export');
-			$sql = $this->nonvoters_model->get_grants();
-			$this->export->to_excel($sql, 'allgrants'); 
+            $max_count = $this->rvoters_model->record_count();
+			$sql = $this->rvoters_model->get_rvoters($max_count, 0);
+			$this->export->to_excel($sql, 'all_beneficiaries'); 
 			
         }
         
@@ -433,7 +434,7 @@ class Beneficiaries extends CI_Controller {
         	//echo '<pre>'; print_r($filter); echo '</pre>';
         	$field = key($filter);
         	$value = $filter[key($filter)];
-        	$sql = $this->nonvoters_model->filter_grants($field, $value);
+        	$sql = $this->nonvoters_model->filter_beneficiaries($field, $value);
 			//echo '<pre>'; print_r($sql); echo '</pre>';
 			$filename = 'filtered_'.$field.'_'.$value.'_'.date('Y-m-d-Hi');
 			echo $filename;
@@ -447,7 +448,7 @@ class Beneficiaries extends CI_Controller {
         	
         	$search = $this->uri->segment(3);
 			//echo $search;
-        	$sql = $this->nonvoters_model->search_grants($search);
+        	$sql = $this->nonvoters_model->search_beneficiaries($search);
 			$filename = 'results_'.$search.'_'.date('Y-m-d-Hi');
 			//echo $filename;
 			$this->export->to_excel($sql, $filename); 
