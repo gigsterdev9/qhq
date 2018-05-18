@@ -278,7 +278,9 @@
 
 		</div>
 	</div>
-	<div><small>[ <a href="<?php echo base_url('services/batch_import'); ?>">Batch Import</a></small> ]</div>
+	<div>
+        [ <small><a href="<?php echo base_url('services/batch_import'); ?>">Batch Import</a></small> ] 
+    </div>
 	
 </div>
 <script>
