@@ -7,11 +7,8 @@ class services_model extends CI_Model {
 	}
 		
 	public function record_count() {
-		
-		$this->db->select('*');
-		$this->db->from('services');
-		$this->db->where("trash = 0");
-        return $this->db->count_all_results();
+        $this->db->where('trash = 0');
+        return $this->db->count_all_results('services');
     }
 
 	public function get_r_services($limit = 0, $start = 0, $where_clause=FALSE) {
@@ -29,7 +26,7 @@ class services_model extends CI_Model {
 		$query1 = $this->db->get();
 		$result1 = $query1->result_array();
 
-		if (is_array($result1)) {
+        if (is_array($result1)) {
 			foreach ($result1 as $r1) {
 				
 				$ben_id = $r1['ben_id'];
@@ -85,8 +82,9 @@ class services_model extends CI_Model {
 		$this->db->order_by('req_date', 'DESC');
 		$query1 = $this->db->get();
 		$result1 = $query1->result_array();
-
-		if (is_array($result1)) {
+        
+        if (is_array($result1)) {
+            //echo count($result1);
 			foreach ($result1 as $r1) {
 				
 				$ben_id = $r1['ben_id'];
@@ -107,11 +105,11 @@ class services_model extends CI_Model {
 					$n_services[] = $r1;
 				}
 				else{
-					//do nothing
+					//do nothing 
 				}
 			}
 
-			if (!empty($n_services)) {
+            if (!empty($n_services)) {
 				return $n_services;
 			}
 			else{
@@ -212,8 +210,8 @@ class services_model extends CI_Model {
 		$q = $this->db->get();
 				
 		$rs = $q->result_array();
-		
-		if (empty($rs)) {
+        
+        if (empty($rs)) {
 			return 0;
 		}
 

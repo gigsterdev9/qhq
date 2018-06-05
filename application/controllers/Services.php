@@ -25,7 +25,8 @@ class Services extends CI_Controller {
 				
         }
 
-		public function index() {		
+        
+        public function index() {		
         
         	//if ($_SERVER['REMOTE_ADDR'] <> '125.212.122.21') die('Undergoing maintenance.');
 			
@@ -77,13 +78,14 @@ class Services extends CI_Controller {
 							break;
 
 					}
-					$r_count = (!empty($data['r_services'])) ? count($data['r_services']) : 0;
-					$n_count = (!empty($data['n_services'])) ? count($data['n_services']) : 0;
-
-						$config['total_rows'] = $r_count + $n_count;
+					//$r_count = (!empty($data['r_services'])) ? count($data['r_services']) : 0;
+					//$n_count = (!empty($data['n_services'])) ? count($data['n_services']) : 0;
+                        //$config['total_rows'] = $r_count + $n_count;
+                    $data['total_result_count'] = $this->services_model->record_count();
+                        $config['total_rows'] = $data['total_result_count'];
 						$this->pagination->initialize($config);
 					$data['links'] = $this->pagination->create_links();
-					$data['total_result_count'] = $r_count + $n_count;
+					
 
 				}
 				elseif ($this->input->get('search_param') != NULL) {
@@ -147,14 +149,14 @@ class Services extends CI_Controller {
 						$data['r_services'] = $this->services_model->search_r_services($config["per_page"], $page, $where_clause);
 						$data['n_services'] = $this->services_model->search_n_services($config["per_page"], $page, $where_clause);
 						
-						$r_count = (!empty($data['r_services'])) ? count($data['r_services']) : 0;
-						$n_count = (!empty($data['n_services'])) ? count($data['n_services']) : 0;
-
-							$config['total_rows'] = $r_count + $n_count;
+						//$r_count = (!empty($data['r_services'])) ? count($data['r_services']) : 0;
+						//$n_count = (!empty($data['n_services'])) ? count($data['n_services']) : 0;
+                            //$config['total_rows'] = $r_count + $n_count;
+                        $data['total_result_count'] = $this->services_model->record_count();
+                            $config['total_rows'] = $data['total_result_count'];
 							$this->pagination->initialize($config);
 						$data['links'] = $this->pagination->create_links();
 						$data['searchval'] = $search_param;
-						$data['total_result_count'] = $r_count + $n_count;
 					}
 					else {
 						$data['nonvoters']['result_count'] = 0;
@@ -183,11 +185,12 @@ class Services extends CI_Controller {
 							}
 						}
 					}
-					$count_r_services = (isset($data['r_services'])) ? count($data['r_services']) : 0 ;
-					$count_n_services = (isset($data['n_services'])) ? count($data['n_services']) : 0 ;
-
-					$data['total_result_count'] = $count_r_services + $count_n_services;
-						$config['total_rows'] = $data['total_result_count'];
+					//$count_r_services = (isset($data['r_services'])) ? count($data['r_services']) : 0 ;
+					//$count_n_services = (isset($data['n_services'])) ? count($data['n_services']) : 0 ;
+					//$data['total_result_count'] = $count_r_services + $count_n_services;
+                        //$config['total_rows'] = $data['total_result_count'];
+                    $data['total_result_count'] = $this->services_model->record_count();
+                        $config['total_rows'] = $data['total_result_count'];
 						$this->pagination->initialize($config);
 					$data['links'] = $this->pagination->create_links();
 
