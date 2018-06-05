@@ -11,8 +11,30 @@ class services_model extends CI_Model {
         return $this->db->count_all_results('services');
     }
 
+    private function record_count_r() {
+        $query = "select b.ben_id
+                    from services as s
+                    join beneficiaries as b on b.ben_id = s.ben_id
+                    join rvoters as r on r.id_no_comelec = b.id_no_comelec
+                    where (s.trash = 0 and b.trash = 0 and r.trash = 0)";
+        $q = $this->db->query($query);
+        return $q->num_rows();
+    }
+
+    private function record_count_n() {
+        $query = "select b.ben_id
+                    from services as s
+                    join beneficiaries as b on b.ben_id = s.ben_id
+                    join non_voters as n on n.nv_id = b.nv_id
+                    where (s.trash = 0 and b.trash = 0 and n.trash = 0)";
+        $q = $this->db->query($query);
+        return $q->num_rows();
+    }
+
 	public function get_r_services($limit = 0, $start = 0, $where_clause=FALSE) {
-		
+        
+        $rc_r = $this->record_count_r();
+        
 		$this->db->select('*');
 		$this->db->from('services');
 		if ($where_clause == FALSE) {
@@ -20,8 +42,10 @@ class services_model extends CI_Model {
 		}
 		else{
 			$this->db->where("$where_clause and trash = 0");
-		}
-		$this->db->limit($limit, $start);
+        }
+        if ($rc_r > $limit) {
+            $this->db->limit($limit, $start);
+        }
 		$this->db->order_by('req_date', 'DESC');
 		$query1 = $this->db->get();
 		$result1 = $query1->result_array();
@@ -51,7 +75,12 @@ class services_model extends CI_Model {
 				}
 
 			}
-			
+            
+            //hide results on subsequent pages if any
+            if ($start > $rc_r) {
+                $r_services = array(); 
+            }
+
 			if (!empty($r_services)) {
 				return $r_services;
 			}
@@ -69,7 +98,9 @@ class services_model extends CI_Model {
 	}
 
 	public function get_n_services($limit = 0, $start = 0, $where_clause=FALSE) {
-		
+        
+        $rc_n = $this->record_count_n();
+
 		$this->db->select('*');
 		$this->db->from('services');
 		if ($where_clause == FALSE) {
@@ -77,8 +108,10 @@ class services_model extends CI_Model {
 		}
 		else{
 			$this->db->where("$where_clause and trash = 0");
-		}
-		$this->db->limit($limit, $start);
+        }
+        if ($rc_n > $limit) {
+            $this->db->limit($limit, $start);
+        }
 		$this->db->order_by('req_date', 'DESC');
 		$query1 = $this->db->get();
 		$result1 = $query1->result_array();
@@ -108,6 +141,11 @@ class services_model extends CI_Model {
 					//do nothing 
 				}
 			}
+
+            //hide results on subsequent pages if any
+            if ($start > $rc_n) {
+                $n_services = array(); 
+            }
 
             if (!empty($n_services)) {
 				return $n_services;
