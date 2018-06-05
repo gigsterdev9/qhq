@@ -168,28 +168,10 @@ class Services extends CI_Controller {
 
 					//Display registered first, non-voters next
 					//implement pagination
-					$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
-					$r_s = $this->services_model->get_r_services($config["per_page"], $page); 
-					if (is_array($r_s)) {
-						foreach ($r_s as $s) {
-							if (is_array($s)) { //do not display 'result_count' 
-								$data['r_services'][] = $s;
-							}
-						}
-					}
-					$n_s = $this->services_model->get_n_services($config["per_page"], $page);
-					if (is_array($n_s)) {
-						foreach ($n_s as $s) {
-							if (is_array($s)) { //do not display 'result_count' 
-								$data['n_services'][] = $s;
-							}
-						}
-					}
-					//$count_r_services = (isset($data['r_services'])) ? count($data['r_services']) : 0 ;
-					//$count_n_services = (isset($data['n_services'])) ? count($data['n_services']) : 0 ;
-					//$data['total_result_count'] = $count_r_services + $count_n_services;
-                        //$config['total_rows'] = $data['total_result_count'];
-                    $data['total_result_count'] = $this->services_model->record_count();
+                    $page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
+                    $data['r_services'] = $this->services_model->get_r_services($config["per_page"], $page); 
+                    $data['n_services'] = $this->services_model->get_n_services($config["per_page"], $page);
+					$data['total_result_count'] = $this->services_model->record_count();
                         $config['total_rows'] = $data['total_result_count'];
 						$this->pagination->initialize($config);
 					$data['links'] = $this->pagination->create_links();
