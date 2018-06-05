@@ -32,7 +32,7 @@ class Services extends CI_Controller {
 			
 			//set general pagination config
 			$config = array();
-			$config['base_url'] = base_url() . 'services';
+			$config['base_url'] = base_url('services');
 			
 			$config['per_page'] = 100;
 			$config['uri_segment'] = 2;
