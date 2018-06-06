@@ -869,9 +869,10 @@ class Services extends CI_Controller {
         
             $this->load->library('export');
 			$sql = $this->services_model->get_all_services();
-			$this->export->to_excel($sql, 'allservices'); 
+            
+            //echo '<pre>'; print_r($sql); echo '</pre>';
+            $this->export->to_excel($sql, 'allservices'); 
 	
-			//$this->output->enable_profiler(TRUE);	
         }
         
         public function filtered_to_excel() {
@@ -887,7 +888,6 @@ class Services extends CI_Controller {
 			echo $filename;
 			$this->export->to_excel($sql, $filename); 
 	
-			//$this->output->enable_profiler(TRUE);	
         }
         
         public function results_to_excel() {

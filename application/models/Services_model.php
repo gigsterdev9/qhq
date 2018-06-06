@@ -704,16 +704,28 @@ class services_model extends CI_Model {
 	public function get_all_services() { //for extraction to excel
         
         //nonvoters
-        $query = "select s.req_date, n.fname, n.mname, n.lname, n.dob, n.address, n.barangay, n.sex, 
+        $query1 = "select s.req_date, n.fname, n.mname, n.lname, n.id_no, n.dob, n.address, n.barangay, n.sex, 
                     s.service_type, s.particulars, s.institution, s.amount, s.s_status, s.action_officer, s.recommendation, s.s_remarks
                     from services as s
                     join beneficiaries as b on b.ben_id = s.ben_id
                     join non_voters as n on n.nv_id = b.nv_id
                     where (s.trash = 0 and b.trash = 0 and n.trash = 0) 
+                    order by s.req_date asc
                     ";
+        $result1 = $this->db->query($query1);
 
-        $result = $this->db->query($query);
-        return $result->result_array();
+        //registered voters
+        $query2 = "select s.req_date, r.fname, r.mname, r.lname, r.id_no_comelec, r.dob, r.address, r.barangay, r.sex, 
+                    s.service_type, s.particulars, s.institution, s.amount, s.s_status, s.action_officer, s.recommendation, s.s_remarks
+                    from services as s
+                    join beneficiaries as b on b.ben_id = s.ben_id
+                    join rvoters as r on r.id_no_comelec = b.id_no_comelec
+                    where (s.trash = 0 and b.trash = 0 and r.trash = 0) 
+                    order by s.req_date asc
+                    ";
+        $result2 = $this->db->query($query2);
+
+        return array_merge($result1->result_array(), $result2->result_array());
 
     }
 	
