@@ -701,27 +701,20 @@ class services_model extends CI_Model {
 	}
 
 
-	/*
-	//removed and consolidated with other tracker db methods in tracker_model
-	public function show_activities($beneficiary_id) {
-		$this->db->select('*');
-		$this->db->from('audit_trail');
-		$this->db->order_by('timestamp', 'desc');
-		$this->db->where("beneficiary_id = '$beneficiary_id' and activity = 'modified'");
-		$this->db->limit(5);
-		$query = $this->db->get();		
-		
-		$tracker['modified'] = $query->result_array();	
-		
-		$this->db->select('*');
-		$this->db->from('audit_trail');
-		$this->db->where("beneficiary_id = '$beneficiary_id' and activity = 'created'");
-		$query = $this->db->get();		
-		
-		$tracker['created'] = $query->row_array();	
-		
-		return $tracker;
-	}
-	*/
+	public function get_all_services() { //for extraction to excel
+        
+        //nonvoters
+        $query = "select s.req_date, n.fname, n.mname, n.lname, n.dob, n.address, n.barangay, n.sex, 
+                    s.service_type, s.particulars, s.institution, s.amount, s.s_status, s.action_officer, s.recommendation, s.s_remarks
+                    from services as s
+                    join beneficiaries as b on b.ben_id = s.ben_id
+                    join non_voters as n on n.nv_id = b.nv_id
+                    where (s.trash = 0 and b.trash = 0 and n.trash = 0) 
+                    ";
+
+        $result = $this->db->query($query);
+        return $result->result_array();
+
+    }
 	
 }

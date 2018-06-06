@@ -867,8 +867,8 @@ class Services extends CI_Controller {
 		public function all_to_excel() {
         //export all data to Excel file
         
-        	$this->load->library('export');
-			$sql = $this->services_model->get_services();
+            $this->load->library('export');
+			$sql = $this->services_model->get_all_services();
 			$this->export->to_excel($sql, 'allservices'); 
 	
 			//$this->output->enable_profiler(TRUE);	

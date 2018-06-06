@@ -84,7 +84,7 @@ $route['services/add'] = 'services/add';
 $route['services/add_exist'] = 'services/add_exist';
 $route['services/edit_exist'] = 'services/edit_exist';
 $route['services/batch_import'] = 'services/batch_import';
-//$route['services/do_upload'] = 'services/do_upload';
+$route['services/all_to_excel'] = 'services/all_to_excel';
 $route['services/(:any)'] = 'services';
 $route['services'] = 'services';
 
