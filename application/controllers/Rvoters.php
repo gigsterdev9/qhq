@@ -327,13 +327,14 @@ class Rvoters extends CI_Controller {
 			
 		}
 		
-		public function all_to_excel() {
+		public function all_to_excel() {  //disable this! data is too massive to export.
         //export all data to Excel file
         
             $this->load->library('export');
-            $max_count = $this->rvoters_model->record_count();
-			$sql = $this->rvoters_model->get_rvoters($max_count, 0);
-			$this->export->to_excel($sql, 'all_rvoters'); 
+            $sql = $this->rvoters_model->get_rvoters();
+
+            //echo '<pre>'; print_r($sql); echo '</pre>';
+			//$this->export->to_excel($sql, 'all_rvoters'); 
 			
         }
         

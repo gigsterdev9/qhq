@@ -449,7 +449,7 @@ class Scholarships extends CI_Controller {
         //export all data to Excel file
         
         	$this->load->library('export');
-			$sql = $this->scholarships_model->get_scholarships();
+			$sql = $this->scholarships_model->get_all_scholarships();
 			$this->export->to_excel($sql, 'allscholarships'); 
 	
 			//$this->output->enable_profiler(TRUE);	

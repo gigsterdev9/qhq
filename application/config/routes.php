@@ -61,6 +61,7 @@ $route['beneficiaries'] = 'beneficiaries';
 $route['rvoters/view/(:any)'] = 'rvoters/view/$1';
 $route['rvoters/edit/(:any)'] = 'rvoters/edit/$1';
 $route['rvoters/add'] = 'rvoters/add';
+$route['rvoters/all_to_excel'] = 'rvoters/all_to_excel';
 $route['rvoters/(:any)'] = 'rvoters';
 $route['rvoters'] = 'rvoters';
 
@@ -76,7 +77,8 @@ $route['scholarships/edit/(:any)'] = 'scholarships/edit/$1';
 $route['scholarships/add'] = 'scholarships/add';
 $route['scholarships/add_term'] = 'scholarships/add_term';
 $route['scholarships/edit_term'] = 'scholarships/edit_term';
-$route['scholarships/test'] = 'scholarships/test';
+//$route['scholarships/test'] = 'scholarships/test';
+$route['scholarships/all_to_excel'] = 'scholarships/all_to_excel';
 $route['scholarships/(:any)'] = 'scholarships';
 $route['scholarships'] = 'scholarships';
 

@@ -672,26 +672,32 @@ class scholarships_model extends CI_Model {
 		return;
 	}
 
-	/*
-	public function show_activities($s_id) {
-		$this->db->select('*');
-		$this->db->from('audit_trail');
-		$this->db->order_by('timestamp', 'desc');
-		$this->db->where("scholarship_id = '$s_id' and activity = 'modified'");
-		$this->db->limit(5);
-		$query = $this->db->get();		
-		
-		$tracker['modified'] = $query->result_array();	
-		
-		$this->db->select('*');
-		$this->db->from('audit_trail');
-		$this->db->where("scholarship_id = '$s_id' and activity = 'created'");
-		$query = $this->db->get();		
-		
-		$tracker['created'] = $query->row_array();	
-		
-		return $tracker;
-	}
-	*/
+	public function get_all_scholarships() { //for extraction to excel
+        
+        //nonvoters
+        $query1 = "select n.fname, n.mname, n.lname, n.id_no, n.dob, n.address, n.barangay, n.sex, 
+                    c.school_name, s.course, s.major, s.scholarship_status, s.scholarship_remarks
+                    from scholarships as s
+                    join schools as c on c.school_id = s.school_id
+                    join beneficiaries as b on b.ben_id = s.ben_id
+                    join non_voters as n on n.nv_id = b.nv_id
+                    where (s.trash = 0 and b.trash = 0 and n.trash = 0) 
+                    ";
+        $result1 = $this->db->query($query1);
+
+        //registered voters
+        $query2 = "select r.fname, r.mname, r.lname, r.id_no_comelec, r.dob, r.address, r.barangay, r.sex, 
+                    c.school_name, s.course, s.major, s.scholarship_status, s.scholarship_remarks
+                    from scholarships as s
+                    join schools as c on c.school_id = s.school_id
+                    join beneficiaries as b on b.ben_id = s.ben_id
+                    join rvoters as r on r.id_no_comelec = b.id_no_comelec
+                    where (s.trash = 0 and b.trash = 0 and r.trash = 0) 
+                    ";
+        $result2 = $this->db->query($query2);
+
+        return array_merge($result1->result_array(), $result2->result_array());
+
+    }
 	
 }
