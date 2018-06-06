@@ -67,6 +67,7 @@ $route['rvoters'] = 'rvoters';
 $route['nonvoters/view/(:any)'] = 'nonvoters/view/$1';
 $route['nonvoters/edit/(:any)'] = 'nonvoters/edit/$1';
 $route['nonvoters/add'] = 'nonvoters/add';
+$route['nonvoters/all_to_excel'] = 'nonvoters/all_to_excel';
 $route['nonvoters/(:any)'] = 'nonvoters';
 $route['nonvoters'] = 'nonvoters';
 

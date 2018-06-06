@@ -333,10 +333,10 @@ class Nonvoters extends CI_Controller {
         //export all data to Excel file
         
             $this->load->library('export');
-            $max_count = $this->nonvoters_model->record_count();
-			$sql = $this->nonvoters_model->get_nonvoters($max_count, 1);
-			$this->export->to_excel($sql, 'all_nonvoters'); 
-			
+			$sql = $this->nonvoters_model->get_nonvoters();
+            
+            //echo '<pre>'; print_r($sql); echo '</pre>';
+            $this->export->to_excel($sql, 'allnonvoters'); 
         }
         
         public function filtered_to_excel() {

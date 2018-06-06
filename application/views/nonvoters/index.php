@@ -83,7 +83,8 @@
 	</div> 
 	<div class="container-fluid">
 		<small>
-		<?php 
+        <?php 
+            /*
 			if (isset($filterval)) { 
 				$url = 'nonvoters/filtered_to_excel/'.$filterval[0].'/'.$filterval[1];
 			} 
@@ -93,9 +94,10 @@
 			else {
 				$url = 'nonvoters/all_to_excel';
 			}
-			
-			if ($nonvoters['result_count'] > 0) //echo '<a href="'.$url.'" target="_blank">Export to Excel &raquo;</a>';	
-				echo '<a href="#">Export to Excel &raquo;</a>';	
+            */
+            $url = 'nonvoters/all_to_excel';
+			if ($nonvoters['result_count'] > 0) echo '<a href="'.$url.'" target="_blank">Export to Excel &raquo;</a>';	
+				//echo '<a href="#">Export to Excel &raquo;</a>';	
 		?>
 		</small>
 	</div>
