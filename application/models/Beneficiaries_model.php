@@ -291,5 +291,27 @@ class beneficiaries_model extends CI_Model {
 		
 		return $ben_id;
 	}
-	
+
+    public function get_all_beneficiaries() {
+
+        //nonvoters
+        $query1 = "select n.fname, n.mname, n.lname, n.id_no as id_no, n.dob, n.address, n.barangay, n.sex, n.nv_remarks as remarks
+                    from beneficiaries as b 
+                    join non_voters as n on n.nv_id = b.nv_id
+                    where (b.trash = 0 and n.trash = 0) 
+                    ";
+        $result1 = $this->db->query($query1);
+
+        //registered voters
+        $query2 = "select r.fname, r.mname, r.lname, r.id_no_comelec as id_no, r.dob, r.address, r.barangay, r.sex, r.remarks as remarks
+                    from beneficiaries as b
+                    join rvoters as r on r.id_no_comelec = b.id_no_comelec
+                    where (b.trash = 0 and r.trash = 0) 
+                    ";
+        $result2 = $this->db->query($query2);
+
+        return array_merge($result1->result_array(), $result2->result_array());
+
+    }
+
 }

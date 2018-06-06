@@ -419,12 +419,12 @@ class Beneficiaries extends CI_Controller {
         
       	public function all_to_excel() {
         //export all data to Excel file
-        
-        	$this->load->library('export');
-            $max_count = $this->rvoters_model->record_count();
-			$sql = $this->rvoters_model->get_rvoters($max_count, 0);
-			$this->export->to_excel($sql, 'all_beneficiaries'); 
-			
+            
+            $this->load->library('export');
+            $sql = $this->beneficiaries_model->get_all_beneficiaries();
+            
+            //echo '<pre>'; print_r($sql); echo '</pre>';
+            $this->export->to_excel($sql, 'allbeneficiaries'); 
         }
         
         public function filtered_to_excel() {

@@ -23,10 +23,14 @@ Please log in with your credentials to access.</p>
     <?php echo form_input($password, '', $attrib_input);?>
   </div>
 
+<!--
   <div class="form-group">
+    <small>
     <?php echo lang('login_remember_label', 'remember');?>
     <?php echo form_checkbox('remember', '1', FALSE, 'id="remember"');?>
+    </small>
   </div>
+-->
 
   <div class="form-group">
   	<?php $attrib_btn = array('class' => 'btn btn-default'); ?>

@@ -54,6 +54,7 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 $route['beneficiaries/match_find'] = 'beneficiaries/match_find';
+$route['beneficiaries/all_to_excel'] = 'beneficiaries/all_to_excel';
 $route['beneficiaries/(:any)'] = 'beneficiaries';
 $route['beneficiaries'] = 'beneficiaries';
 
