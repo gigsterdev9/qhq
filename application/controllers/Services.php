@@ -631,11 +631,10 @@ class Services extends CI_Controller {
 										$this->beneficiaries_model->set_beneficiary($id_no_comelec, 'rv');
 										//create new service with new ben id
 										$new_ben_id = $this->beneficiaries_model->get_ben_by_comid($id_no_comelec);
-										
 										$service_data = array(
 											'req_date' => $req_date,
-											'ben_id' => $new_ben_id,
-											'req_ben_id' => $new_ben_id, //defaulting to self
+											'ben_id' => $new_ben_id['ben_id'],
+											'req_ben_id' => $new_ben_id['ben_id'], //defaulting to self
 											'relationship' => 'self',
 											'service_type' => $service_type,
                                             'particulars' => $particulars,
@@ -695,11 +694,11 @@ class Services extends CI_Controller {
 										//create new ben via id_no_comelec
 										$this->beneficiaries_model->set_beneficiary($id_no_comelec, 'rv');
 										//create new service with new ben id
-										$new_ben_id = $this->beneficiaries_model->get_ben_by_comid($id_no_comelec);
-										$service_data = array(
+                                        $new_ben_id = $this->beneficiaries_model->get_ben_by_comid($id_no_comelec);
+                                        $service_data = array(
 											'req_date' => $req_date,
-											'ben_id' => $new_ben_id,
-											'req_ben_id' => $new_ben_id, //defaulting to self
+											'ben_id' => $new_ben_id['ben_id'],
+											'req_ben_id' => $new_ben_id['ben_id'], //defaulting to self
 											'relationship' => 'self',
 											'service_type' => $service_type,
                                             'particulars' => $particulars,

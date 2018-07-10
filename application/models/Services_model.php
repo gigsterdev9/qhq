@@ -560,8 +560,9 @@ class services_model extends CI_Model {
 					'trash' => 0
 			);
 		}
-		//insert new voter
-		$this->db->insert('services', $data);
+        //echo '<pre>'; print_r($data); echo '</pre>';
+        //insert new voter
+        $this->db->insert('services', $data);
 		
 		$rvid = $this->db->insert_id();
 		//add audit trail
