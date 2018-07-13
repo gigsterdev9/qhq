@@ -2,3 +2,4 @@ application/config/database.php
 application/cache
 tmp
 .vscode
+__db__/infragre_qhq_cdb.sql.gz
