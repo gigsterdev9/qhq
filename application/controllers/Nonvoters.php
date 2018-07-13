@@ -328,8 +328,7 @@ class Nonvoters extends CI_Controller {
 			
 		}
 		
-		
-		public function all_to_excel() {
+        public function all_to_excel() {
         //export all data to Excel file
         
             $this->load->library('export');

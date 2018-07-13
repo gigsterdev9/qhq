@@ -326,7 +326,144 @@ class Rvoters extends CI_Controller {
 			}
 			
 		}
+        
+        public function batch_import() {
+
+			$data['title'] = 'COMELEC data update';
+
+			if ($this->input->post('action') == 'upload') {
+
+				//print_r($_FILES);
+				
+				$config['upload_path'] 		= './tmp/';
+				$config['allowed_types']    = 'csv';
+                $config['max_size']         = 10240;
+                
+				$this->load->library('upload', $config);
+				
+				if ( ! $this->upload->do_upload('userfile')) {
+						
+						//$error = array('error' => $this->upload->display_errors());
+						//echo '<pre>'; print_r($error); echo '</pre>';
+
+						$data['error'] = array('error' => $this->upload->display_errors());
+						$this->load->view('templates/header', $data);
+						$this->load->view('rvoters/batch_import');
+						$this->load->view('templates/footer');		
+                }
+                else{
+						
+						$dd = array('upload_data' => $this->upload->data());
+						//echo '<pre>'; print_r($dd); echo '</pre>';
+
+						if ($dd['upload_data']['file_size'] > 0) {
+							
+							$userfile = $dd['upload_data']['full_path'];
+							//echo $userfile;
+							$this->load->library('CSVReader');
+							$result =   $this->csvreader->parse_file($userfile);//path to csv file
+							//$data['flow'] = $result;
+							$data['csvData'] =  $result;
+							
+							//initiate system lockdown
+							$ctr = 0;
+							foreach ($result as $r) {
+								
+								$keys = array_keys($r);
+								$values = $r[$keys[0]];
+								$keys = explode(',', $keys[0]);
+								$values = explode(',', $values);	
+
+								for ($i = 0; $i < count($keys); $i++){
+									$keys[$i] = trim($keys[$i]);
+									$r[$keys[$i]] = $values[$i];
+								}
+								//echo '<pre>'; print_r($r); echo '</pre>'; die();
+                                
+                                $code = $r['CODE'];
+                                $id_no = $r['ID_NO'];
+                                $id_no_comelec = $r['ID_NO_COMELEC'];
+								$fname = $r['FNAME'];
+								$mname = $r['MNAME'];
+								$lname = $r['LNAME'];
+								$dob = $r['DOB'];
+								$address = $r['ADDRESS'];
+								$barangay = $r['BARANGAY'];
+								$district = $r['DISTRICT'];
+                                $sex = $r['SEX'];
+                                $precinct = $r['PRECINCT'];
+								$mobile_no = $r['MOBILE_NO'];
+                                $email = $r['EMAIL'];
+                                $referee = $r['REFEREE'];
+                                $remarks = $r['REMARKS'];
+								
+								$data['flow'][$ctr]['fullname'] = $fname.' '.$mname.' '.$lname;
+								
+								//check if record exists in rvoter
+                                //$rvoter_match = $this->rvoters_model->find_rvoter_match($fname, $mname, $lname, $dob);
+                                $rvoter_match = $this->rvoters_model->get_rvoter_by_comelec_id($id_no_comelec, true); //include 'trashed' entries
+                                
+                                //match is found
+								if (!empty($rvoter_match)) {
+                                    //DO NOTHING
+                                    //echo '<pre>'; print_r($rvoter_match); echo '</pre>';
+                                    //$data['notice'][] = 'Entry exists for:  ('.$id_no_comelec.') '.$fname.' '.$mname.' '.$lname;
+                                }
+                                //entry is new
+								else {
+                                    //add into rvoters table 
+                                    $new_entry = array(
+                                        'fname' => $fname,
+                                        'mname' => $mname,
+                                        'lname' => $lname,
+                                        'dob' => $dob,
+                                        'address' => $address,
+                                        'barangay' => $barangay,
+                                        'district' => $district,
+                                        'sex' => $sex,
+                                        'code' => $code,
+                                        'id_no' => $id_no,
+                                        'id_no_comelec' => $id_no_comelec,
+                                        'precinct' => $precinct,
+                                        'mobile_no' => $mobile_no,
+                                        'email' => $email,
+                                        'referee' => $referee,
+                                        'remarks' => $remarks
+                                    );
+                                    $this->rvoters_model->set_rvoter($new_entry); 
+
+                                    //report data insertion
+                                    $data['notice'][] = 'New entry added:  ('.$id_no_comelec.') '.$fname.' '.$mname.' '.$lname;
+								}
+								
+								$ctr++;
+							}
+							//release system lockdown
+                        }
+                        
+                        $this->tracker_model->log_event('completed','completed rvoters data update. '.$ctr.' records processed');
+
+                        $data['ctr'] = $ctr;
+						$data['import_success'] = TRUE;
+						//echo '<pre>'; print_r($data); echo '</pre>'; die();
+
+						$this->load->view('templates/header', $data);
+						$this->load->view('rvoters/batch_import', $data);
+						$this->load->view('templates/footer');
+                }
+			
+			}
+			else{
+				
+				$this->tracker_model->log_event('initiated','initiated rvoters data update.');
+
+				$this->load->view('templates/header', $data);
+				$this->load->view('rvoters/batch_import', $data);
+				$this->load->view('templates/footer');
+			}
 		
+		}
+
 		public function all_to_excel() {  //disable this! data is too massive to export.
         //export all data to Excel file
         

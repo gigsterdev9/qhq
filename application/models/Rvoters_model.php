@@ -181,29 +181,31 @@ class rvoters_model extends CI_Model {
 		
 	}
 	
-	public function set_rvoter() //new voter
+	public function set_rvoter($data = false) //new voter
 	{
 		$this->load->helper('url');
-		
-		$data = array(
-				'fname' => $this->input->post('fname'),
-				'mname' => $this->input->post('mname'),
-				'lname' => $this->input->post('lname'),
-				'dob' => $this->input->post('dob'),
-				'address' => $this->input->post('address'),
-				'barangay' => $this->input->post('barangay'),
-				'district' => $this->input->post('district'),
-				'sex' => $this->input->post('sex'),
-				'code' => $this->input->post('code'),
-				'id_no' => $this->input->post('id_no'),
-				'id_no_comelec' => $this->input->post('id_no_comelec'),
-				'precinct' => $this->input->post('precinct'),
-				'mobile_no' => $this->input->post('mobile_no'),
-				'email' => $this->input->post('email'),
-				'referee' => $this->input->post('referee'),
-				'status' => $this->input->post('status'),
-				'remarks' => $this->input->post('remarks')
-		);
+        
+        if ($data == false) {
+            $data = array(
+                'fname' => $this->input->post('fname'),
+                'mname' => $this->input->post('mname'),
+                'lname' => $this->input->post('lname'),
+                'dob' => $this->input->post('dob'),
+                'address' => $this->input->post('address'),
+                'barangay' => $this->input->post('barangay'),
+                'district' => $this->input->post('district'),
+                'sex' => $this->input->post('sex'),
+                'code' => $this->input->post('code'),
+                'id_no' => $this->input->post('id_no'),
+                'id_no_comelec' => $this->input->post('id_no_comelec'),
+                'precinct' => $this->input->post('precinct'),
+                'mobile_no' => $this->input->post('mobile_no'),
+                'email' => $this->input->post('email'),
+                'referee' => $this->input->post('referee'),
+                'status' => $this->input->post('status'),
+                'remarks' => $this->input->post('remarks')
+            );
+        } 
 		//insert new voter
 		$this->db->insert('rvoters', $data);
 		
