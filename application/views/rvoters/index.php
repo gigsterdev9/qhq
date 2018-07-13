@@ -161,6 +161,10 @@
 
 		</div>
 	</div>
+    <div>
+        [ <small><a href="<?php echo base_url('rvoters/batch_import'); ?>">COMELEC Data Update</a></small> ] 
+    </div>
+
 </div>
 <script>
 	$('#filter_by').on('change', function(){
