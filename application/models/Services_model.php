@@ -5,30 +5,41 @@ class services_model extends CI_Model {
 	public function __construct() {
 		$this->load->database();
 	}
-		
+    
+    //count all services rendered
 	public function record_count() {
         $this->db->where('trash = 0');
         return $this->db->count_all_results('services');
     }
 
-    private function record_count_r() {
-        $query = "select b.ben_id
+    //count all services rendered to registered voters
+    public function record_count_r() {
+        $query = "select count(*) as total
                     from services as s
                     join beneficiaries as b on b.ben_id = s.ben_id
                     join rvoters as r on r.id_no_comelec = b.id_no_comelec
                     where (s.trash = 0 and b.trash = 0 and r.trash = 0)";
-        $q = $this->db->query($query);
-        return $q->num_rows();
+        $result = $this->db->query($query);
+        $count = $result->row();
+
+        //echo $this->db->last_query();
+        //die($count->total);
+        return $count->total;
     }
 
-    private function record_count_n() {
-        $query = "select b.ben_id
+    //count all services rendered to non-voters
+    public function record_count_n() {
+        $query = "select count(*) as total
                     from services as s
                     join beneficiaries as b on b.ben_id = s.ben_id
                     join non_voters as n on n.nv_id = b.nv_id
                     where (s.trash = 0 and b.trash = 0 and n.trash = 0)";
-        $q = $this->db->query($query);
-        return $q->num_rows();
+        $result = $this->db->query($query);
+        $count = $result->row();
+
+        //echo $this->db->last_query();
+        //die($count->total);
+        return $count->total;
     }
 
 	public function get_r_services($limit = 0, $start = 0, $where_clause=FALSE) {
@@ -683,7 +694,7 @@ class services_model extends CI_Model {
 
 	}
 
-	public function total_services_amount($year = null) {
+	public function total_services_amount($year = false) {
 
 		$this->db->select('sum(amount) as total');
 		$this->db->from('services');
@@ -693,11 +704,11 @@ class services_model extends CI_Model {
 		else{
 			$this->db->where("year(req_date) = '$year'");
 		}
-		$query = $this->db->get();
-		//$last_query = $this->db->last_query();
-		//die($last_query);
-
-		return $query->row_array(); 
+		$result = $this->db->get();
+        $amount = $result->row();
+        
+		//die($this->db->last_query());
+        return $amount->total;
 
 	}
 

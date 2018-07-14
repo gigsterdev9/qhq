@@ -20,7 +20,7 @@ class Pages extends CI_Controller {
 				redirect('auth/login');
 			}
 			
-			/**
+			/*
 			//add users
 			$username = 'QDev';
 			$password = 'Afv!yzG#8h';
@@ -31,8 +31,7 @@ class Pages extends CI_Controller {
 								);
 			$group = array('2'); // Sets user to admin.
 			$this->ion_auth->register($username, $password, $email, $additional_data, $group);
-			
-			**/
+			*/
         }
 		
         public function view($page = 'dashboard') {
@@ -47,15 +46,18 @@ class Pages extends CI_Controller {
 				
 				//total ben
 				$data['total_ben'] = $this->beneficiaries_model->record_count();
-				$data['recent_service_availments'] = $this->services_model->get_recent_service_availments(10);
-				$data['recent_scholars'] = $this->scholarships_model->get_recent_scholars(20);
+				$data['recent_service_availments'] = $this->services_model->get_recent_service_availments(5);
+				$data['recent_scholars'] = $this->scholarships_model->get_recent_scholars(10);
 
 				//get all services
-				$data['total_services'] = $this->services_model->record_count();
-				$data['r_services'] = $this->services_model->get_r_services($data['total_services'], 0);
-				$data['n_services'] = $this->services_model->get_n_services($data['total_services'], 0);
-					$services_amount = $this->services_model->total_services_amount();
-				$data['total_services_amount'] = $services_amount['total'];
+                $data['total_services'] = $this->services_model->record_count();
+                $data['r_services'] = $this->services_model->record_count_r();
+                //$data['r_services'] = $this->services_model->get_r_services($data['total_services'], 0);
+                $data['n_services'] = $this->services_model->record_count_n();
+				//$data['n_services'] = $this->services_model->get_n_services($data['total_services'], 0);
+					//$services_amount = $this->services_model->total_services_amount();
+                //$data['total_services_amount'] = $services_amount['total'];
+                $data['total_services_amount'] = $this->services_model->total_services_amount();
 
 				//get all scholarships
 				$data['total_scholarships'] = $this->scholarships_model->record_count();
@@ -76,9 +78,27 @@ class Pages extends CI_Controller {
 				$data['r_ben'] = $this->beneficiaries_model->get_rv_beneficiaries($data['total_ben'], 0, false);
 				$data['n_ben'] = $this->beneficiaries_model->get_nv_beneficiaries($data['total_ben'], 0, false);
 
-				//distribution by barangay
-				$data['r_brgy']['barangka'] = $this->beneficiaries_model->get_rv_beneficiaries($data['total_ben'], 0, "barangay = 'Barangka'");
-				$data['r_brgy']['con_uno'] = $this->beneficiaries_model->get_rv_beneficiaries($data['total_ben'], 0, "barangay = 'Concepcion Uno'");
+                //distribution by barangay
+                $data['r_brgy']['barangka'] = $this->beneficiaries_model->count_rv_ben_by_brgy('Barangka');
+                $data['r_brgy']['con_uno'] = $this->beneficiaries_model->count_rv_ben_by_brgy('Concepcion Uno');
+				$data['r_brgy']['con_dos'] = $this->beneficiaries_model->count_rv_ben_by_brgy('Concepcion Dos');
+				$data['r_brgy']['fortune'] = $this->beneficiaries_model->count_rv_ben_by_brgy('Fortune');
+				$data['r_brgy']['ivc'] = $this->beneficiaries_model->count_rv_ben_by_brgy('Industrial Valley Complex');
+				$data['r_brgy']['jdp'] = $this->beneficiaries_model->count_rv_ben_by_brgy('Jesus Dela Peña');
+				$data['r_brgy']['kalumpang'] = $this->beneficiaries_model->count_rv_ben_by_brgy('Kalumpang');
+				$data['r_brgy']['malanday'] = $this->beneficiaries_model->count_rv_ben_by_brgy('Malanday');
+				$data['r_brgy']['heights'] = $this->beneficiaries_model->count_rv_ben_by_brgy('Marikina Heights');
+				$data['r_brgy']['nangka'] = $this->beneficiaries_model->count_rv_ben_by_brgy('Nangka');
+				$data['r_brgy']['parang'] = $this->beneficiaries_model->count_rv_ben_by_brgy('Parang');
+				$data['r_brgy']['santonino'] = $this->beneficiaries_model->count_rv_ben_by_brgy('Santo Niño');
+				$data['r_brgy']['sanroque'] = $this->beneficiaries_model->count_rv_ben_by_brgy('San Roque');
+				$data['r_brgy']['santaelena'] = $this->beneficiaries_model->count_rv_ben_by_brgy('Santa Elena');
+				$data['r_brgy']['tanong'] = $this->beneficiaries_model->count_rv_ben_by_brgy('Tañong');
+				$data['r_brgy']['tumana'] = $this->beneficiaries_model->count_rv_ben_by_brgy('Tumana');
+
+                /*
+                $data['r_brgy']['barangka'] = $this->beneficiaries_model->get_rv_beneficiaries($data['total_ben'], 0, "barangay = 'Barangka'");
+                $data['r_brgy']['con_uno'] = $this->beneficiaries_model->get_rv_beneficiaries($data['total_ben'], 0, "barangay = 'Concepcion Uno'");
 				$data['r_brgy']['con_dos'] = $this->beneficiaries_model->get_rv_beneficiaries($data['total_ben'], 0, "barangay = 'Concepcion Dos'");
 				$data['r_brgy']['fortune'] = $this->beneficiaries_model->get_rv_beneficiaries($data['total_ben'], 0, "barangay = 'Fortune'");
 				$data['r_brgy']['ivc'] = $this->beneficiaries_model->get_rv_beneficiaries($data['total_ben'], 0, "barangay = 'Industrial Valley Complex'");
@@ -93,7 +113,34 @@ class Pages extends CI_Controller {
 				$data['r_brgy']['santaelena'] = $this->beneficiaries_model->get_rv_beneficiaries($data['total_ben'], 0, "barangay = 'Santa Elena'");
 				$data['r_brgy']['tanong'] = $this->beneficiaries_model->get_rv_beneficiaries($data['total_ben'], 0, "barangay = 'Tañong'");
 				$data['r_brgy']['tumana'] = $this->beneficiaries_model->get_rv_beneficiaries($data['total_ben'], 0, "barangay = 'Tumana'");
-				
+                */
+                
+                $data['n_brgy']['barangka'] = $this->beneficiaries_model->count_nv_ben_by_brgy('Barangka');
+                $data['n_brgy']['con_uno'] = $this->beneficiaries_model->count_nv_ben_by_brgy('Concepcion Uno');
+				$data['n_brgy']['con_dos'] = $this->beneficiaries_model->count_nv_ben_by_brgy('Concepcion Dos');
+				$data['n_brgy']['fortune'] = $this->beneficiaries_model->count_nv_ben_by_brgy('Fortune');
+				$data['n_brgy']['ivc'] = $this->beneficiaries_model->count_nv_ben_by_brgy('Industrial Valley Complex');
+				$data['n_brgy']['jdp'] = $this->beneficiaries_model->count_nv_ben_by_brgy('Jesus Dela Peña');
+				$data['n_brgy']['kalumpang'] = $this->beneficiaries_model->count_nv_ben_by_brgy('Kalumpang');
+				$data['n_brgy']['malanday'] = $this->beneficiaries_model->count_nv_ben_by_brgy('Malanday');
+				$data['n_brgy']['heights'] = $this->beneficiaries_model->count_nv_ben_by_brgy('Marikina Heights');
+				$data['n_brgy']['nangka'] = $this->beneficiaries_model->count_nv_ben_by_brgy('Nangka');
+				$data['n_brgy']['parang'] = $this->beneficiaries_model->count_nv_ben_by_brgy('Parang');
+				$data['n_brgy']['santonino'] = $this->beneficiaries_model->count_nv_ben_by_brgy('Santo Niño');
+				$data['n_brgy']['sanroque'] = $this->beneficiaries_model->count_nv_ben_by_brgy('San Roque');
+				$data['n_brgy']['santaelena'] = $this->beneficiaries_model->count_nv_ben_by_brgy('Santa Elena');
+				$data['n_brgy']['tanong'] = $this->beneficiaries_model->count_nv_ben_by_brgy('Tañong');
+				$data['n_brgy']['tumana'] = $this->beneficiaries_model->count_nv_ben_by_brgy('Tumana');
+
+                /*
+                echo '<pre>';
+                print_r($data['r_brgy']);
+                print_r($data['n_brgy']);
+                echo '<pre>';
+                die();
+                */
+
+                /*
 				$data['n_brgy']['barangka'] = $this->beneficiaries_model->get_nv_beneficiaries($data['total_ben'], 0, "barangay = 'Barangka'");
 				$data['n_brgy']['con_uno'] = $this->beneficiaries_model->get_nv_beneficiaries($data['total_ben'], 0, "barangay = 'Concepcion Uno'");
 				$data['n_brgy']['con_dos'] = $this->beneficiaries_model->get_nv_beneficiaries($data['total_ben'], 0, "barangay = 'Concepcion Dos'");
@@ -109,8 +156,27 @@ class Pages extends CI_Controller {
 				$data['n_brgy']['sanroque'] = $this->beneficiaries_model->get_nv_beneficiaries($data['total_ben'], 0, "barangay = 'San Roque'");
 				$data['n_brgy']['santaelena'] = $this->beneficiaries_model->get_nv_beneficiaries($data['total_ben'], 0, "barangay = 'Santa Elena'");
 				$data['n_brgy']['tanong'] = $this->beneficiaries_model->get_nv_beneficiaries($data['total_ben'], 0, "barangay = 'Tañong'");
-				$data['n_brgy']['tumana'] = $this->beneficiaries_model->get_nv_beneficiaries($data['total_ben'], 0, "barangay = 'Tumana'");
+                $data['n_brgy']['tumana'] = $this->beneficiaries_model->get_nv_beneficiaries($data['total_ben'], 0, "barangay = 'Tumana'");
+                */
 
+                $data['barangka_count'] = $data['r_brgy']['barangka'] + $data['n_brgy']['barangka'];
+				$data['con_uno_count'] = $data['r_brgy']['con_uno'] + $data['n_brgy']['con_uno'];
+				$data['con_dos_count'] = $data['r_brgy']['con_dos'] + $data['n_brgy']['con_dos'];
+				$data['fortune_count'] = $data['r_brgy']['fortune'] + $data['n_brgy']['fortune'];
+				$data['ivc_count'] = $data['r_brgy']['ivc'] + $data['n_brgy']['ivc'];
+				$data['jdp_count'] = $data['r_brgy']['jdp'] + $data['n_brgy']['jdp'];
+				$data['kalumpang_count'] = $data['r_brgy']['kalumpang'] + $data['n_brgy']['kalumpang'];
+				$data['malanday_count'] = $data['r_brgy']['malanday'] + $data['n_brgy']['malanday'];
+				$data['heights_count'] = $data['r_brgy']['heights'] + $data['n_brgy']['heights'];
+				$data['nangka_count'] = $data['r_brgy']['nangka'] + $data['n_brgy']['nangka'];
+				$data['parang_count'] = $data['r_brgy']['parang'] + $data['n_brgy']['parang'];
+				$data['santonino_count'] = $data['r_brgy']['santonino'] + $data['n_brgy']['santonino'];
+				$data['sanroque_count'] = $data['r_brgy']['sanroque'] + $data['n_brgy']['sanroque'];
+				$data['santaelena_count'] = $data['r_brgy']['santaelena'] + $data['n_brgy']['santaelena'];
+				$data['tanong_count'] = $data['r_brgy']['tanong'] + $data['n_brgy']['tanong'];
+				$data['tumana_count'] = $data['r_brgy']['tumana'] + $data['n_brgy']['tumana'];
+                
+                /*
 				$data['barangka_count'] = count($data['r_brgy']['barangka']) + count($data['n_brgy']['barangka']);
 				$data['con_uno_count'] = count($data['r_brgy']['con_uno']) + count($data['n_brgy']['con_uno']);
 				$data['con_dos_count'] = count($data['r_brgy']['con_dos']) + count($data['n_brgy']['con_dos']);
@@ -127,6 +193,7 @@ class Pages extends CI_Controller {
 				$data['santaelena_count'] = count($data['r_brgy']['santaelena']) + count($data['n_brgy']['santaelena']);
 				$data['tanong_count'] = count($data['r_brgy']['tanong']) + count($data['n_brgy']['tanong']);
 				$data['tumana_count'] = count($data['r_brgy']['tumana']) + count($data['n_brgy']['tumana']);
+                */
 
 				/*
 				echo $data['barangka_count']; echo '<br />';
@@ -149,13 +216,22 @@ class Pages extends CI_Controller {
 				*/
 
 		    }
-		    $data['title'] = ucfirst($page); // Capitalize the first letter
+		    $data['title'] = ucfirst($page); 
 
 		    $this->load->view('templates/header', $data);
-		    $this->load->view('pages/'.$page, $data);
-		    $this->load->view('templates/footer', $data);
-		    
-		    //$this->output->enable_profiler(TRUE);
+		    $this->load->view('pages/'.$page);
+		    $this->load->view('templates/footer');
+            
+            /*
+            $sections = array(
+                'config'  => TRUE,
+                'memory_usage' => TRUE, 
+                'queries' => FALSE
+                );
+            
+            $this->output->set_profiler_sections($sections);
+            $this->output->enable_profiler(TRUE);
+            */
         }
         
         

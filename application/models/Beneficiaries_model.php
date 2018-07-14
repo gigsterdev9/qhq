@@ -11,6 +11,33 @@ class beneficiaries_model extends CI_Model {
         return $this->db->count_all("beneficiaries");
     }
 
+    public function count_rv_ben_by_brgy($brgy = false) {
+
+        $query = "select count(*) as total from beneficiaries b
+                join rvoters r on r.id_no_comelec = b.id_no_comelec
+                where r.barangay = '$brgy' 
+                and (b.trash = 0 and r.trash = 0)";
+        $result = $this->db->query($query);
+        $count = $result->row();
+        
+        //die($count->total);
+        return $count->total;
+    }
+
+
+    public function count_nv_ben_by_brgy($brgy = false) {
+
+        $query = "select count(*) as total from beneficiaries b
+                join non_voters n on n.nv_id = b.nv_id
+                where n.barangay = '$brgy' 
+                and (b.trash = 0 and n.trash = 0)";
+        $result = $this->db->query($query);
+        $count = $result->row();
+        
+        //die($count->total);
+        return $count->total;
+
+    }
 
 	public function get_rv_beneficiaries($limit = 0, $start = 0, $where_clause = false) {
 		
@@ -34,8 +61,7 @@ class beneficiaries_model extends CI_Model {
 
 	}
 
-
-	public function get_nv_beneficiaries($limit = 0, $start = 0, $where_clause = false) {
+    public function get_nv_beneficiaries($limit = 0, $start = 0, $where_clause = false) {
 		
 		$this->db->select("*, floor((DATEDIFF(CURRENT_DATE, STR_TO_DATE(n.dob, '%Y-%m-%d'))/365)) as age");
 		$this->db->from('beneficiaries b');

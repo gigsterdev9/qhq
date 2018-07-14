@@ -69,17 +69,16 @@
 							<ul class="list-group">
 							<?php
 
-								if ($recent_scholars == NULL)
-								{
-									echo '<li class="list-group-item">There are currently no projects nearing completion.</li>';
+								if ($recent_scholars == NULL){
+									echo '<li class="list-group-item">No scholarship grantees on record.</li>';
 								}
-								else
-								{
-									foreach ($recent_scholars as $recent_scholar) 
-									{
+								else {
+									foreach ($recent_scholars as $recent_scholar) {
+
 										$link = base_url('scholarships/view/'.$recent_scholar['scholarship_id']);
 										$display = strtoupper($recent_scholar['fname'].' '.$recent_scholar['lname']).', '.$recent_scholar['age'].'<br />('.$recent_scholar['course'].')';
-										echo '<li class="list-group-item"><a href="'.$link.'">'.$display.'</a></li>';
+                                        echo '<li class="list-group-item"><a href="'.$link.'">'.$display.'</a></li>';
+                                        
 									}
 								}
 							?>
@@ -88,21 +87,26 @@
 						<div class="col-md-6">
 							<p><strong><span class="glyphicon glyphicon-folder-open"></span>&nbsp; Recent Service Recipients</strong></p>
 							<ul class="list-group">
-								<?php 
-									foreach ($recent_service_availments['r'] as $rsa) 
-									{
-										$link = base_url('services/view/'.$rsa['service_id']);
-										$display = strtoupper($rsa['fname'].' '.$rsa['lname']).'<br /> VID: '.$rsa['id_no_comelec'].'<br />'.
-													'('.ucfirst($rsa['service_type']).' Assistance)';
-										echo '<li class="list-group-item"><a href="'.$link.'">'.$display.'</a></li>';
-									}
-								
-									foreach ($recent_service_availments['n'] as $rsa) 
-									{
-										$link = base_url('services/view/'.$rsa['service_id']);
-										$display = strtoupper($rsa['fname'].' '.$rsa['lname']).'<br />('.ucfirst($rsa['service_type']).' Assistance)';
-										echo '<li class="list-group-item"><a href="'.$link.'">'.$display.'</a></li>';
-									}
+                                <?php 
+                                    if ($recent_service_availments == NULL) {
+                                        echo '<li class="list-group-item">No service recipients on record.</li>';
+                                    }
+                                    else{
+                                        foreach ($recent_service_availments['r'] as $rsa) {
+
+                                            $link = base_url('services/view/'.$rsa['service_id']);
+                                            $display = strtoupper($rsa['fname'].' '.$rsa['lname']).'<br /> VID: '.$rsa['id_no_comelec'].'<br />'.
+                                                        '('.ucfirst($rsa['service_type']).' Assistance)';
+                                            echo '<li class="list-group-item"><a href="'.$link.'">'.$display.'</a></li>';
+                                        }
+                                    
+                                        foreach ($recent_service_availments['n'] as $rsa) {
+
+                                            $link = base_url('services/view/'.$rsa['service_id']);
+                                            $display = strtoupper($rsa['fname'].' '.$rsa['lname']).'<br />('.ucfirst($rsa['service_type']).' Assistance)';
+                                            echo '<li class="list-group-item"><a href="'.$link.'">'.$display.'</a></li>';
+                                        }
+                                    }
 								?>
 							</ul>
 						</div>
@@ -139,8 +143,8 @@
 					&nbsp; &nbsp; Tumana <?php echo $tumana_count ?><br />
 					<br /><br />
 					Total Services Rendered: <?php echo $total_services ?> <br />
-					&nbsp; &nbsp; Services to Registered Voters: <?php echo count($r_services) - 1 ?> <br />
-					&nbsp; &nbsp; Services to Non-Voters: <?php echo count($n_services) - 1 ?> <br />
+					&nbsp; &nbsp; Services to Registered Voters: <?php $r_services//echo count($r_services) - 1 ?> <br />
+					&nbsp; &nbsp; Services to Non-Voters: <?php echo $n_services//count($n_services) - 1 ?> <br />
 					&nbsp; &nbsp; Total amount released: <?php echo number_format($total_services_amount,2).' (Php)' ?> <br />
 					<br />
 					Total Scholarship Grants: <?php echo $total_scholarships ?> <br />
@@ -167,7 +171,8 @@
 	
 	<div class="alert alert-danger">
 		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		<strong>Alert!</strong> Set base url.
+        <strong>Alert!</strong> Set base url.<br />
+        <?php //echo CI_VERSION; ?> 
 	</div>
 	
 </div>

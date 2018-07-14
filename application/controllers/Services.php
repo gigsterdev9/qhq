@@ -20,7 +20,6 @@ class Services extends CI_Controller {
 					redirect('auth/login');
 				}
 
-				//debug
 				//$this->output->enable_profiler(TRUE);	
 				
         }
@@ -28,9 +27,7 @@ class Services extends CI_Controller {
         
         public function index() {		
         
-        	//if ($_SERVER['REMOTE_ADDR'] <> '125.212.122.21') die('Undergoing maintenance.');
-			
-			//set general pagination config
+        	//set general pagination config
 			$config = array();
 			$config['base_url'] = base_url('services');
 			
@@ -449,6 +446,7 @@ class Services extends CI_Controller {
 			
 		}
 
+        
 		public function delete($service_id = FALSE, $ben_id = FALSE) {
 			if (!$this->ion_auth->in_group('admin')) {
 				redirect('services'); 
@@ -458,33 +456,8 @@ class Services extends CI_Controller {
 
 		}
 
-		/*
-		public function do_upload() {
-
-			$config['upload_path']          = './tmp/';
-			$config['allowed_types']        = 'gif|jpg|png|csv';
-			$config['max_size']             = 100;
-			$config['max_width']            = 1024;
-			$config['max_height']           = 768;
-
-			$this->load->library('upload', $config);
-
-			if ( ! $this->upload->do_upload('userfile'))
-			{
-					$error = array('error' => $this->upload->display_errors());
-					echo '<pre>'; print_r($error); echo '</pre>';
-					//$this->load->view('services/batch_import', $error);
-			}
-			else
-			{
-					$data = array('upload_data' => $this->upload->data());
-					//$this->load->view('services/import_success', $data);
-					echo '<pre>'; print_r($data); echo '</pre>';
-			}
-		}
-		*/
-
-		public function batch_import() {
+        
+        public function batch_import() {
 
 			$data['title'] = 'Services data import';
 

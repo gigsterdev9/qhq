@@ -96,6 +96,7 @@ $route['services'] = 'services';
 
 $route['tracker/(:any)'] = 'tracker';
 $route['tracker'] = 'tracker';
+$route['audit_trail'] = 'tracker';
 
 $route['login'] = 'auth/login';
 $route['logout'] = 'auth/logout';
