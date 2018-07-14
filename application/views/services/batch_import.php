@@ -42,8 +42,14 @@
 			?>
 				<div class="alert alert-success">
 					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-					Process completed. <?php //echo '<pre>'; print_r($upload_details); echo '</pre>' ?> 
-					<a href="<?php echo base_url('services') ?>">Return to Index.</a>
+					Process completed. <?php echo $ctr.' total records processed. '?><?php //echo '<pre>'; print_r($upload_details); echo '</pre>' ?> 
+                    <?php 
+                    if (!isset($notice)) {
+                        echo 'No data issues encountered.';
+                    }
+                    ?>
+                    <br />
+                    <a href="<?php echo base_url('services') ?>">Return to Index.</a>
 				</div>
 			<?php
 			}

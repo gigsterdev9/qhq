@@ -815,7 +815,8 @@ class Services extends CI_Controller {
 						}
 
 						$this->tracker_model->log_event('completed','completed services data import. '.$ctr.' records processed');
-
+                        
+                        $data['ctr'] = $ctr;
 						$data['import_success'] = TRUE;
 						//echo '<pre>'; print_r($data); echo '</pre>'; die();
 
