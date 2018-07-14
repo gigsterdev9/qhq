@@ -94,6 +94,9 @@ $route['services/all_to_excel'] = 'services/all_to_excel';
 $route['services/(:any)'] = 'services';
 $route['services'] = 'services';
 
+$route['tracker/(:any)'] = 'tracker';
+$route['tracker'] = 'tracker';
+
 $route['login'] = 'auth/login';
 $route['logout'] = 'auth/logout';
 

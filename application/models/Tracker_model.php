@@ -25,6 +25,18 @@ class tracker_model extends CI_Model {
         return;
     }
     
+    public function get_all_activities() {
+        
+        $this->db->select('*');
+        $this->db->from('audit_trail');
+        $this->db->order_by('timestamp', 'desc');
+        $query = $this->db->get();	
+
+        $activities = $query->result_array();
+
+        return $activities;
+
+    }
 
 	// this is the refactored tracker that consolidates all requests from the major tables into 1
 	public function get_activities($id, $module = 'beneficiaries') {
